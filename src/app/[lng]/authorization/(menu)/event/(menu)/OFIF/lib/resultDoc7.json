@@ -1,0 +1,51 @@
+{
+    "generate": false,
+    "id_runnumber": null,
+    "id_documents": null,
+    "longdo_dict": "ส่วนบริหารสัญญาระบบท่อส่งก๊าซ (บส.กตต.)",
+    "event_date": "2026-04-29",
+    "doc_7_input_date_time_of_the_incident": "",
+    "doc_7_input_detail_incident": "-",
+    "doc_7_input_time_event_start_date": "2026-04-29",
+    "doc_7_input_time_event_start_time": "18:30",
+    "doc_7_input_time_event_end_date": "2026-04-29",
+    "doc_7_input_time_event_end_time": "18:40",
+    "doc_7_input_note": "ทดสอบกรอกข้อมูล 07",
+    "doc_7_input_ref_1_id": 1,
+    "doc_7_input_ref_2_id": null,
+    "event_doc_ofo_type_id": 2,
+    "event_doc_ofo_gas_tranmiss_id": 2,
+    "event_doc_ofo_gas_tranmiss_other": null,
+    "gas_shipper": [
+        {
+            "id": null,
+            "ir": 1,
+            "io": 3,
+            "area": 1,
+            "nom_point": 18,
+            "nom_value_mmscfh": "1.000000",
+            "gas_command": "เพิ่ม L ",
+            "gas_more": "---",
+            "shipper": [
+                62
+            ],
+            "file": []
+        },
+        {
+            "id": null,
+            "ir": 2,
+            "io": 3,
+            "area": 1,
+            "nom_point": 18,
+            "nom_value_mmscfh": "2.000000",
+            "gas_command": "ลด LM",
+            "gas_more": "--",
+            "shipper": [
+                67
+            ],
+            "file": []
+        }
+    ],
+    "email_event_for_shipper": [],
+    "cc_email": []
+}

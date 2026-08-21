@@ -1,0 +1,2 @@
+export const dayinWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+export const dayMapping = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];

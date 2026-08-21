@@ -1,0 +1,1103 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { Tune } from "@mui/icons-material"
+import ModalComponent from "@/components/other/ResponseModal";
+import { findRoleConfigByMenuName, formatDate, formatDateNoTime, formatNumberFourDecimal, formatNumberFourDecimalNoComma, generateUserPermission } from '@/utils/generalFormatter';
+import SearchInput from "@/components/other/searchInput";
+import { postService } from "@/utils/postService";
+import BtnExport from "@/components/other/btnExport";
+import { useFetchMasters } from "@/hook/fetchMaster";
+import ModalAction from "./form/modalAction";
+import DatePickaSearch from "@/components/library/dateRang/dateSearch";
+import BtnSearch from "@/components/other/btnSearch";
+import BtnReset from "@/components/other/btnReset";
+import PaginationComponent from "@/components/other/globalPagination";
+import ColumnVisibilityPopover from "@/components/other/popOverShowHideCol";
+import { useAppDispatch } from "@/utils/store/store";
+import { fetchZoneMasterSlice } from "@/utils/store/slices/zoneMasterSlice";
+import { fetchAreaMaster } from "@/utils/store/slices/areaMasterSlice";
+import getCookieValue from "@/utils/getCookieValue";
+import useRestrictedPage from "@/utils/checkRestrictedPage";
+import { decryptData } from "@/utils/encryptionData";
+import dayjs from 'dayjs';
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import getUserValue from "@/utils/getuserValue";
+import CheckboxSearch2, { InputSearch } from "@/components/other/SearchForm";
+import { useForm } from "react-hook-form";
+import ModalImport from "./form/modalImport";
+import TableBalanceIntradayBaseInventoryShipper from "./form/table";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("Asia/Bangkok");
+
+interface ClientProps {
+    params: {
+        lng: string;
+    };
+}
+
+const ClientPage: React.FC<ClientProps> = (props) => {
+
+    // ############### Check Authen ###############
+    const userDT: any = getUserValue();
+    const token = getCookieValue("v4r2d9z5m3h0c1p0x7l");
+    useRestrictedPage(token);
+
+    // ############### PERMISSION ###############
+    const [userPermission, setUserPermission] = useState<any>();
+    let user_permission: any = localStorage?.getItem("k3a9r2b6m7t0x5w1s8j");
+    // let user_permission: any = getCookieValue("k3a9r2b6m7t0x5w1s8j");
+    user_permission = user_permission ? decryptData(user_permission) : null;
+
+    const getPermission = () => {
+        try {
+            user_permission = user_permission ? JSON.parse(user_permission) : null; // Convert JSON string to object
+
+            // if (user_permission?.role_config) {
+            //     const updatedUserPermission = generateUserPermission(user_permission);
+            //     setUserPermission(updatedUserPermission);
+            // } else {
+            //     const permission = findRoleConfigByMenuName('Intraday Base Inventory Shipper', userDT)
+            //     setUserPermission(permission);
+            // }
+
+            const permission = findRoleConfigByMenuName('Intraday Base Inventory Shipper', userDT)
+            if (permission) {
+                setUserPermission(permission);
+            } else if (user_permission?.role_config) {
+                const updatedUserPermission = generateUserPermission(user_permission);
+                setUserPermission(updatedUserPermission);
+            }
+        } catch (error) {
+            // Failed to parse user_permission:
+        }
+    }
+
+    // ############### REDUX DATA ###############
+    const { zoneMaster, areaMaster } = useFetchMasters();
+    const [forceRefetch, setForceRefetch] = useState(true);
+    const dispatch = useAppDispatch();
+    useEffect(() => {
+        if (forceRefetch) {
+            dispatch(fetchZoneMasterSlice());
+            dispatch(fetchAreaMaster());
+        }
+        if (forceRefetch) {
+            setForceRefetch(false);
+        }
+        getPermission();
+    }, [dispatch, zoneMaster, areaMaster, forceRefetch]);
+
+    // ############### FIELD SEARCH ###############
+    const { register, setValue, reset, formState: { errors }, watch, getValues } = useForm<any>();
+
+    const [key, setKey] = useState(0);
+    const [filteredDataTable, setFilteredDataTable] = useState<any>([]);
+    const [srchStartDate, setSrchStartDate] = useState<Date | null>(new Date);
+    const [srchZone, setSrchZone] = useState('');
+    const [srchMode, setSrchMode] = useState('');
+    const [srchTimeStamp, setSrchTimeStamp] = useState('');
+    const [bodySearch, setBodySearch] = useState<any>({});
+
+    // ข้ามการเรียก API Timestamp ครั้งแรก
+    // เพราะ fetchData() โหลดข้อมูลตารางและ Timestamp ให้อยู่แล้ว
+    const isFirstGasDayRender = useRef(true);
+
+    // ป้องกัน response ของ Gas Day เก่ากลับมาทับ Gas Day ล่าสุด
+    const timestampRequestIdRef = useRef(0);
+
+    const handleFieldSearch = async () => {
+        setIsLoading(false);
+
+        let body_post = {
+            gas_day: srchStartDate ? dayjs(srchStartDate).tz("Asia/Bangkok").format("YYYY-MM-DD") : "", // YYYY-MM-DD ไม่เลือก ส่ง ว่าง ""
+            start_date: srchStartDate ? dayjs(srchStartDate).tz("Asia/Bangkok").format("YYYY-MM-DD") : "",
+            end_date: srchStartDate ? dayjs(srchStartDate).tz("Asia/Bangkok").format("YYYY-MM-DD") : "",
+
+            zone: srchZone ? srchZone : "", // ไม่เลือก ส่ง ว่าง ""
+            mode: srchMode ? srchMode : "", // ไม่เลือก ส่ง ว่าง ""
+            // active_mode: watch('active_mode'), // กำลังทำ ****
+            latest_daily_version: watch('last_daily_version'),  // กำลังทำ ****
+            latest_hourly_version: watch('last_hourly_version'),  // กำลังทำ ****
+            // timestamp: srchTimeStamp ? srchTimeStamp : "",// ไม่เลือก ส่ง ว่าง ""
+            timestamp: "", // ไม่รู้ทำไมตอนส่ง srchTimeStamp format 20/02/2025 06:20 ไปแล้วไม่ได้อะไรกลับมา เลย fix ส่ง "" แล้วมากรองหน้าบ้านเอา
+            skip: 0,
+            limit: 100
+        }
+        setBodySearch(body_post)
+
+        const response = await postService('/master/balancing/intraday-base-inentory-shipper', body_post);
+
+        // Shipper ต้องเห็นเฉพาะรายการของตัวเอง https://app.clickup.com/t/86eud2u2n
+        let filter_only_own_shipper: any = response
+        if (userDT?.account_manage?.[0]?.user_type_id == 3) {
+            filter_only_own_shipper = response?.filter((item: any) => item?.shipper == userDT?.account_manage?.[0]?.group?.id_name)
+        }
+
+        const transformed_res = filter_only_own_shipper?.map((item: any) => {
+            const valueMap = item.values.reduce((acc: Record<string, any>, curr: any) => {
+                acc[curr.tag] = curr.value;
+                return acc;
+            }, {});
+
+            return {
+                ...item,
+                ...valueMap, // inject tag-value pairs as top-level keys
+            };
+        });
+
+        let filtered = transformed_res?.filter((item: any) => {
+            return (
+                (srchTimeStamp ? srchTimeStamp == item?.timestamp : true) &&
+                (srchZone ? srchZone == item?.zoneObj?.name : true) &&
+                (srchMode ? srchMode == item?.mode : true)
+            );
+        });
+
+        // Step 2: last_daily_version filter
+        // watch('last_daily_version') // โชว์ชม. ล่าสุดที่มีตาม Gas Day ที่เลือก
+        // if (watch('last_daily_version')) {
+        //     const groupedByGasDay: Record<string, any[]> = {};
+
+        //     for (const item of filtered) {
+        //         const key = item.gas_day;
+        //         if (!groupedByGasDay[key]) groupedByGasDay[key] = [];
+        //         groupedByGasDay[key].push(item);
+        //     }
+
+        //     filtered = Object.values(groupedByGasDay).flatMap((entries) => {
+        //         const maxHour = Math.max(...entries.map((e) => e.gas_hour));
+        //         return entries.filter((e) => e.gas_hour === maxHour);
+        //     });
+        // }
+
+        // Step 3: last_hourly_version filter
+        // watch('last_hourly_version') // โชว์ล่าสุดของชม.นั้นๆ สมมุติมี 9 โมง 2 อันจะแสดงแค่ 9 โมงล่าสุด
+        // if (watch('last_hourly_version')) {
+        //     const maxTimestamp = Math.max(...filtered.map((e: any) => e.execute_timestamp));
+        //     filtered = filtered.filter((e: any) => e.execute_timestamp === maxTimestamp);
+
+        //     // Then filter to only keep the max gas_hour within that timestamp group
+        //     const maxHour = Math.max(...filtered.map((e: any) => e.gas_hour));
+        //     filtered = filtered.filter((e: any) => e.gas_hour === maxHour);
+        // }
+
+        const result_final = filtered;
+
+        // DATA TIMESTAMP
+        const data_timestamp = Array.from(
+            new Map(
+                result_final?.map((item: any) => [item.timestamp, { timestamp: item.timestamp }])
+            ).values()
+        );
+        if (data_timestamp?.length > 0) {
+            setDataTimestamp(data_timestamp);
+        }
+
+        // DATA MODE
+        const data_mode = Array.from(
+            new Map(
+                result_final?.map((item: any) => [item.mode, { mode: item.mode }])
+            ).values()
+        );
+        if (data_mode?.length > 0) {
+            // setDataMode((prev: any[]) => [...prev, ...data_mode]); // เติมมันเข้าไป
+            setDataMode((prev: any[]) => {
+                const existingModes = new Set(prev.map(item => item.mode));
+                const newUniqueItems = data_mode.filter((item: any) => !existingModes.has(item.mode));
+                return [...prev, ...newUniqueItems]; // เติมมันเข้าไป และเช็คซ้ำด้วย
+            });
+        }
+
+        setData(result_final);
+        setFilteredDataTable(result_final);
+
+        setTimeout(() => {
+            setIsLoading(true);
+        }, 500);
+    };
+
+    const handleReset = async () => {
+        setBodySearch({})
+        setSrchStartDate(new Date);
+        setSrchZone('')
+        setSrchMode('')
+        setSrchTimeStamp('')
+
+        setData([]);
+        setValue('last_daily_version', false)
+        setValue('last_hourly_version', true)
+        setKey((prevKey) => prevKey + 1);
+
+        await fetchData({
+            gasDay: new Date(),
+            zone: '',
+            mode: '',
+            timestamp: ''
+
+        });
+    };
+
+    // ############### LIKE SEARCH ###############
+    const handleSearch = (query: string) => {
+
+        const filtered = dataTable?.filter(
+            (item: any) => {
+                const queryLower = query.toLowerCase().replace(/\s+/g, '')?.trim();
+                return (
+                    formatDateNoTime(item?.gas_day)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    item?.gas_hour?.toString().replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    // (item?.gas_hour + ':00')?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    ((item?.gas_hour ? item.gas_hour.toString().padStart(2, '0') + ':00' : '')).replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) || // เติม 0 ด้านหน้าให้เป็น 2 หลัก แล้วตามด้วย ':00'
+                    formatDate(item?.timestamp)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    item?.timestamp?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    item?.zoneObj?.name?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    item?.groupObj?.name?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    item?.mode?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+
+                    formatNumberFourDecimal(item?.heatingValue_base)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimal(item?.baseInv)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimal(item?.high_dd)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimal(item?.high_red)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimal(item?.high_orange)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimal(item?.high_alert)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimal(item?.low_alert)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimal(item?.low_orange)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimal(item?.low_red)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimal(item?.low_dd)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimal(item?.low_max)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimal(item?.high_max)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+
+                    formatNumberFourDecimalNoComma(item?.heatingValue_base)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimalNoComma(item?.baseInv)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimalNoComma(item?.high_dd)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimalNoComma(item?.high_red)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimalNoComma(item?.high_orange)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimalNoComma(item?.high_alert)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimalNoComma(item?.low_alert)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimalNoComma(item?.low_orange)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimalNoComma(item?.low_red)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimalNoComma(item?.low_dd)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimalNoComma(item?.low_max)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    formatNumberFourDecimalNoComma(item?.high_max)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower)
+
+
+                    // removeComma(item?.heatingValue_base)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    // removeComma(item?.baseInv)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    // removeComma(item?.high_dd)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    // removeComma(item?.high_red)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    // removeComma(item?.high_orange)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    // removeComma(item?.high_alert)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    // removeComma(item?.low_alert)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    // removeComma(item?.low_orange)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    // removeComma(item?.low_red)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower) ||
+                    // removeComma(item?.low_dd)?.replace(/\s+/g, '').toLowerCase().trim().includes(queryLower)
+
+                )
+            }
+        );
+        setCurrentPage(1); // ตอน filter กลับไปหน้าแรก
+        setFilteredDataTable(filtered);
+    };
+
+    // const [isModalOpen, setModalOpen] = useState(false);
+    // const handleOpenModal = () => setModalOpen(true);
+
+    // ############### DATA TABLE ###############
+    const [dataTable, setData] = useState<any>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [resetForm, setResetForm] = useState<() => void | null>();
+    const [dataZoneMasterZ, setDataZoneMasterZ] = useState<any>([]);
+    const [dataTimestamp, setDataTimestamp] = useState<any>([]);
+    const [dataMode, setDataMode] = useState<any>([]);
+
+    // const fetchData = async () => {
+    //     setIsLoading(false)
+    //     try {
+
+    //         // setValue('active_mode', false)
+    //         setValue('last_daily_version', false)
+    //         setValue('last_hourly_version', true)
+
+    //         let body_post = {
+    //             gas_day: dayjs().tz("Asia/Bangkok").format("YYYY-MM-DD"), // YYYY-MM-DD ไม่เลือก ส่ง ว่าง ""
+    //             start_date: dayjs().tz("Asia/Bangkok").format("YYYY-MM-DD"),
+    //             end_date: dayjs().tz("Asia/Bangkok").format("YYYY-MM-DD"),
+
+    //             zone: srchZone ? srchZone : "", // ไม่เลือก ส่ง ว่าง ""
+    //             mode: srchMode ? srchMode : "", // ไม่เลือก ส่ง ว่าง ""
+    //             // active_mode: watch('active_mode'), // กำลังทำ ****
+    //             latest_daily_version: watch('last_daily_version'),  // กำลังทำ ****
+    //             latest_hourly_version: watch('last_hourly_version'),  // กำลังทำ ****
+    //             timestamp: srchTimeStamp ? srchTimeStamp : "",// ไม่เลือก ส่ง ว่าง ""
+    //             skip: 0,
+    //             limit: 100
+    //         }
+    //         setBodySearch(body_post)
+
+    //         const response = await postService('/master/balancing/intraday-base-inentory-shipper', body_post);
+
+    //         // Shipper ต้องเห็นเฉพาะรายการของตัวเอง https://app.clickup.com/t/86eud2u2n
+    //         let filter_only_own_shipper: any = response
+    //         if (userDT?.account_manage?.[0]?.user_type_id == 3) {
+    //             filter_only_own_shipper = response?.filter((item: any) => item?.shipper == userDT?.account_manage?.[0]?.group?.id_name)
+    //         }
+
+    //         const transformed_res = filter_only_own_shipper?.map((item: any) => {
+    //             const valueMap = item.values.reduce((acc: Record<string, any>, curr: any) => {
+    //                 acc[curr.tag] = curr.value;
+    //                 return acc;
+    //             }, {});
+
+    //             return {
+    //                 ...item,
+    //                 ...valueMap, // inject tag-value pairs as top-level keys
+    //             };
+    //         });
+
+    //         setData(transformed_res);
+    //         setFilteredDataTable(transformed_res);
+
+    //         // DATA TIMESTAMP
+    //         const data_timestamp = Array.from(
+    //             new Map(transformed_res?.map((item: any) => [item.timestamp, { timestamp: item.timestamp }])).values()
+    //         );
+    //         setDataTimestamp(data_timestamp);
+
+    //         // DATA MODE
+    //         const data_mode = Array.from(
+    //             new Map(transformed_res?.map((item: any) => [item.mode, { mode: item.mode }])).values()
+    //         );
+    //         setDataMode(data_mode);
+
+    //         // DATA ZONE แบบไม่ซ้ำ
+    //         const data_zone_de_dup = Array.from(
+    //             new Map(zoneMaster?.data?.map((item: any) => [item.name, { zone_name: item.name }])).values()
+    //         );
+    //         setDataZoneMasterZ(data_zone_de_dup);
+
+    //         setTimeout(() => {
+    //             setIsLoading(true);
+    //         }, 300);
+    //     } catch (err) {
+    //         // setError(err.message);
+    //     } finally {
+    //         // setLoading(false);
+    //     }
+    //     setTimeout(() => {
+    //         setIsLoading(true);
+    //     }, 300);
+    // };
+
+    const fetchData = async ({
+        gasDay = new Date(),
+        zone = '',
+        mode = '',
+        timestamp = '',
+    }: {
+        gasDay?: Date | null;
+        zone?: string;
+        mode?: string;
+        timestamp?: string;
+    } = {}) => {
+        setIsLoading(false);
+
+        try {
+            setValue('last_daily_version', false);
+            setValue('last_hourly_version', true);
+
+            const gasDayText = gasDay
+                ? dayjs(gasDay).tz("Asia/Bangkok").format("YYYY-MM-DD")
+                : "";
+
+            const body_post = {
+                gas_day: gasDayText,
+                start_date: gasDayText,
+                end_date: gasDayText,
+
+                zone,
+                mode,
+
+                latest_daily_version: false,
+                latest_hourly_version: true,
+
+                timestamp,
+                skip: 0,
+                limit: 100
+            };
+
+            setBodySearch(body_post);
+
+            const response = await postService(
+                '/master/balancing/intraday-base-inentory-shipper',
+                body_post
+            );
+
+            let filter_only_own_shipper: any[] = Array.isArray(response)
+                ? response
+                : [];
+
+            if (userDT?.account_manage?.[0]?.user_type_id === 3) {
+                filter_only_own_shipper = filter_only_own_shipper.filter(
+                    (item: any) =>
+                        item?.shipper ===
+                        userDT?.account_manage?.[0]?.group?.id_name
+                );
+            }
+
+            const transformed_res = filter_only_own_shipper.map((item: any) => {
+                const valueMap = Array.isArray(item?.values)
+                    ? item.values.reduce(
+                        (acc: Record<string, any>, curr: any) => {
+                            acc[curr.tag] = curr.value;
+                            return acc;
+                        },
+                        {}
+                    )
+                    : {};
+
+                return {
+                    ...item,
+                    ...valueMap
+                };
+            });
+
+            setData(transformed_res);
+            setFilteredDataTable(transformed_res);
+            setCurrentPage(1);
+
+            const data_timestamp = Array.from(
+                new Map(
+                    transformed_res
+                        .filter((item: any) => Boolean(item?.timestamp))
+                        .map((item: any) => [
+                            item.timestamp,
+                            { timestamp: item.timestamp }
+                        ])
+                ).values()
+            );
+
+            setDataTimestamp(data_timestamp);
+
+            const data_mode = Array.from(
+                new Map(
+                    transformed_res
+                        .filter((item: any) => Boolean(item?.mode))
+                        .map((item: any) => [
+                            item.mode,
+                            { mode: item.mode }
+                        ])
+                ).values()
+            );
+
+            setDataMode(data_mode);
+
+            const data_zone_de_dup = Array.from(
+                new Map(
+                    zoneMaster?.data?.map((item: any) => [
+                        item.name,
+                        { zone_name: item.name }
+                    ]) ?? []
+                ).values()
+            );
+
+            setDataZoneMasterZ(data_zone_de_dup);
+        } catch (error) {
+            setData([]);
+            setFilteredDataTable([]);
+            setDataTimestamp([]);
+        } finally {
+            setIsLoading(true);
+        }
+    };
+    
+    useEffect(() => {
+        fetchData();
+    }, [resetForm]);
+
+    // ############# NEW MODAL CREATE/EDIT/VIEW  #############
+    const [isModalSuccessOpen, setModalSuccessOpen] = useState(false);
+    const handleCloseModal = () => setModalSuccessOpen(false);
+    const [modalErrorMsg, setModalErrorMsg] = useState('');
+    const [isModalErrorOpen, setModalErrorOpen] = useState(false);
+    const [modalSuccessMsg, setModalSuccessMsg] = useState('');
+
+    const [formOpen, setFormOpen] = useState(false);
+    const [selectedId, setSelectedId] = useState(null);
+    const [formMode, setFormMode] = useState<'create' | 'edit' | 'view' | 'period'>('create');
+
+    const fdInterface: any = {
+        non_tpa_point_name: '',
+        description: '',
+        area_id: '',
+        nomination_point_id: '',
+        // start_date: new Date(),
+        // end_date: new Date(),
+        start_date: undefined,
+        end_date: undefined,
+    };
+
+    const [formData, setFormData] = useState<any>([]);
+
+    const handleFormSubmit = async (data: any) => {
+
+        // let body_post = {
+        //     "gas_day": data?.gas_day,
+        //     "zone": data?.zone_id,
+        //     "value": data?.value_mmbtu,
+        //     "remark": data?.remark ? data?.remark : null
+        // }
+
+        // switch (formMode) {
+        //     case "create":
+
+        //         break;
+        //     case "edit":
+
+        //         break;
+        //     default:
+        //         break;
+        // }
+        await fetchData();
+        if (resetForm) resetForm();
+    };
+
+    const openEditForm = (id: any) => {
+        //  fetchDataDiv(id);
+        setSelectedId(id);
+        const filteredData = dataTable.find((item: any) => item.id === id);
+        setFormMode('edit');
+        // setFormData(fdInterface);
+        setFormData(filteredData);
+        setFormOpen(true);
+    };
+
+    const openViewForm = (id: any) => {
+        const filteredData = dataTable.find((item: any) => item.id === id);
+        setFormMode('view');
+        // setFormData(fdInterface);
+        setFormData(filteredData);
+        setFormOpen(true);
+    };
+
+    // ############### PAGINATION ###############
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [paginatedData, setPaginatedData] = useState<any[]>([]);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
+    const handleItemsPerPageChange = (itemsPerPage: number) => {
+        setItemsPerPage(itemsPerPage);
+        setCurrentPage(1);
+    };
+
+    // const paginatedData = Array.isArray(filteredDataTable)
+    //     ? filteredDataTable.slice(
+    //         (currentPage - 1) * itemsPerPage,
+    //         currentPage * itemsPerPage
+    //     )
+    //     : [];
+
+    useEffect(() => {
+        if (filteredDataTable) {
+            setPaginatedData(filteredDataTable.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage))
+            // setPaginatedData(filteredDataTable)
+        }
+    }, [filteredDataTable, currentPage, itemsPerPage])
+
+    // ############### COLUMN SHOW/HIDE ###############
+    const initialColumns: any = [
+        { key: 'gas_day', label: 'Gas Day', visible: true },
+        { key: 'gas_hour', label: 'Gas Hour', visible: true },
+        { key: 'timestamp', label: 'Timestamp', visible: true },
+        { key: 'zone', label: 'Zone', visible: true },
+        { key: 'mode', label: 'Mode', visible: true },
+        { key: 'group', label: 'Shipper Name', visible: true },
+        // { key: 'hv', label: 'HV (BTU/SCF)', visible: true },
+        // { key: 'base_inventory_value', label: 'Base Inventory Value (MMBTU)', visible: true },
+        // { key: 'high_max', label: 'High Max (MMBTU)', visible: true },
+        { key: 'high_difficult_day', label: 'High Difficult Day', visible: true },
+        { key: 'high_red', label: 'High Red (MMBTU)', visible: true },
+        { key: 'high_orange', label: 'High Orange (MMBTU)', visible: true },
+        { key: 'alert_high', label: 'Alert High (MMBTU)', visible: true },
+        { key: 'alert_low', label: 'Alert Low (MMBTU)', visible: true },
+        { key: 'low_orange', label: 'Low Orange (MMBTU)', visible: true },
+        { key: 'low_red', label: 'Low Red (MMBTU)', visible: true },
+        { key: 'low_difficult_day', label: 'Low Difficult Day', visible: true },
+        // { key: 'low_max', label: 'Low Max (MMBTU)', visible: true },
+    ];
+
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const [columnVisibility, setColumnVisibility] = useState<any>(
+        Object.fromEntries(initialColumns.map((column: any) => [column.key, column.visible]))
+    );
+
+    const handleTogglePopover = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(anchorEl ? null : event.currentTarget);
+    };
+
+    const handleColumnToggle = (columnKey: string) => {
+        setColumnVisibility((prev: any) => ({
+            ...prev,
+            [columnKey]: !prev[columnKey]
+        }));
+    };
+
+    // =================== MODAL IMPORT ===================
+    const [formActionOpen, setformActionOpen] = useState(false); // open modal action
+    const openTemplateForm = () => {
+        setformActionOpen(true);
+    };
+
+
+    // const getTs = async () => {
+    //     let body_post = {
+    //         gas_day: srchStartDate ? dayjs(srchStartDate).tz("Asia/Bangkok").format("YYYY-MM-DD") : "", // YYYY-MM-DD ไม่เลือก ส่ง ว่าง ""
+    //         start_date: srchStartDate ? dayjs(srchStartDate).tz("Asia/Bangkok").format("YYYY-MM-DD") : "",
+    //         end_date: srchStartDate ? dayjs(srchStartDate).tz("Asia/Bangkok").format("YYYY-MM-DD") : "",
+
+    //         zone: srchZone ? srchZone : "", // ไม่เลือก ส่ง ว่าง ""
+    //         mode: srchMode ? srchMode : "", // ไม่เลือก ส่ง ว่าง ""
+    //         // active_mode: watch('active_mode'), // กำลังทำ ****
+    //         latest_daily_version: watch('last_daily_version'),  // กำลังทำ ****
+    //         latest_hourly_version: watch('last_hourly_version'),  // กำลังทำ ****
+    //         // timestamp: srchTimeStamp ? srchTimeStamp : "",// ไม่เลือก ส่ง ว่าง ""
+    //         timestamp: "", // ไม่รู้ทำไมตอนส่ง srchTimeStamp format 20/02/2025 06:20 ไปแล้วไม่ได้อะไรกลับมา เลย fix ส่ง "" แล้วมากรองหน้าบ้านเอา
+    //         skip: 0,
+    //         limit: 100
+    //     }
+    //     setBodySearch(body_post)
+
+    //     const response = await postService('/master/balancing/intraday-base-inentory-shipper', body_post);
+
+    //     // Shipper ต้องเห็นเฉพาะรายการของตัวเอง https://app.clickup.com/t/86eud2u2n
+    //     let filter_only_own_shipper: any = response
+    //     if (userDT?.account_manage?.[0]?.user_type_id == 3) {
+    //         filter_only_own_shipper = response?.filter((item: any) => item?.shipper == userDT?.account_manage?.[0]?.group?.id_name)
+    //     }
+
+    //     const transformed_res = filter_only_own_shipper?.map((item: any) => {
+    //         const valueMap = item.values.reduce((acc: Record<string, any>, curr: any) => {
+    //             acc[curr.tag] = curr.value;
+    //             return acc;
+    //         }, {});
+
+    //         return {
+    //             ...item,
+    //             ...valueMap, // inject tag-value pairs as top-level keys
+    //         };
+    //     });
+
+    //     let filtered = transformed_res?.filter((item: any) => {
+    //         return (
+    //             (srchTimeStamp ? srchTimeStamp == item?.timestamp : true) &&
+    //             (srchZone ? srchZone == item?.zoneObj?.name : true) &&
+    //             (srchMode ? srchMode == item?.mode : true)
+    //         );
+    //     });
+
+    //     const result_final = filtered;
+
+    //     // DATA TIMESTAMP
+    //     const data_timestamp = Array.from(
+    //         new Map(
+    //             result_final?.map((item: any) => [item.timestamp, { timestamp: item.timestamp }])
+    //         ).values()
+    //     );
+    //     if (data_timestamp?.length > 0) {
+    //         setDataTimestamp(data_timestamp);
+    //     }
+
+    //     // DATA MODE
+    //     const data_mode = Array.from(
+    //         new Map(
+    //             result_final?.map((item: any) => [item.mode, { mode: item.mode }])
+    //         ).values()
+    //     );
+    //     if (data_mode?.length > 0) {
+    //         // setDataMode((prev: any[]) => [...prev, ...data_mode]); // เติมมันเข้าไป
+    //         setDataMode((prev: any[]) => {
+    //             const existingModes = new Set(prev.map(item => item.mode));
+    //             const newUniqueItems = data_mode.filter((item: any) => !existingModes.has(item.mode));
+    //             return [...prev, ...newUniqueItems]; // เติมมันเข้าไป และเช็คซ้ำด้วย
+    //         });
+    //     }
+
+    //     setData(result_final);
+    //     setFilteredDataTable(result_final);
+
+    // }
+
+    // // ตอนเลือก gas day ต้องได้ dropdown ของ timestamp มาเลยโดยไม่ต้องไปกด filter ก่อน https://app.clickup.com/t/86ev5f74f
+    // useEffect(() => {
+    //     getTs();
+    // }, [srchStartDate])
+
+    /**
+ * โหลดเฉพาะรายการ Timestamp ตาม Gas Day ที่เลือก
+ *
+ * ห้ามเรียก:
+ * - setData()
+ * - setFilteredDataTable()
+ * - setBodySearch()
+ *
+ * เพราะยังไม่ได้กดปุ่ม Search
+ */
+const getTimestampOptions = async (gasDay: Date | null) => {
+    // เปลี่ยน Gas Day แล้ว Timestamp เดิมอาจไม่อยู่ในวันใหม่
+    setSrchTimeStamp('');
+
+    if (!gasDay) {
+        setDataTimestamp([]);
+        return;
+    }
+
+    const requestId = ++timestampRequestIdRef.current;
+
+    try {
+        const gasDayText = dayjs(gasDay)
+            .tz("Asia/Bangkok")
+            .format("YYYY-MM-DD");
+
+        const body_post = {
+            gas_day: gasDayText,
+            start_date: gasDayText,
+            end_date: gasDayText,
+
+            // โหลด Timestamp ทั้งหมดของ Gas Day
+            // Zone และ Mode จะใช้ค้นหาจริงตอนกด Search
+            zone: "",
+            mode: "",
+
+            latest_daily_version: watch('last_daily_version'),
+            latest_hourly_version: watch('last_hourly_version'),
+
+            timestamp: "",
+            skip: 0,
+            limit: 100
+        };
+
+        const response = await postService(
+            '/master/balancing/intraday-base-inentory-shipper',
+            body_post
+        );
+
+        // หากผู้ใช้เปลี่ยน Gas Day อีกรอบระหว่างรอ API
+        // ไม่ให้ response ของวันเก่ากลับมาทับวันใหม่
+        if (requestId !== timestampRequestIdRef.current) {
+            return;
+        }
+
+        let responseByPermission: any[] = Array.isArray(response)
+            ? response
+            : [];
+
+        // Shipper เห็นเฉพาะรายการของตัวเอง
+        if (userDT?.account_manage?.[0]?.user_type_id === 3) {
+            responseByPermission = responseByPermission.filter(
+                (item: any) =>
+                    item?.shipper ===
+                    userDT?.account_manage?.[0]?.group?.id_name
+            );
+        }
+
+        // ตัด Timestamp ที่ว่างและค่าซ้ำ
+        const timestampOptions = Array.from(
+            new Map(
+                responseByPermission
+                    .filter((item: any) => Boolean(item?.timestamp))
+                    .map((item: any) => [
+                        item.timestamp,
+                        {
+                            timestamp: item.timestamp
+                        }
+                    ])
+            ).values()
+        );
+
+        // อัปเดตเฉพาะ Dropdown Timestamp
+        // ไม่กระทบข้อมูลในตาราง
+        setDataTimestamp(timestampOptions);
+    } catch (error) {
+        if (requestId !== timestampRequestIdRef.current) {
+            return;
+        }
+
+        setDataTimestamp([]);
+    }
+};
+
+// เปลี่ยน Gas Day แล้วโหลดเฉพาะ Dropdown Timestamp
+useEffect(() => {
+    // ตอนเปิดหน้าครั้งแรก fetchData() โหลดข้อมูลให้อยู่แล้ว
+    // จึงไม่ต้องยิง API ซ้ำ
+    if (isFirstGasDayRender.current) {
+        isFirstGasDayRender.current = false;
+        return;
+    }
+
+    getTimestampOptions(srchStartDate);
+}, [srchStartDate]);
+
+    return (
+        <div className=" space-y-2">
+            <div className="border-[#DFE4EA] border-[1px] p-4 rounded-xl flex flex-col sm:flex-row gap-2">
+                <aside className="flex flex-wrap sm:flex-row gap-2 w-full">
+
+                    <DatePickaSearch
+                        key={"start" + key}
+                        label={"Gas Day"}
+                        placeHolder={"Select Gas Day"}
+                        isDefaultToday={true}
+                        allowClear
+                        onChange={(e: any) => setSrchStartDate(e ? e : null)}
+                    />
+
+                    <InputSearch
+                        id="searchZoneMaster"
+                        label="Zone"
+                        type="select"
+                        value={srchZone}
+                        onChange={(e) => setSrchZone(e.target.value)}
+                        // options={zoneMaster?.data?.map((item: any) => ({
+                        //     value: item?.id?.toString(),
+                        //     label: item.name
+                        // }))}
+                        options={dataZoneMasterZ?.map((item: any) => ({
+                            value: item.zone_name,
+                            label: item.zone_name
+                        }))}
+                    />
+
+                    <InputSearch
+                        id="searchMode"
+                        label="Mode"
+                        type="select"
+                        value={srchMode}
+                        onChange={(e) => setSrchMode(e.target.value)}
+                        options={dataMode?.map((item: any) => ({
+                            value: item.mode,
+                            label: item.mode
+                        }))}
+                    />
+
+                    {/* <div className="w-auto relative">
+                        <CheckboxSearch
+                            {...register('active_mode')}
+                            id="active_mode"
+                            label="Active Mode"
+                            type="single-line"
+                            value={watch('active_mode') ? watch('active_mode') : false}
+                            onChange={(e: any) => setValue('active_mode', e?.target?.checked)}
+                        />
+                    </div> */}
+
+                    <div className="-mb-2">
+                        {/* โชว์ชม. ล่าสุดที่มีตาม Gas Day ที่เลือก */}
+                        <CheckboxSearch2
+                            {...register('last_daily_version')}
+                            id="last_daily_version"
+                            label="Latest Daily Version"
+                            type="single-line"
+                            value={watch('last_daily_version') ? watch('last_daily_version') : false}
+                            onChange={(e: any) => setValue('last_daily_version', e?.target?.checked)}
+                        />
+                    </div>
+
+
+                    <div className="-mb-2">
+                        {/* โชว์ล่าสุดของชม.นั้นๆ สมมุติมี 9 โมง 2 อันจะแสดงแค่ 9 โมงล่าสุด */}
+                        <CheckboxSearch2
+                            {...register('last_hourly_version')}
+                            id="last_hourly_version"
+                            label="Latest Hourly Version"
+                            type="single-line"
+                            value={watch('last_hourly_version') ? watch('last_hourly_version') : false}
+                            onChange={(e: any) => setValue('last_hourly_version', e?.target?.checked)}
+                            isDisable={(userDT?.account_manage?.[0]?.user_type_id === 3 || userDT?.account_manage?.[0]?.user_type_id === 4) ? true : false}
+                        />
+                    </div>
+
+                    <InputSearch
+                        id="searchTimestamp"
+                        label="Timestamp"
+                        type="select"
+                        value={srchTimeStamp}
+                        onChange={(e) => setSrchTimeStamp(e.target.value)}
+                        options={dataTimestamp?.map((item: any) => ({
+                            value: item.timestamp,
+                            label: item.timestamp
+                        }))}
+                    />
+
+                    <BtnSearch handleFieldSearch={handleFieldSearch} />
+                    <BtnReset handleReset={handleReset} />
+                </aside>
+
+                <aside className="mt-auto ml-1 w-full sm:w-auto">
+                    <div className="flex flex-wrap gap-2 justify-end">
+                        {/* {
+                            // Shipper จะไม่เห็นปุ่ม Alloc & Bal https://app.clickup.com/t/86et8d33n
+                            userDT?.account_manage?.[0]?.user_type_id !== 3 &&
+                            <BtnGeneral
+                                textRender={"Alloc & Bal"}
+                                iconNoRender={true}
+                                bgcolor={"#00ADEF"}
+                                generalFunc={handleExcute}
+                                can_create={userPermission ? userPermission?.f_create : false}
+                            />
+                        } */}
+                    </div>
+                </aside>
+                <aside className="mt-auto ml-1 w-full sm:w-auto">
+                    <div className="flex flex-wrap gap-2 justify-end">
+                        {/* <BtnAddNew openCreateForm={openCreateForm} textRender={"New"} can_create={userPermission ? userPermission?.f_create : false} /> */}
+                    </div>
+                </aside>
+            </div>
+
+            <div className="border-[#DFE4EA] border-[1px] p-4 rounded-xl shadow-sm">
+                <div>
+                    <div className=" text-sm flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
+                        <div onClick={handleTogglePopover}>
+                            <Tune
+                                className="cursor-pointer rounded-lg"
+                                style={{ fontSize: "18px", color: '#2B2A87', borderRadius: '4px', width: '22px', height: '22px', border: '1px solid rgba(43, 42, 135, 0.4)' }}
+                            />
+                        </div>
+                        <div className="flex flex-wrap gap-2 justify-end">
+                            <SearchInput onSearch={handleSearch} />
+                            <BtnExport
+                                textRender={"Export"}
+                                data={filteredDataTable}
+                                path="balancing/intraday-base-inentory-shipper"
+                                can_export={userPermission ? userPermission?.f_export : false}
+                                columnVisibility={columnVisibility}
+                                initialColumns={initialColumns}
+                                specificMenu={'intraday-base-inentory-shipper'}
+                                specificData={bodySearch}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <TableBalanceIntradayBaseInventoryShipper
+                    openEditForm={openEditForm}
+                    openViewForm={openViewForm}
+                    // tableData={filteredDataTable}
+                    tableData={paginatedData}
+                    zoneMaster={zoneMaster?.data}
+                    isLoading={isLoading}
+                    columnVisibility={columnVisibility}
+                    userPermission={userPermission}
+                />
+            </div>
+
+            <PaginationComponent
+                totalItems={filteredDataTable?.length}
+                itemsPerPage={itemsPerPage}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+                onItemsPerPageChange={handleItemsPerPageChange}
+            />
+
+            <ModalAction
+                mode={formMode}
+                data={formData}
+                open={formOpen}
+                zoneMasterData={zoneMaster?.data}
+                onClose={() => {
+                    setFormOpen(false);
+                    if (resetForm) {
+                        setTimeout(() => {
+                            resetForm();
+                        }, 200);
+                    }
+                }}
+                onSubmit={handleFormSubmit}
+                setResetForm={setResetForm}
+            />
+
+            <ModalImport
+                mode={'template'}
+                open={formActionOpen}
+                setformActionOpen={setformActionOpen}
+                setModalErrorMsg={setModalErrorMsg}
+                setModalErrorOpen={setModalErrorOpen}
+                setModalSuccessOpen={setModalSuccessOpen}
+                setModalSuccessMsg={setModalSuccessMsg}
+                // shipperGroupData={shipperGroupData}
+                // dataContractOriginal={dataContractOriginal}
+                userDT={userDT}
+                onClose={() => {
+                    setformActionOpen(false);
+                    if (resetForm) {
+                        setTimeout(() => {
+                            // setFormMode(undefined);
+                            resetForm();
+                        }, 200);
+                    }
+                }}
+                onSubmit={handleFormSubmit}
+                setResetForm={setResetForm}
+            />
+
+            <ModalComponent
+                open={isModalSuccessOpen}
+                handleClose={handleCloseModal}
+                title="Success"
+                // description="Non TPA Point has been added."
+                description={modalSuccessMsg}
+            />
+
+            <ModalComponent
+                open={isModalErrorOpen}
+                handleClose={() => {
+                    setModalErrorOpen(false);
+                    if (resetForm) resetForm();
+                }}
+                title="Failed"
+                description={
+                    <div>
+                        {
+                            modalErrorMsg?.split('<br/>').length > 1 ?
+                                <ul className="text-start list-disc">
+                                    {
+                                        modalErrorMsg.split('<br/>').map(item => {
+                                            return (
+                                                <li>{item}</li>
+                                            )
+                                        })
+                                    }
+                                </ul>
+                                :
+                                <div className="text-center">
+                                    {`${modalErrorMsg}`}
+                                </div>
+                        }
+                    </div>
+                }
+                stat="error"
+            />
+
+            <ColumnVisibilityPopover
+                open={open}
+                anchorEl={anchorEl}
+                setAnchorEl={setAnchorEl}
+                columnVisibility={columnVisibility}
+                handleColumnToggle={handleColumnToggle}
+                // initialColumns={tabIndex == 0 ? initialColumns?.filter((item: any) => item?.key !== 'gas_hour') : initialColumns}
+                initialColumns={initialColumns}
+            />
+
+        </div>
+    );
+};
+
+export default ClientPage;

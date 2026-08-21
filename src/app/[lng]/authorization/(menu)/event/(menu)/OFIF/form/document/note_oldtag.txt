@@ -1,0 +1,2418 @@
+<div className="pb-5">
+
+                <div className="gap-2 w-full flex items-center">
+                    {/* เพิ่ม - ลด */}
+                    <div className="grid grid-cols-2 gap-1 pt-4">
+                        <label className="w-[85px] text-[#58585A]">
+                            <input
+                                type="radio"
+                                {...register("doc_7_perm_lod_1", { required: false })}
+                                value={1}
+                                disabled={(mode == 'view' || isShipper || idChudTee1) ? true : false}
+                                checked={watch("doc_7_perm_lod_1") == 1 || watch("doc_7_perm_lod_1") == "1"}
+                                onChange={(e) => {
+                                    setIsEditPermLod(true)
+                                    setValue('doc_7_perm_lod_1', e.target.value)
+                                }}
+                                className="mr-1 accent-[#1473A1]"
+                            />
+                            {`เพิ่ม`}
+                        </label>
+
+                        <label className="w-[85px] text-[#58585A]">
+                            <input
+                                type="radio"
+                                {...register("doc_7_perm_lod_1", { required: false })}
+                                value={2}
+                                disabled={(mode == 'view' || isShipper || idChudTee1) ? true : false}
+                                checked={watch("doc_7_perm_lod_1") == 2 || watch("doc_7_perm_lod_1") == "2"}
+                                onChange={(e) => {
+                                    setIsEditPermLod(true)
+                                    setValue('doc_7_perm_lod_1', e.target.value)
+                                }}
+                                className="mr-1 accent-[#1473A1]"
+                            />
+                            {`ลด`}
+                        </label>
+                    </div>
+
+                    {/* จุดส่งเข้า - จุดส่งออก */}
+                    {
+                        watch('doc_7_perm_lod_1') && <div className="grid grid-cols-2 gap-1 pt-4">
+                            <label className="w-[100px] text-[#58585A]">
+                                <input
+                                    type="radio"
+                                    {...register("doc_7_jud_soong_kaw_ook_1", { required: false })}
+                                    value={3}
+                                    disabled={(mode == 'view' || isShipper || idChudTee1) ? true : false}
+                                    checked={watch("doc_7_jud_soong_kaw_ook_1") == 3 || watch("doc_7_jud_soong_kaw_ook_1") == "3"}
+                                    onChange={(e) => {
+                                        setValue('doc_7_jud_soong_kaw_ook_1', e.target.value)
+                                        filterAreaEntryExit(e.target.value, 1)
+                                    }}
+                                    className="mr-1 accent-[#1473A1]"
+                                />
+                                {`จุดส่งเข้า`}
+                            </label>
+
+                            <label className="w-[100px] text-[#58585A]">
+                                <input
+                                    type="radio"
+                                    {...register("doc_7_jud_soong_kaw_ook_1", { required: false })}
+                                    value={4}
+                                    disabled={(mode == 'view' || isShipper || idChudTee1) ? true : false}
+                                    checked={watch("doc_7_jud_soong_kaw_ook_1") == 4 || watch("doc_7_jud_soong_kaw_ook_1") == "4"}
+                                    onChange={(e) => {
+                                        setValue('doc_7_jud_soong_kaw_ook_1', e.target.value)
+                                        filterAreaEntryExit(e.target.value, 1)
+                                    }}
+                                    className="mr-1 accent-[#1473A1]"
+                                />
+                                {`จุดส่งออก`}
+                            </label>
+                        </div>
+                    }
+
+                </div>
+
+
+                {/* Area */}
+                {
+                    watch('doc_7_perm_lod_1') &&
+                    <div className="gap-2 w-full flex items-center pt-4">
+                        <div className="grid grid-cols-2 gap-1 pt-4">
+                            <label className="w-[100px] text-[#58585A]"></label>
+                            <label className="w-[100px] text-[#58585A]"></label>
+                        </div>
+
+                        <div className="grid grid-cols-3 w-full gap-4">
+                            <div className="flex flex-wrap flex-auto ">
+                                <label className={`${labelClass}`}>{`Area`}</label>
+                                <SelectFormProps
+                                    id={'doc_7_area_1'}
+                                    register={register("doc_7_area_1", { required: false })}
+                                    // disabled={(mode == 'view' || mode == 'edit' || !watch('doc_7_perm_lod_1')) ? true : false}
+                                    // disabled={(idChudTee1 && mode == 'edit') || !watch('doc_7_perm_lod_1') ? true : false} // kom test
+                                    disabled={mode == 'view' || !watch('doc_7_perm_lod_1') || isShipper || idChudTee1 ? true : false} // kom test 2
+                                    valueWatch={watch("doc_7_area_1") || ""}
+                                    handleChange={(e) => {
+                                        setValue("doc_7_area_1", e.target.value);
+                                        getNomPointOfArea(e.target.value, 1) // หา nom
+                                        clearErrors('doc_7_area_1')
+                                        if (errors?.doc_7_area_1) { clearErrors('doc_7_area_1') }
+                                    }}
+                                    errors={errors?.doc_7_area_1}
+                                    errorsText={'Select Area'}
+                                    // options={dataNomPointForDoc7}
+                                    options={dataAreaChud1}
+                                    optionsKey={'id'}
+                                    optionsValue={'id'}
+                                    optionsText={'name'}
+                                    optionsResult={'name'}
+                                    placeholder={'Select Area'}
+                                    pathFilter={'name'}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                {/* ปริมาณก๊าซที่ */}
+                <div className="gap-2 w-full flex items-center pt-4">
+                    <div className="grid grid-cols-2 gap-1 pt-4">
+                        <label className="w-[100px] text-[#58585A]"></label>
+                        <label className="w-[100px] text-[#58585A]"></label>
+                    </div>
+
+                    <div className="grid grid-cols-3 w-full gap-4">
+                        <div className="flex flex-wrap flex-auto ">
+                            <label className={`${labelClass}`}>{`ปริมาณก๊าซที่`}</label>
+                            <SelectFormProps
+                                id={'doc_7_nom_point_1'}
+                                register={register("doc_7_nom_point_1", { required: false })}
+                                // disabled={(mode == 'view' || mode == 'edit' || !watch('doc_7_perm_lod_1')) ? true : false}
+                                // disabled={(idChudTee1 && mode == 'edit') || !watch('doc_7_perm_lod_1') ? true : false} // kom test
+                                disabled={mode == 'view' || !watch('doc_7_perm_lod_1') || isShipper || idChudTee1 ? true : false} // kom test 2
+                                valueWatch={watch("doc_7_nom_point_1") || ""}
+                                handleChange={(e) => {
+                                    handletrickerEdit();
+                                    setValue("doc_7_nom_point_1", e.target.value);
+                                    getShipperOfNomPoint(e.target.value, 1)
+                                    clearErrors('doc_7_nom_point_1')
+                                    if (errors?.doc_7_nom_point_1) { clearErrors('doc_7_nom_point_1') }
+                                }}
+                                errors={errors?.doc_7_nom_point_1}
+                                errorsText={'Select Point'}
+                                options={dataNomPoint1}
+                                optionsKey={'id'}
+                                optionsValue={'id'}
+                                optionsText={'nomination_point'}
+                                optionsResult={'nomination_point'}
+                                placeholder={'Select Point'}
+                                pathFilter={'nomination_point'}
+                            />
+                        </div>
+
+                        {/* <div className="flex flex-wrap flex-auto ">
+                            <label className={`${labelClass} `}>{`คิดเป็นปริมาณ (MMSCFH)`}</label>
+                            <NumericFormat
+                                id="doc_7_nom_value_1"
+                                placeholder="0.0000"
+                                value={watch("doc_7_nom_value_1")}
+                                // readOnly={(mode == 'view' || mode == 'edit' || !watch('doc_7_perm_lod_1')) ? true : false}
+                                // readOnly={(idChudTee1 && mode == 'edit') || !watch('doc_7_perm_lod_1') ? true : false} // kom test
+                                disabled={mode == 'view' || !watch('doc_7_perm_lod_1') ? true : false} // kom test 2
+                                {...register("doc_7_nom_value_1", { required: false })}
+                                className={`${inputClass} ${errors.doc_7_nom_value_1 && "border-red-500"}  ${(mode == 'view' || isShipper) && '!bg-[#EFECEC]'} text-right`}
+                                thousandSeparator={true}
+                                decimalScale={4}
+                                fixedDecimalScale={true}
+                                allowNegative={false}
+                                displayType="input"
+                                onValueChange={(values) => {
+                                    const { value } = values;
+                                    setValue("doc_7_nom_value_1", value, { shouldValidate: true, shouldDirty: true });
+                                }}
+                            />
+                        </div> */}
+
+                        <div className="flex flex-wrap flex-auto">
+                            <label className={`${labelClass}`}>{`Shipper`}</label>
+                            <Select
+                                id="shipper_id_1"
+                                multiple
+                                IconComponent={(props) => <ExpandMoreIcon {...props} fontSize="medium" />}
+                                {...register("shipper_id_1", { required: false })}
+                                disabled={(mode == 'view' || !watch('doc_7_perm_lod_1') || isShipper) ? true : false}
+                                value={selectedShippers1}
+                                onChange={(e: any) => handleSelectChange(e, 1)}
+                                className={`${selectboxClass} ${(mode == 'view') && "!bg-[#EFECEC]"}`}
+                                sx={selectSx}
+                                displayEmpty
+                                renderValue={(selected) => {
+                                    if (selected.length === 0) {
+                                        return <Typography color="#9CA3AF" fontSize={14}>Select Shipper Name</Typography>;
+                                    }
+                                    // return selected.map((id) => dataShipper1.find((item: any) => item.id === id)?.name).join(", ");
+                                    const shipper_data = dataShipper1?.filter((item: any) => !defaultShippersId1?.includes(item.id))
+
+                                    return (
+                                        <span className={`pl-[10px] text-[14px]`}>
+                                            {shipper_data?.length == selectedShippers1?.length ? `Select All` : selected.map((id) => dataShipper1?.filter((item: any) => !defaultShippersId1?.includes(item.id)).find((item: any) => item.id === id)?.name).join(", ")}
+                                        </span>
+                                    );
+                                }}
+                                MenuProps={{ PaperProps: { style: { maxHeight: 48 * 4.5 + 8 } } }}
+                            >
+                                {userDT?.account_manage?.[0]?.user_type_id !== 3 && (
+                                    <MenuItem value="all">
+                                        <Checkbox checked={selectedShippers1.length === dataShipper1?.length && dataShipper1?.length > 0} />
+                                        <ListItemText
+                                            primary="Select All"
+                                            // sx={{ fontWeight: 'bold' }}
+                                            primaryTypographyProps={{ sx: { fontWeight: 'bold' } }}
+                                        />
+                                    </MenuItem>
+                                )}
+
+                                {/* {dataShipper1?.length > 0 && dataShipper1
+                                    ?.filter((item: any) => !defaultShippersId1?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                    ?.map((item: any) => (
+                                        <MenuItem
+                                            key={item.id}
+                                            value={item.id}
+                                            disabled={false}
+                                        >
+                                            <Checkbox checked={selectedShippers1.includes(item.id)} />
+                                            <ListItemText primary={item.name} />
+                                        </MenuItem>
+                                    ))
+                                } */}
+
+                                {dataShipper1?.length > 0 && dataShipper1
+                                    ?.filter((item: any) => !defaultShippersId1?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId2?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId3?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId4?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId5?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+
+                                    // ?.filter((item: any) => !selectedShippers1.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !selectedShippers2?.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !selectedShippers3?.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !selectedShippers4?.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !selectedShippers5?.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                    ?.map((item: any) => (
+                                        <MenuItem
+                                            key={item.id}
+                                            value={item.id}
+                                            disabled={false}
+                                        >
+                                            <Checkbox checked={selectedShippers1.includes(item.id)} />
+                                            <ListItemText primary={item.name} />
+                                        </MenuItem>
+                                    ))
+                                }
+                            </Select>
+                        </div>
+                    </div>
+                </div>
+
+                {
+                    watch('doc_7_perm_lod_1') && <>
+                        <div className="gap-2 w-full flex items-center">
+
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+
+                            <div className="grid grid-cols-3 w-full gap-4">
+                                <div></div>
+                                {/* <div></div> */}
+                                <div className="w-full flex flex-wrap items-end justify-end gap-4">
+                                    <div className="flex flex-wrap gap-2 pt-2 mt-2 w-full max-h-[120px] overflow-y-auto">
+                                        {/* ลบไม่ได้เว่ย */}
+                                        {defaultShippersRender1?.map((item: any, index: number) => (
+                                            <div
+                                                key={`default-${index}`}
+                                                className="relative w-fit h-[40px] p-2 text-[13px] bg-[#CFF2FF] border border-[#DFE4EA] rounded-[6px] text-[#58585A] break-all"
+                                            >
+                                                {item?.name}
+                                            </div>
+                                        ))}
+
+                                        {
+                                            selectedShippersRender1?.map((item: any, index: number) => (
+                                                <div
+                                                    key={index}
+                                                    className="relative w-fit h-[40px] p-2 text-[13px] bg-[#CFF2FF] border border-[#DFE4EA] rounded-[6px] text-[#58585A] break-all"
+                                                >
+                                                    {item?.name}
+                                                    <button
+                                                        type="button"
+                                                        className="absolute top-[-6px] right-[-4px] w-[15px] h-[15px] rounded-full bg-[#58585A] text-white flex justify-center items-center text-[8px]"
+                                                        onClick={() => removeShipper(item?.id, 1)}
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div className="gap-2 w-full flex items-center pt-4">
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+                            <div className="w-full col-span-2">
+                                <label className={`${labelClass} `}>{`คิดเป็นปริมาณ (MMSCFH)`}</label>
+                                <TextField
+                                    {...register("doc_7_nom_value_1")}
+                                    value={watch("doc_7_nom_value_1") || ""}
+                                    label=""
+                                    multiline
+                                    onChange={(e) => {
+                                        if (e.target.value.length <= 255) {
+                                            setValue("doc_7_nom_value_1", e.target.value);
+                                            handletrickerEdit();
+                                        }
+                                    }}
+                                    placeholder="ระบุรายละเอียด"
+                                    // disabled={mode == 'view' ? true : false}
+                                    disabled={mode == 'view' || !watch('doc_7_perm_lod_1') || isShipper ? true : false} // kom test 2
+                                    rows={2}
+                                    sx={textFieldSx}
+                                    className={`${mode == 'view' && 'bg-[#EFECEC] rounded-[8px]'}`}
+                                    InputProps={inputPropsTextField}
+                                    fullWidth
+                                />
+                                <div className="flex justify-end text-sm text-[#B6B6B6] mt-1">
+                                    <span className="text-[13px]">
+                                        {watch("doc_7_nom_value_1")?.length || 0} / 255
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div className="gap-2 w-full flex items-center pt-4">
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+
+                            <div className="grid grid-cols-2 w-full gap-4">
+                                <div className="">
+                                    <label htmlFor="doc_7_gas_command_1" className={labelClass}> {`การสั่งการ`}</label>
+                                    <input
+                                        id="doc_7_gas_command_1"
+                                        type="text"
+                                        placeholder="รายละเอียด"
+                                        // readOnly={isReadOnly}
+                                        // readOnly={(idChudTee1 && mode == 'edit') || !watch('doc_7_perm_lod_1') ? true : false} // kom test
+                                        readOnly={mode == 'view' || !watch('doc_7_perm_lod_1') || isShipper ? true : false} // kom test 2
+                                        {...register("doc_7_gas_command_1", { required: false })}
+                                        onChange={(e) => {
+                                            if (e.target.value.length <= 255) {
+                                                setValue('doc_7_gas_command_1', e.target.value);
+                                                handletrickerEdit();
+                                            }
+                                        }}
+                                        maxLength={255}
+                                        className={`${inputClass} ${errors.doc_7_gas_command_1 && "border-red-500"}  ${isReadOnly && '!bg-[#EFECEC]'}`}
+                                    />
+                                    <div className="flex justify-end text-sm text-[#B6B6B6] mt-1"><span className="text-[13px]">{watch('doc_7_gas_command_1')?.length || 0} / 255</span></div>
+                                </div>
+
+                                <div className="">
+                                    <label htmlFor="doc_7_gas_more_1" className={labelClass}> {`ข้อมูลเพิ่มเติม`}</label>
+                                    <input
+                                        id="doc_7_gas_more_1"
+                                        type="text"
+                                        placeholder="รายละเอียด"
+                                        // readOnly={isReadOnly}
+                                        // readOnly={(idChudTee1 && mode == 'edit') || !watch('doc_7_perm_lod_1') ? true : false} // kom test
+                                        readOnly={mode == 'view' || !watch('doc_7_perm_lod_1') || isShipper ? true : false} // kom test 2
+                                        {...register("doc_7_gas_more_1", { required: false })}
+                                        onChange={(e) => {
+                                            if (e.target.value.length <= 255) {
+                                                setValue('doc_7_gas_more_1', e.target.value);
+                                                handletrickerEdit();
+                                            }
+                                        }}
+                                        maxLength={255}
+                                        className={`${inputClass} ${errors.doc_7_gas_more_1 && "border-red-500"}  ${isReadOnly && '!bg-[#EFECEC]'}`}
+                                    />
+                                    <div className="flex justify-end text-sm text-[#B6B6B6] mt-1"><span className="text-[13px]">{watch('doc_7_gas_more_1')?.length || 0} / 255</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="gap-2 w-full flex items-center ">
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+
+                            {/* File */}
+                            {/* ถ้าเป็น create แสดงอันนี้ */}
+                            {
+                                // userDT?.account_manage?.[0]?.user_type_id !== 3 && mode == 'create' &&
+                                userDT?.account_manage?.[0]?.user_type_id !== 3 && mode !== 'view' &&
+                                <div className="grid grid-cols-2 w-full">
+                                    <label className={`${labelClass}`}>{`File`}</label>
+                                    <div className={`flex items-center col-span-2 ${IsErrorChudTee == '1' ? 'border  border-[#ff0000] rounded-r-lg rounded-l-lg' : ''}`}>
+                                        <label className={`flex bg-[#00ADEF] text-white items-center justify-center font-light rounded-l-[6px] text-[16px] text-justify w-[20%] !h-[44px] px-2 cursor-pointer`}>
+                                            {`Choose File`}
+                                            {isUploading && (
+                                                <span className="ml-2 w-[14px] h-[14px] border-[2px] border-white border-t-transparent rounded-full animate-spin"></span>
+                                            )}
+                                            <input
+                                                id="url"
+                                                type="file"
+                                                className="hidden"
+                                                {...register('file')}
+                                                // accept=".xls, .xlsx"
+                                                onChange={(e) => handleFileChange(e, 1)}
+                                            />
+                                        </label>
+
+                                        <div className="bg-white text-[#9CA3AF] text-sm w-[80%] !h-[44px] px-2 py-2 rounded-r-[6px] border-l-0 border border-gray-300 truncate overflow-hidden flex items-center">
+                                            <span className="truncate">
+                                                {fileName1}
+                                            </span>
+                                            {fileName1 !== "Maximum File 10 MB" && (
+                                                <CloseOutlinedIcon
+                                                    onClick={() => handleRemoveFile(1)}
+                                                    className="cursor-pointer ml-2 text-[#9CA3AF] z-10"
+                                                    sx={{ color: '#323232', fontSize: 18 }}
+                                                    style={{ fontSize: 18 }}
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className={`w-full flex items-center justify-between text-[14px] text-red-500 `}>
+                                        {IsErrorChudTee == '1' && 'The file is larger than 10 MB.'}
+                                    </div>
+
+                                </div>
+                            }
+
+                            {/* File */}
+                            {/* ถ้าเป็น edit view แสดงอันนี้ */}
+                            {
+                                // (mode == 'edit' || mode == 'view') && fileNameEditTextUrl1 !== '' &&
+                                (mode == 'view') && fileNameEditTextUrl1 !== '' &&
+                                <div className="grid grid-cols-2 w-full gap-4 ">
+                                    <div className="col-span-2 ">
+                                        <label className={`${labelClass}`}>
+                                            {`File`}
+                                        </label>
+                                        <div className="h-[46px] text-[#464255] p-3 rounded-[6px] bg-[#F3F2F2] flex justify-between w-full">
+                                            <div className="flex items-center gap-2">
+                                                <InsertDriveFileOutlinedIcon sx={{ fontSize: '20px' }} /> {fileNameEditText1}
+                                            </div>
+
+                                            <button
+                                                type="button"
+                                                className={`flex items-center justify-center px-[2px] py-[2px] rounded-[4px] relative ${fileNameEditTextUrl1 === '' ? 'bg-[#f0f0f0] cursor-not-allowed pointer-events-none' : 'hover:bg-[#DFE4EA] hover:border hover:border-[#DFE4EA]'}`}
+                                                onClick={() => downloadFile(1)}
+                                                disabled={fileNameEditTextUrl1 !== '' ? false : true}
+                                            >
+                                                <FileDownloadIcon sx={{ fontSize: 23, color: '#1473A1', backgroundColor: '#ffffff', borderRadius: '4px', borderColor: '#DFE4EA' }} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </>
+                }
+            </div>
+
+
+            {horizoneDivide()}
+
+
+            {/* =============== ชุด 2 ===============*/}
+            <div className="pb-5">
+
+                <div className="gap-2 w-full flex items-center">
+                    {/* เพิ่ม - ลด */}
+                    <div className="grid grid-cols-2 gap-1 pt-4">
+                        <label className="w-[85px] text-[#58585A]">
+                            <input
+                                type="radio"
+                                // {...register("doc_7_perm_lod_2", { required: !watch("doc_7_perm_lod_2") ? true : false })}
+                                {...register("doc_7_perm_lod_2", { required: false })}
+                                value={1}
+                                disabled={(mode == 'view' || isShipper || idChudTee2) ? true : false || watch('doc_7_perm_lod_1') ? false : true}
+                                checked={watch("doc_7_perm_lod_2") == 1 || watch("doc_7_perm_lod_2") == "1"}
+                                // defaultChecked={watch("doc_7_perm_lod_2") == 1}
+                                onChange={(e) => {
+                                    setValue('doc_7_perm_lod_2', e.target.value)
+                                    // handletrickerEdit();
+                                }}
+                                className="mr-1 accent-[#1473A1]"
+                            />
+                            {`เพิ่ม`}
+                        </label>
+
+                        <label className="w-[85px] text-[#58585A]">
+                            <input
+                                type="radio"
+                                // {...register("doc_7_perm_lod_2", { required: !watch("doc_7_perm_lod_2") ? true : false })}
+                                {...register("doc_7_perm_lod_2", { required: false })}
+                                value={2}
+                                disabled={(mode == 'view' || isShipper || idChudTee2) ? true : false || watch('doc_7_perm_lod_1') ? false : true}
+                                checked={watch("doc_7_perm_lod_2") == 2 || watch("doc_7_perm_lod_2") == "2"}
+                                onChange={(e) => {
+                                    setValue('doc_7_perm_lod_2', e.target.value)
+                                    // handletrickerEdit();
+                                }}
+                                className="mr-1 accent-[#1473A1]"
+                            />
+                            {`ลด`}
+                        </label>
+                    </div>
+
+                    {/* จุดส่งเข้า - จุดส่งออก */}
+                    {
+                        watch('doc_7_perm_lod_2') && <div className="grid grid-cols-2 gap-1 pt-4">
+                            <label className="w-[100px] text-[#58585A]">
+                                <input
+                                    type="radio"
+                                    {...register("doc_7_jud_soong_kaw_ook_2", { required: false })}
+                                    value={3}
+                                    disabled={(mode == 'view' || isShipper || idChudTee2) ? true : false}
+                                    checked={watch("doc_7_jud_soong_kaw_ook_2") == 3 || watch("doc_7_jud_soong_kaw_ook_2") == "3"}
+                                    onChange={(e) => {
+                                        setValue('doc_7_jud_soong_kaw_ook_2', e.target.value)
+                                        filterAreaEntryExit(e.target.value, 2)
+                                    }}
+                                    className="mr-1 accent-[#1473A1]"
+                                />
+                                {`จุดส่งเข้า`}
+                            </label>
+
+                            <label className="w-[100px] text-[#58585A]">
+                                <input
+                                    type="radio"
+                                    {...register("doc_7_jud_soong_kaw_ook_2", { required: false })}
+                                    value={4}
+                                    disabled={(mode == 'view' || isShipper || idChudTee2) ? true : false}
+                                    checked={watch("doc_7_jud_soong_kaw_ook_2") == 4 || watch("doc_7_jud_soong_kaw_ook_2") == "4"}
+                                    onChange={(e) => {
+                                        setValue('doc_7_jud_soong_kaw_ook_2', e.target.value)
+                                        filterAreaEntryExit(e.target.value, 2)
+                                    }}
+                                    className="mr-1 accent-[#1473A1]"
+                                />
+                                {`จุดส่งออก`}
+                            </label>
+                        </div>
+                    }
+                </div>
+
+
+                {/* Area */}
+                {
+                    watch('doc_7_perm_lod_2') &&
+                    <div className="gap-2 w-full flex items-center pt-4">
+                        <div className="grid grid-cols-2 gap-1 pt-4">
+                            <label className="w-[100px] text-[#58585A]"></label>
+                            <label className="w-[100px] text-[#58585A]"></label>
+                        </div>
+
+                        <div className="grid grid-cols-3 w-full gap-4">
+                            <div className="flex flex-wrap flex-auto ">
+                                <label className={`${labelClass}`}>{`Area`}</label>
+                                <SelectFormProps
+                                    id={'doc_7_area_2'}
+                                    register={register("doc_7_area_2", { required: false })}
+                                    // disabled={(mode == 'view' || mode == 'edit' || !watch('doc_7_perm_lod_2')) ? true : false}
+                                    // disabled={(idChudTee2 && mode == 'edit') || !watch('doc_7_perm_lod_2') ? true : false} // kom test
+                                    disabled={mode == 'view' || !watch('doc_7_perm_lod_2') || isShipper || idChudTee2 ? true : false} // kom test 2
+                                    valueWatch={watch("doc_7_area_2") || ""}
+                                    handleChange={(e) => {
+                                        setValue("doc_7_area_2", e.target.value);
+                                        getNomPointOfArea(e.target.value, 2) // หา nom
+                                        clearErrors('doc_7_area_2')
+                                        if (errors?.doc_7_area_2) { clearErrors('doc_7_area_2') }
+                                    }}
+                                    errors={errors?.doc_7_area_2}
+                                    errorsText={'Select Area'}
+                                    options={dataAreaChud2}
+                                    optionsKey={'id'}
+                                    optionsValue={'id'}
+                                    optionsText={'name'}
+                                    optionsResult={'name'}
+                                    placeholder={'Select Area'}
+                                    pathFilter={'name'}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                {/* ปริมาณก๊าซที่ */}
+                <div className="gap-2 w-full flex items-center pt-4">
+                    <div className="grid grid-cols-2 gap-1 pt-4">
+                        <label className="w-[100px] text-[#58585A]"></label>
+                        <label className="w-[100px] text-[#58585A]"></label>
+                    </div>
+
+                    <div className="grid grid-cols-3 w-full gap-4">
+                        <div className="flex flex-wrap flex-auto ">
+                            <label className={`${labelClass}`}>{`ปริมาณก๊าซที่`}</label>
+                            <SelectFormProps
+                                id={'doc_7_nom_point_2'}
+                                register={register("doc_7_nom_point_2", { required: false })}
+                                // disabled={(mode == 'view' || mode == 'edit' || !watch('doc_7_perm_lod_2')) ? true : false}
+                                // disabled={(idChudTee2 && mode == 'edit') || !watch('doc_7_perm_lod_2') ? true : false} // kom test
+                                disabled={mode == 'view' || !watch('doc_7_perm_lod_2') || isShipper || idChudTee2 ? true : false} // kom test 2
+                                valueWatch={watch("doc_7_nom_point_2") || ""}
+                                handleChange={(e) => {
+                                    handletrickerEdit();
+                                    setValue("doc_7_nom_point_2", e.target.value);
+                                    getShipperOfNomPoint(e.target.value, 2)
+                                    clearErrors('doc_7_nom_point_2')
+                                    if (errors?.doc_7_nom_point_2) { clearErrors('doc_7_nom_point_2') }
+                                }}
+                                errors={errors?.doc_7_nom_point_2}
+                                errorsText={'Select Point'}
+                                options={dataNomPoint2}
+                                optionsKey={'id'}
+                                optionsValue={'id'}
+                                optionsText={'nomination_point'}
+                                optionsResult={'nomination_point'}
+                                placeholder={'Select Point'}
+                                pathFilter={'nomination_point'}
+                            />
+                        </div>
+
+                        {/* <div className="flex flex-wrap flex-auto ">
+                            <label className={`${labelClass} `}>{`คิดเป็นปริมาณ (MMSCFH)`}</label>
+                            <NumericFormat
+                                id="doc_7_nom_value_2"
+                                placeholder="0.0000"
+                                value={watch("doc_7_nom_value_2")}
+                                // readOnly={(mode == 'view' || mode == 'edit' || !watch('doc_7_perm_lod_2')) ? true : false}
+                                // readOnly={(idChudTee2 && mode == 'edit') || !watch('doc_7_perm_lod_2') ? true : false} // kom test
+                                disabled={mode == 'view' || !watch('doc_7_perm_lod_2') || isShipper ? true : false} // kom test 2
+                                {...register("doc_7_nom_value_2", { required: false })}
+                                className={`${inputClass} ${errors.doc_7_nom_value_2 && "border-red-500"}  ${(mode == 'view' || isShipper) && '!bg-[#EFECEC]'} text-right`}
+                                thousandSeparator={true}
+                                decimalScale={4}
+                                fixedDecimalScale={true}
+                                allowNegative={false}
+                                displayType="input"
+                                onValueChange={(values) => {
+                                    const { value } = values;
+                                    setValue("doc_7_nom_value_2", value, { shouldValidate: true, shouldDirty: true });
+                                }}
+                            />
+                        </div> */}
+
+                        <div className="flex flex-wrap flex-auto">
+                            <label className={`${labelClass}`}>{`Shipper`}</label>
+                            <Select
+                                id="shipper_id_2"
+                                multiple
+                                IconComponent={(props) => <ExpandMoreIcon {...props} fontSize="medium" />}
+                                {...register("shipper_id_2", { required: false })}
+                                disabled={(mode == 'view' || !watch('doc_7_perm_lod_2') || isShipper) ? true : false}
+                                value={selectedShippers2}
+                                onChange={(e: any) => handleSelectChange(e, 2)}
+                                className={`${selectboxClass} ${(mode == 'view') && "!bg-[#EFECEC]"}`}
+                                sx={selectSx}
+                                displayEmpty
+                                renderValue={(selected) => {
+                                    if (selected.length === 0) {
+                                        return <Typography color="#9CA3AF" fontSize={14}>Select Shipper Name</Typography>;
+                                    }
+                                    // return selected.map((id) => dataShipper2.find((item: any) => item.id === id)?.name).join(", ");
+                                    const shipper_data = dataShipper2?.filter((item: any) => !defaultShippersId2?.includes(item.id))
+                                    return (
+                                        <span className={`pl-[10px] text-[14px]`}>
+                                            {shipper_data?.length == selectedShippers2?.length ? `Select All` : selected.map((id) => dataShipper2?.filter((item: any) => !defaultShippersId2?.includes(item.id)).find((item: any) => item.id === id)?.name).join(", ")}
+                                        </span>
+                                    );
+                                }}
+                                MenuProps={{ PaperProps: { style: { maxHeight: 48 * 4.5 + 8 } } }}
+                            >
+                                {userDT?.account_manage?.[0]?.user_type_id !== 3 && (
+                                    <MenuItem value="all">
+                                        <Checkbox checked={selectedShippers2.length === dataShipper2?.length && dataShipper2?.length > 0} />
+                                        <ListItemText
+                                            primary="Select All"
+                                            // sx={{ fontWeight: 'bold' }}
+                                            primaryTypographyProps={{ sx: { fontWeight: 'bold' } }}
+                                        />
+                                    </MenuItem>
+                                )}
+
+                                {/* {dataShipper2?.length > 0 && dataShipper2
+                                    ?.filter((item: any) => !defaultShippersId2?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                    ?.map((item: any) => (
+                                        <MenuItem
+                                            key={item.id}
+                                            value={item.id}
+                                            disabled={false}
+                                        >
+                                            <Checkbox checked={selectedShippers2.includes(item.id)} />
+                                            <ListItemText primary={item.name} />
+                                        </MenuItem>
+                                    ))
+                                } */}
+
+                                {dataShipper2?.length > 0 && dataShipper2
+                                    ?.filter((item: any) => !defaultShippersId1?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId2?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId3?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId4?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId5?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+
+                                    ?.filter((item: any) => !selectedShippers1.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    // ?.filter((item: any) => !selectedShippers2.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !selectedShippers3.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !selectedShippers4.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !selectedShippers5.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+
+                                    ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                    ?.map((item: any) => (
+                                        <MenuItem
+                                            key={item.id}
+                                            value={item.id}
+                                            disabled={false}
+                                        >
+                                            <Checkbox checked={selectedShippers2.includes(item.id)} />
+                                            <ListItemText primary={item.name} />
+                                        </MenuItem>
+                                    ))
+                                }
+                            </Select>
+                        </div>
+                    </div>
+                </div>
+
+                {
+                    watch('doc_7_perm_lod_2') && <>
+                        <div className="gap-2 w-full flex items-center">
+
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+
+                            <div className="grid grid-cols-3 w-full gap-4">
+                                <div></div>
+                                {/* <div></div> */}
+                                <div className="w-full flex flex-wrap items-end justify-end gap-4">
+                                    <div className="flex flex-wrap gap-2 pt-2 mt-2 w-full max-h-[120px] overflow-y-auto">
+                                        {/* ลบไม่ได้เว่ย */}
+                                        {defaultShippersRender2?.map((item: any, index: number) => (
+                                            <div
+                                                key={`default-${index}`}
+                                                className="relative w-fit h-[40px] p-2 text-[13px] bg-[#CFF2FF] border border-[#DFE4EA] rounded-[6px] text-[#58585A] break-all"
+                                            >
+                                                {item?.name}
+                                            </div>
+                                        ))}
+
+                                        {
+                                            selectedShippersRender2?.map((item: any, index: number) => (
+                                                <div
+                                                    key={index}
+                                                    className="relative w-fit h-[40px] p-2 text-[13px] bg-[#CFF2FF] border border-[#DFE4EA] rounded-[6px] text-[#58585A] break-all"
+                                                >
+                                                    {item?.name}
+                                                    <button
+                                                        type="button"
+                                                        className="absolute top-[-6px] right-[-4px] w-[15px] h-[15px] rounded-full bg-[#58585A] text-white flex justify-center items-center text-[8px]"
+                                                        onClick={() => removeShipper(item?.id, 2)}
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="gap-2 w-full flex items-center pt-4">
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+                            <div className="w-full col-span-2">
+                                <label className={`${labelClass} `}>{`คิดเป็นปริมาณ (MMSCFH)`}</label>
+                                <TextField
+                                    {...register("doc_7_nom_value_2")}
+                                    value={watch("doc_7_nom_value_2") || ""}
+                                    label=""
+                                    multiline
+                                    onChange={(e) => {
+                                        if (e.target.value.length <= 255) {
+                                            setValue("doc_7_nom_value_2", e.target.value);
+                                            handletrickerEdit();
+                                        }
+                                    }}
+                                    placeholder="ระบุรายละเอียด"
+                                    // disabled={mode == 'view' ? true : false}
+                                    disabled={mode == 'view' || !watch('doc_7_perm_lod_2') || isShipper ? true : false} // kom test 2
+                                    rows={2}
+                                    sx={textFieldSx}
+                                    className={`${mode == 'view' && 'bg-[#EFECEC] rounded-[8px]'}`}
+                                    InputProps={inputPropsTextField}
+                                    fullWidth
+                                />
+                                <div className="flex justify-end text-sm text-[#B6B6B6] mt-1">
+                                    <span className="text-[13px]">
+                                        {watch("doc_7_nom_value_2")?.length || 0} / 255
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="gap-2 w-full flex items-center pt-4">
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+
+                            <div className="grid grid-cols-2 w-full gap-4">
+                                <div className="">
+                                    <label htmlFor="doc_7_gas_command_2" className={labelClass}> {`การสั่งการ`}</label>
+                                    <input
+                                        id="doc_7_gas_command_2"
+                                        type="text"
+                                        placeholder="รายละเอียด"
+                                        // readOnly={isReadOnly}
+                                        // readOnly={(idChudTee2 && mode == 'edit') || !watch('doc_7_perm_lod_2') ? true : false} // kom test
+                                        readOnly={mode == 'view' || !watch('doc_7_perm_lod_2') || isShipper ? true : false} // kom test 2
+                                        {...register("doc_7_gas_command_2", { required: false })}
+                                        onChange={(e) => {
+                                            if (e.target.value.length <= 255) {
+                                                setValue('doc_7_gas_command_2', e.target.value);
+                                                handletrickerEdit();
+                                            }
+                                        }}
+                                        maxLength={255}
+                                        className={`${inputClass} ${errors.doc_7_gas_command_2 && "border-red-500"}  ${isReadOnly && '!bg-[#EFECEC]'}`}
+                                    />
+                                    <div className="flex justify-end text-sm text-[#B6B6B6] mt-1"><span className="text-[13px]">{watch('doc_7_gas_command_2')?.length || 0} / 255</span></div>
+                                </div>
+
+                                <div className="">
+                                    <label htmlFor="doc_7_gas_more_2" className={labelClass}> {`ข้อมูลเพิ่มเติม`}</label>
+                                    <input
+                                        id="doc_7_gas_more_2"
+                                        type="text"
+                                        placeholder="รายละเอียด"
+                                        // readOnly={isReadOnly}
+                                        // readOnly={(idChudTee2 && mode == 'edit') || !watch('doc_7_perm_lod_2') ? true : false} // kom test
+                                        readOnly={mode == 'view' || !watch('doc_7_perm_lod_2') || isShipper ? true : false} // kom test 2
+                                        {...register("doc_7_gas_more_2", { required: false })}
+                                        onChange={(e) => {
+                                            if (e.target.value.length <= 255) {
+                                                setValue('doc_7_gas_more_2', e.target.value);
+                                                handletrickerEdit();
+                                            }
+                                        }}
+                                        maxLength={255}
+                                        className={`${inputClass} ${errors.doc_7_gas_more_2 && "border-red-500"}  ${isReadOnly && '!bg-[#EFECEC]'}`}
+                                    />
+                                    <div className="flex justify-end text-sm text-[#B6B6B6] mt-1"><span className="text-[13px]">{watch('doc_7_gas_more_2')?.length || 0} / 255</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="gap-2 w-full flex items-center ">
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+
+                            {/* File */}
+                            {/* ถ้าเป็น create แสดงอันนี้ */}
+                            {
+                                userDT?.account_manage?.[0]?.user_type_id !== 3 && mode !== 'view' &&
+                                <div className="grid grid-cols-2 w-full">
+                                    <label className={`${labelClass}`}>{`File`}</label>
+                                    <div className={`flex items-center col-span-2 ${IsErrorChudTee == '2' ? 'border  border-[#ff0000] rounded-r-lg rounded-l-lg' : ''}`}>
+                                        <label className={`flex bg-[#00ADEF] text-white items-center justify-center font-light rounded-l-[6px] text-[16px] text-justify w-[20%] !h-[44px] px-2 cursor-pointer`}>
+                                            {`Choose File`}
+                                            {isUploading && (
+                                                <span className="ml-2 w-[14px] h-[14px] border-[2px] border-white border-t-transparent rounded-full animate-spin"></span>
+                                            )}
+                                            <input
+                                                id="url"
+                                                type="file"
+                                                className="hidden"
+                                                {...register('file')}
+                                                // accept=".xls, .xlsx"
+                                                onChange={(e) => handleFileChange(e, 2)}
+                                            />
+                                        </label>
+
+                                        <div className="bg-white text-[#9CA3AF] text-sm w-[80%] !h-[44px] px-2 py-2 rounded-r-[6px] border-l-0 border border-gray-300 truncate overflow-hidden flex items-center">
+                                            <span className="truncate">
+                                                {fileName2}
+                                            </span>
+                                            {fileName2 !== "Maximum File 10 MB" && (
+                                                <CloseOutlinedIcon
+                                                    onClick={() => handleRemoveFile(2)}
+                                                    className="cursor-pointer ml-2 text-[#9CA3AF] z-10"
+                                                    sx={{ color: '#323232', fontSize: 18 }}
+                                                    style={{ fontSize: 18 }}
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className={`w-full flex items-center justify-between text-[14px] text-red-500 `}>
+                                        {IsErrorChudTee == '2' && 'The file is larger than 10 MB.'}
+                                    </div>
+                                </div>
+                            }
+
+                            {/* File */}
+                            {/* ถ้าเป็น edit view แสดงอันนี้ */}
+                            {
+                                // (mode == 'edit' || mode == 'view') && fileNameEditTextUrl2 !== '' &&
+                                (mode == 'view') && fileNameEditTextUrl2 !== '' &&
+                                <div className="grid grid-cols-2 w-full gap-4 ">
+                                    <div className="col-span-2 ">
+                                        <label className={`${labelClass}`}>
+                                            {`File`}
+                                        </label>
+                                        <div className="h-[46px] text-[#464255] p-3 rounded-[6px] bg-[#F3F2F2] flex justify-between w-full">
+                                            <div className="flex items-center gap-2">
+                                                <InsertDriveFileOutlinedIcon sx={{ fontSize: '20px' }} /> {fileNameEditText2}
+                                            </div>
+
+                                            <button
+                                                type="button"
+                                                className={`flex items-center justify-center px-[2px] py-[2px] rounded-[4px] relative ${fileNameEditTextUrl2 === '' ? 'bg-[#f0f0f0] cursor-not-allowed pointer-events-none' : 'hover:bg-[#DFE4EA] hover:border hover:border-[#DFE4EA]'}`}
+                                                onClick={() => downloadFile(2)}
+                                                disabled={fileNameEditTextUrl2 !== '' ? false : true}
+                                            >
+                                                <FileDownloadIcon sx={{ fontSize: 23, color: '#1473A1', backgroundColor: '#ffffff', borderRadius: '4px', borderColor: '#DFE4EA' }} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </>
+                }
+            </div>
+
+
+            {horizoneDivide()}
+
+
+            {/* =============== ชุด 3 ===============*/}
+            <div className="pb-5">
+
+                <div className="gap-2 w-full flex items-center">
+                    {/* เพิ่ม - ลด */}
+                    <div className="grid grid-cols-2 gap-1 pt-4">
+                        <label className="w-[85px] text-[#58585A]">
+                            <input
+                                type="radio"
+                                // {...register("doc_7_perm_lod_3", { required: !watch("doc_7_perm_lod_3") ? true : false })}
+                                {...register("doc_7_perm_lod_3", { required: false })}
+                                value={1}
+                                disabled={(mode == 'view' || isShipper || idChudTee3) ? true : false || watch('doc_7_perm_lod_2') ? false : true}
+                                checked={watch("doc_7_perm_lod_3") == 1 || watch("doc_7_perm_lod_3") == "1"}
+                                // defaultChecked={watch("doc_7_perm_lod_3") == 1}
+                                onChange={(e) => {
+                                    setValue('doc_7_perm_lod_3', e.target.value)
+                                    // handletrickerEdit();
+                                }}
+                                className="mr-1 accent-[#1473A1]"
+                            />
+                            {`เพิ่ม`}
+                        </label>
+
+                        <label className="w-[85px] text-[#58585A]">
+                            <input
+                                type="radio"
+                                // {...register("doc_7_perm_lod_3", { required: !watch("doc_7_perm_lod_3") ? true : false })}
+                                {...register("doc_7_perm_lod_3", { required: false })}
+                                value={2}
+                                disabled={(mode == 'view' || isShipper || idChudTee3) ? true : false || watch('doc_7_perm_lod_2') ? false : true}
+                                // checked={watch("doc_7_perm_lod_3") == 2}
+                                checked={watch("doc_7_perm_lod_3") == 2 || watch("doc_7_perm_lod_3") == "2"}
+                                onChange={(e) => {
+                                    setValue('doc_7_perm_lod_3', e.target.value)
+                                    // handletrickerEdit();
+                                }}
+                                className="mr-1 accent-[#1473A1]"
+                            />
+                            {`ลด`}
+                        </label>
+                    </div>
+
+                    {/* จุดส่งเข้า - จุดส่งออก */}
+                    {
+                        watch('doc_7_perm_lod_3') && <div className="grid grid-cols-2 gap-1 pt-4">
+                            <label className="w-[100px] text-[#58585A]">
+                                <input
+                                    type="radio"
+                                    {...register("doc_7_jud_soong_kaw_ook_3", { required: false })}
+                                    value={3}
+                                    disabled={(mode == 'view' || isShipper || idChudTee3) ? true : false}
+                                    checked={watch("doc_7_jud_soong_kaw_ook_3") == 3 || watch("doc_7_jud_soong_kaw_ook_3") == "3"}
+                                    onChange={(e) => {
+                                        setValue('doc_7_jud_soong_kaw_ook_3', e.target.value)
+                                        filterAreaEntryExit(e.target.value, 3)
+                                    }}
+                                    className="mr-1 accent-[#1473A1]"
+                                />
+                                {`จุดส่งเข้า`}
+                            </label>
+
+                            <label className="w-[100px] text-[#58585A]">
+                                <input
+                                    type="radio"
+                                    {...register("doc_7_jud_soong_kaw_ook_3", { required: false })}
+                                    value={4}
+                                    disabled={(mode == 'view' || isShipper || idChudTee3) ? true : false}
+                                    checked={watch("doc_7_jud_soong_kaw_ook_3") == 4 || watch("doc_7_jud_soong_kaw_ook_3") == "4"}
+                                    onChange={(e) => {
+                                        setValue('doc_7_jud_soong_kaw_ook_3', e.target.value)
+                                        filterAreaEntryExit(e.target.value, 3)
+                                    }}
+                                    className="mr-1 accent-[#1473A1]"
+                                />
+                                {`จุดส่งออก`}
+                            </label>
+                        </div>
+                    }
+                </div>
+
+
+                {/* Area */}
+                {
+                    watch('doc_7_perm_lod_3') &&
+                    <div className="gap-2 w-full flex items-center pt-4">
+                        <div className="grid grid-cols-2 gap-1 pt-4">
+                            <label className="w-[100px] text-[#58585A]"></label>
+                            <label className="w-[100px] text-[#58585A]"></label>
+                        </div>
+
+                        <div className="grid grid-cols-3 w-full gap-4">
+                            <div className="flex flex-wrap flex-auto ">
+                                <label className={`${labelClass}`}>{`Area`}</label>
+                                <SelectFormProps
+                                    id={'doc_7_area_3'}
+                                    register={register("doc_7_area_3", { required: false })}
+                                    // disabled={(mode == 'view' || mode == 'edit' || !watch('doc_7_perm_lod_3')) ? true : false}
+                                    // disabled={(idChudTee2 && mode == 'edit') || !watch('doc_7_perm_lod_3') ? true : false} // kom test
+                                    disabled={mode == 'view' || !watch('doc_7_perm_lod_3') || isShipper || idChudTee3 ? true : false} // kom test 2
+                                    valueWatch={watch("doc_7_area_3") || ""}
+                                    handleChange={(e) => {
+                                        setValue("doc_7_area_3", e.target.value);
+                                        getNomPointOfArea(e.target.value, 3) // หา nom
+                                        clearErrors('doc_7_area_3')
+                                        if (errors?.doc_7_area_3) { clearErrors('doc_7_area_3') }
+                                    }}
+                                    errors={errors?.doc_7_area_3}
+                                    errorsText={'Select Area'}
+                                    // options={dataNomPointForDoc7}
+                                    options={dataAreaChud3}
+                                    optionsKey={'id'}
+                                    optionsValue={'id'}
+                                    optionsText={'name'}
+                                    optionsResult={'name'}
+                                    placeholder={'Select Area'}
+                                    pathFilter={'name'}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                {/* ปริมาณก๊าซที่ */}
+                <div className="gap-2 w-full flex items-center pt-4">
+                    <div className="grid grid-cols-2 gap-1 pt-4">
+                        <label className="w-[100px] text-[#58585A]"></label>
+                        <label className="w-[100px] text-[#58585A]"></label>
+                    </div>
+
+                    <div className="grid grid-cols-3 w-full gap-4">
+                        <div className="flex flex-wrap flex-auto ">
+                            <label className={`${labelClass}`}>{`ปริมาณก๊าซที่`}</label>
+                            <SelectFormProps
+                                id={'doc_7_nom_point_3'}
+                                register={register("doc_7_nom_point_3", { required: false })}
+                                // disabled={(mode == 'view' || mode == 'edit' || !watch('doc_7_perm_lod_3')) ? true : false}
+                                // disabled={(idChudTee3 && mode == 'edit') || !watch('doc_7_perm_lod_3') ? true : false} // kom test
+                                disabled={mode == 'view' || !watch('doc_7_perm_lod_3') || isShipper || idChudTee3 ? true : false} // kom test 2
+                                valueWatch={watch("doc_7_nom_point_3") || ""}
+                                handleChange={(e) => {
+                                    handletrickerEdit();
+                                    setValue("doc_7_nom_point_3", e.target.value);
+                                    getShipperOfNomPoint(e.target.value, 3)
+                                    clearErrors('doc_7_nom_point_3')
+                                    if (errors?.doc_7_nom_point_3) { clearErrors('doc_7_nom_point_3') }
+                                }}
+                                errors={errors?.doc_7_nom_point_3}
+                                errorsText={'Select Point'}
+                                options={dataNomPoint3}
+                                optionsKey={'id'}
+                                optionsValue={'id'}
+                                optionsText={'nomination_point'}
+                                optionsResult={'nomination_point'}
+                                placeholder={'Select Point'}
+                                pathFilter={'nomination_point'}
+                            />
+                        </div>
+
+                        {/* <div className="flex flex-wrap flex-auto ">
+                            <label className={`${labelClass} `}>{`คิดเป็นปริมาณ (MMSCFH)`}</label>
+                            <NumericFormat
+                                id="doc_7_nom_value_3"
+                                placeholder="0.0000"
+                                value={watch("doc_7_nom_value_3")}
+                                // readOnly={(mode == 'view' || mode == 'edit' || !watch('doc_7_perm_lod_3')) ? true : false}
+                                // readOnly={(idChudTee3 && mode == 'edit') || !watch('doc_7_perm_lod_3') ? true : false} // kom test
+                                disabled={mode == 'view' || !watch('doc_7_perm_lod_3') || isShipper ? true : false} // kom test 2
+                                {...register("doc_7_nom_value_3", { required: false })}
+                                className={`${inputClass} ${errors.doc_7_nom_value_3 && "border-red-500"}  ${(mode == 'view' || isShipper) && '!bg-[#EFECEC]'} text-right`}
+                                thousandSeparator={true}
+                                decimalScale={4}
+                                fixedDecimalScale={true}
+                                allowNegative={false}
+                                displayType="input"
+                                onValueChange={(values) => {
+                                    const { value } = values;
+                                    setValue("doc_7_nom_value_3", value, { shouldValidate: true, shouldDirty: true });
+                                }}
+                            />
+                        </div> */}
+
+                        <div className="flex flex-wrap flex-auto">
+                            <label className={`${labelClass}`}>{`Shipper`}</label>
+                            <Select
+                                id="shipper_id_3"
+                                multiple
+                                IconComponent={(props) => <ExpandMoreIcon {...props} fontSize="medium" />}
+                                {...register("shipper_id_3", { required: false })}
+                                disabled={(mode == 'view' || !watch('doc_7_perm_lod_3') || isShipper) ? true : false}
+                                value={selectedShippers3}
+                                onChange={(e: any) => handleSelectChange(e, 3)}
+                                className={`${selectboxClass} ${(mode == 'view') && "!bg-[#EFECEC]"}`}
+                                sx={selectSx}
+                                displayEmpty
+                                renderValue={(selected) => {
+                                    if (selected.length === 0) {
+                                        return <Typography color="#9CA3AF" fontSize={14}>Select Shipper Name</Typography>;
+                                    }
+                                    // return selected.map((id) => dataShipper3.find((item: any) => item.id === id)?.name).join(", ");
+                                    const shipper_data = dataShipper3?.filter((item: any) => !defaultShippersId3?.includes(item.id))
+                                    return (
+                                        <span className={`pl-[10px] text-[14px]`}>
+                                            {shipper_data?.length == selectedShippers3?.length ? `Select All` : selected.map((id) => dataShipper3?.filter((item: any) => !defaultShippersId3?.includes(item.id)).find((item: any) => item.id === id)?.name).join(", ")}
+                                        </span>
+                                    );
+                                }}
+                                MenuProps={{ PaperProps: { style: { maxHeight: 48 * 4.5 + 8 } } }}
+                            >
+                                {userDT?.account_manage?.[0]?.user_type_id !== 3 && (
+                                    <MenuItem value="all">
+                                        <Checkbox checked={selectedShippers3.length === dataShipper3?.length && dataShipper3?.length > 0} />
+                                        <ListItemText
+                                            primary="Select All"
+                                            // sx={{ fontWeight: 'bold' }}
+                                            primaryTypographyProps={{ sx: { fontWeight: 'bold' } }}
+                                        />
+                                    </MenuItem>
+                                )}
+
+                                {/* {dataShipper3?.length > 0 && dataShipper3
+                                    ?.filter((item: any) => !defaultShippersId3?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                    ?.map((item: any) => (
+                                        <MenuItem
+                                            key={item.id}
+                                            value={item.id}
+                                            disabled={false}
+                                        >
+                                            <Checkbox checked={selectedShippers3.includes(item.id)} />
+                                            <ListItemText primary={item.name} />
+                                        </MenuItem>
+                                    ))
+                                } */}
+                                {dataShipper3?.length > 0 && dataShipper3
+                                    ?.filter((item: any) => !defaultShippersId1?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId2?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId3?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId4?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId5?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+
+                                    ?.filter((item: any) => !selectedShippers1.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !selectedShippers2.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    // ?.filter((item: any) => !selectedShippers3.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !selectedShippers4.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !selectedShippers5.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                    ?.map((item: any) => (
+                                        <MenuItem
+                                            key={item.id}
+                                            value={item.id}
+                                            disabled={false}
+                                        >
+                                            <Checkbox checked={selectedShippers3.includes(item.id)} />
+                                            <ListItemText primary={item.name} />
+                                        </MenuItem>
+                                    ))
+                                }
+                            </Select>
+                        </div>
+                    </div>
+                </div>
+
+                {
+                    watch('doc_7_perm_lod_3') && <>
+                        <div className="gap-2 w-full flex items-center">
+
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+
+                            <div className="grid grid-cols-3 w-full gap-4">
+                                <div></div>
+                                {/* <div></div> */}
+                                <div className="w-full flex flex-wrap items-end justify-end gap-4">
+                                    <div className="flex flex-wrap gap-2 pt-2 mt-2 w-full max-h-[120px] overflow-y-auto">
+                                        {/* ลบไม่ได้เว่ย */}
+                                        {defaultShippersRender3?.map((item: any, index: number) => (
+                                            <div
+                                                key={`default-${index}`}
+                                                className="relative w-fit h-[40px] p-2 text-[13px] bg-[#CFF2FF] border border-[#DFE4EA] rounded-[6px] text-[#58585A] break-all"
+                                            >
+                                                {item?.name}
+                                            </div>
+                                        ))}
+
+                                        {
+                                            selectedShippersRender3?.map((item: any, index: number) => (
+                                                <div
+                                                    key={index}
+                                                    className="relative w-fit h-[40px] p-2 text-[13px] bg-[#CFF2FF] border border-[#DFE4EA] rounded-[6px] text-[#58585A] break-all"
+                                                >
+                                                    {item?.name}
+                                                    <button
+                                                        type="button"
+                                                        className="absolute top-[-6px] right-[-4px] w-[15px] h-[15px] rounded-full bg-[#58585A] text-white flex justify-center items-center text-[8px]"
+                                                        onClick={() => removeShipper(item?.id, 3)}
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="gap-2 w-full flex items-center pt-4">
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+                            <div className="w-full col-span-2">
+                                <label className={`${labelClass} `}>{`คิดเป็นปริมาณ (MMSCFH)`}</label>
+                                <TextField
+                                    {...register("doc_7_nom_value_3")}
+                                    value={watch("doc_7_nom_value_3") || ""}
+                                    label=""
+                                    multiline
+                                    onChange={(e) => {
+                                        if (e.target.value.length <= 255) {
+                                            setValue("doc_7_nom_value_3", e.target.value);
+                                            handletrickerEdit();
+                                        }
+                                    }}
+                                    placeholder="ระบุรายละเอียด"
+                                    // disabled={mode == 'view' ? true : false}
+                                    disabled={mode == 'view' || !watch('doc_7_perm_lod_3') || isShipper ? true : false} // kom test 2
+                                    rows={2}
+                                    sx={textFieldSx}
+                                    className={`${mode == 'view' && 'bg-[#EFECEC] rounded-[8px]'}`}
+                                    InputProps={inputPropsTextField}
+                                    fullWidth
+                                />
+                                <div className="flex justify-end text-sm text-[#B6B6B6] mt-1">
+                                    <span className="text-[13px]">
+                                        {watch("doc_7_nom_value_3")?.length || 0} / 255
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="gap-2 w-full flex items-center pt-4">
+
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+
+                            <div className="grid grid-cols-2 w-full gap-4">
+                                <div className="">
+                                    <label htmlFor="doc_7_gas_command_3" className={labelClass}> {`การสั่งการ`}</label>
+                                    <input
+                                        id="doc_7_gas_command_3"
+                                        type="text"
+                                        placeholder="รายละเอียด"
+                                        // readOnly={isReadOnly}
+                                        // readOnly={(idChudTee3 && mode == 'edit') || !watch('doc_7_perm_lod_3') ? true : false} // kom test
+                                        readOnly={mode == 'view' || !watch('doc_7_perm_lod_3') || isShipper ? true : false} // kom test 2
+                                        {...register("doc_7_gas_command_3", { required: false })}
+                                        onChange={(e) => {
+                                            if (e.target.value.length <= 255) {
+                                                setValue('doc_7_gas_command_3', e.target.value);
+                                                handletrickerEdit();
+                                            }
+                                        }}
+                                        maxLength={255}
+                                        className={`${inputClass} ${errors.doc_7_gas_command_3 && "border-red-500"}  ${isReadOnly && '!bg-[#EFECEC]'}`}
+                                    />
+                                    <div className="flex justify-end text-sm text-[#B6B6B6] mt-1"><span className="text-[13px]">{watch('doc_7_gas_command_3')?.length || 0} / 255</span></div>
+                                </div>
+
+                                <div className="">
+                                    <label htmlFor="doc_7_gas_more_3" className={labelClass}> {`ข้อมูลเพิ่มเติม`}</label>
+                                    <input
+                                        id="doc_7_gas_more_3"
+                                        type="text"
+                                        placeholder="รายละเอียด"
+                                        // readOnly={isReadOnly}
+                                        // readOnly={(idChudTee3 && mode == 'edit') || !watch('doc_7_perm_lod_3') ? true : false} // kom test
+                                        readOnly={mode == 'view' || !watch('doc_7_perm_lod_3') || isShipper ? true : false} // kom test 2
+                                        {...register("doc_7_gas_more_3", { required: false })}
+                                        onChange={(e) => {
+                                            if (e.target.value.length <= 255) {
+                                                setValue('doc_7_gas_more_3', e.target.value);
+                                                handletrickerEdit();
+                                            }
+                                        }}
+                                        maxLength={255}
+                                        className={`${inputClass} ${errors.doc_7_gas_more_3 && "border-red-500"}  ${isReadOnly && '!bg-[#EFECEC]'}`}
+                                    />
+                                    <div className="flex justify-end text-sm text-[#B6B6B6] mt-1"><span className="text-[13px]">{watch('doc_7_gas_more_3')?.length || 0} / 255</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="gap-2 w-full flex items-center ">
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+
+                            {/* File */}
+                            {/* ถ้าเป็น create แสดงอันนี้ */}
+                            {
+                                // userDT?.account_manage?.[0]?.user_type_id !== 3 && mode == 'create' &&
+                                userDT?.account_manage?.[0]?.user_type_id !== 3 && mode !== 'view' &&
+                                <div className="grid grid-cols-2 w-full">
+                                    <label className={`${labelClass}`}>{`File`}</label>
+                                    <div className={`flex items-center col-span-2 ${IsErrorChudTee == '3' ? 'border  border-[#ff0000] rounded-r-lg rounded-l-lg' : ''}`}>
+                                        <label className={`flex bg-[#00ADEF] text-white items-center justify-center font-light rounded-l-[6px] text-[16px] text-justify w-[20%] !h-[44px] px-2 cursor-pointer`}>
+                                            {`Choose File`}
+                                            {isUploading && (
+                                                <span className="ml-2 w-[14px] h-[14px] border-[2px] border-white border-t-transparent rounded-full animate-spin"></span>
+                                            )}
+                                            <input
+                                                id="url"
+                                                type="file"
+                                                className="hidden"
+                                                {...register('file')}
+                                                // accept=".xls, .xlsx"
+                                                // onChange={handleFileChange}
+                                                onChange={(e) => handleFileChange(e, 3)}
+                                            />
+                                        </label>
+
+                                        <div className="bg-white text-[#9CA3AF] text-sm w-[80%] !h-[44px] px-2 py-2 rounded-r-[6px] border-l-0 border border-gray-300 truncate overflow-hidden flex items-center">
+                                            <span className="truncate">
+                                                {fileName3}
+                                            </span>
+                                            {fileName3 !== "Maximum File 10 MB" && (
+                                                <CloseOutlinedIcon
+                                                    onClick={() => handleRemoveFile(3)}
+                                                    className="cursor-pointer ml-2 text-[#9CA3AF] z-10"
+                                                    sx={{ color: '#323232', fontSize: 18 }}
+                                                    style={{ fontSize: 18 }}
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className={`w-full flex items-center justify-between text-[14px] text-red-500 `}>
+                                        {IsErrorChudTee == '3' && 'The file is larger than 10 MB.'}
+                                    </div>
+                                </div>
+                            }
+
+                            {/* File */}
+                            {/* ถ้าเป็น edit view แสดงอันนี้ */}
+                            {
+                                // (mode == 'edit' || mode == 'view') && fileNameEditTextUrl3 !== '' &&
+                                (mode == 'view') && fileNameEditTextUrl3 !== '' &&
+                                <div className="grid grid-cols-2 w-full gap-4 ">
+                                    <div className="col-span-2 ">
+                                        <label className={`${labelClass}`}>
+                                            {`File`}
+                                        </label>
+                                        <div className="h-[46px] text-[#464255] p-3 rounded-[6px] bg-[#F3F2F2] flex justify-between w-full">
+                                            <div className="flex items-center gap-2">
+                                                <InsertDriveFileOutlinedIcon sx={{ fontSize: '20px' }} /> {fileNameEditText3}
+                                            </div>
+
+                                            <button
+                                                type="button"
+                                                className={`flex items-center justify-center px-[2px] py-[2px] rounded-[4px] relative ${fileNameEditTextUrl3 === '' ? 'bg-[#f0f0f0] cursor-not-allowed pointer-events-none' : 'hover:bg-[#DFE4EA] hover:border hover:border-[#DFE4EA]'}`}
+                                                onClick={() => downloadFile(3)}
+                                                disabled={fileNameEditTextUrl3 !== '' ? false : true}
+                                            >
+                                                <FileDownloadIcon sx={{ fontSize: 23, color: '#1473A1', backgroundColor: '#ffffff', borderRadius: '4px', borderColor: '#DFE4EA' }} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                    </>
+                }
+            </div>
+
+
+            {horizoneDivide()}
+
+
+            {/* =============== ชุด 4 ===============*/}
+            <div className="pb-5">
+
+                <div className="gap-2 w-full flex items-center">
+                    {/* เพิ่ม - ลด */}
+                    <div className="grid grid-cols-2 gap-1 pt-4">
+                        <label className="w-[85px] text-[#58585A]">
+                            <input
+                                type="radio"
+                                // {...register("doc_7_perm_lod_4", { required: !watch("doc_7_perm_lod_4") ? true : false })}
+                                {...register("doc_7_perm_lod_4", { required: false })}
+                                value={1}
+                                disabled={(mode == 'view' || isShipper || idChudTee4) ? true : false || watch('doc_7_perm_lod_3') ? false : true}
+                                checked={watch("doc_7_perm_lod_4") == 1 || watch("doc_7_perm_lod_4") == "1"}
+                                // defaultChecked={watch("doc_7_perm_lod_4") == 1}
+                                onChange={(e) => {
+                                    setValue('doc_7_perm_lod_4', e.target.value)
+                                    // handletrickerEdit();
+                                }}
+                                className="mr-1 accent-[#1473A1]"
+                            />
+                            {`เพิ่ม`}
+                        </label>
+
+                        <label className="w-[85px] text-[#58585A]">
+                            <input
+                                type="radio"
+                                // {...register("doc_7_perm_lod_4", { required: !watch("doc_7_perm_lod_4") ? true : false })}
+                                {...register("doc_7_perm_lod_4", { required: false })}
+                                value={2}
+                                disabled={(mode == 'view' || isShipper || idChudTee4) ? true : false || watch('doc_7_perm_lod_3') ? false : true}
+                                // checked={watch("doc_7_perm_lod_4") == 2}
+                                checked={watch("doc_7_perm_lod_4") == 2 || watch("doc_7_perm_lod_4") == "2"}
+                                onChange={(e) => {
+                                    setValue('doc_7_perm_lod_4', e.target.value)
+                                    // handletrickerEdit();
+                                }}
+                                className="mr-1 accent-[#1473A1]"
+                            />
+                            {`ลด`}
+                        </label>
+                    </div>
+
+                    {/* จุดส่งเข้า - จุดส่งออก */}
+                    {
+                        watch('doc_7_perm_lod_4') && <div className="grid grid-cols-2 gap-1 pt-4">
+                            <label className="w-[100px] text-[#58585A]">
+                                <input
+                                    type="radio"
+                                    {...register("doc_7_jud_soong_kaw_ook_4", { required: false })}
+                                    value={3}
+                                    disabled={(mode == 'view' || isShipper || idChudTee4) ? true : false}
+                                    checked={watch("doc_7_jud_soong_kaw_ook_4") == 3 || watch("doc_7_jud_soong_kaw_ook_4") == "3"}
+                                    onChange={(e) => {
+                                        setValue('doc_7_jud_soong_kaw_ook_4', e.target.value)
+                                        filterAreaEntryExit(e.target.value, 4)
+                                    }}
+                                    className="mr-1 accent-[#1473A1]"
+                                />
+                                {`จุดส่งเข้า`}
+                            </label>
+
+                            <label className="w-[100px] text-[#58585A]">
+                                <input
+                                    type="radio"
+                                    {...register("doc_7_jud_soong_kaw_ook_4", { required: false })}
+                                    value={4}
+                                    disabled={(mode == 'view' || isShipper || idChudTee4) ? true : false}
+                                    checked={watch("doc_7_jud_soong_kaw_ook_4") == 4 || watch("doc_7_jud_soong_kaw_ook_4") == "4"}
+                                    onChange={(e) => {
+                                        setValue('doc_7_jud_soong_kaw_ook_4', e.target.value)
+                                        filterAreaEntryExit(e.target.value, 4)
+                                    }}
+                                    className="mr-1 accent-[#1473A1]"
+                                />
+                                {`จุดส่งออก`}
+                            </label>
+                        </div>
+                    }
+
+                </div>
+
+
+                {/* Area */}
+                {
+                    watch('doc_7_perm_lod_4') &&
+                    <div className="gap-2 w-full flex items-center pt-4">
+                        <div className="grid grid-cols-2 gap-1 pt-4">
+                            <label className="w-[100px] text-[#58585A]"></label>
+                            <label className="w-[100px] text-[#58585A]"></label>
+                        </div>
+
+                        <div className="grid grid-cols-3 w-full gap-4">
+                            <div className="flex flex-wrap flex-auto ">
+                                <label className={`${labelClass}`}>{`Area`}</label>
+                                <SelectFormProps
+                                    id={'doc_7_area_4'}
+                                    register={register("doc_7_area_4", { required: false })}
+                                    // disabled={(mode == 'view' || mode == 'edit' || !watch('doc_7_perm_lod_4')) ? true : false}
+                                    // disabled={(idChudTee2 && mode == 'edit') || !watch('doc_7_perm_lod_4') ? true : false} // kom test
+                                    disabled={mode == 'view' || !watch('doc_7_perm_lod_4') || isShipper || idChudTee4 ? true : false} // kom test 2
+                                    valueWatch={watch("doc_7_area_4") || ""}
+                                    handleChange={(e) => {
+                                        setValue("doc_7_area_4", e.target.value);
+                                        getNomPointOfArea(e.target.value, 4) // หา nom
+                                        clearErrors('doc_7_area_4')
+                                        if (errors?.doc_7_area_4) { clearErrors('doc_7_area_4') }
+                                    }}
+                                    errors={errors?.doc_7_area_4}
+                                    errorsText={'Select Area'}
+                                    // options={dataNomPointForDoc7}
+                                    options={dataAreaChud4}
+                                    optionsKey={'id'}
+                                    optionsValue={'id'}
+                                    optionsText={'name'}
+                                    optionsResult={'name'}
+                                    placeholder={'Select Area'}
+                                    pathFilter={'name'}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                {/* ปริมาณก๊าซที่ */}
+                <div className="gap-2 w-full flex items-center pt-4">
+                    <div className="grid grid-cols-2 gap-1 pt-4">
+                        <label className="w-[100px] text-[#58585A]"></label>
+                        <label className="w-[100px] text-[#58585A]"></label>
+                    </div>
+
+                    <div className="grid grid-cols-3 w-full gap-4">
+                        <div className="flex flex-wrap flex-auto ">
+                            <label className={`${labelClass}`}>{`ปริมาณก๊าซที่`}</label>
+                            <SelectFormProps
+                                id={'doc_7_nom_point_4'}
+                                register={register("doc_7_nom_point_4", { required: false })}
+                                // disabled={(mode == 'view' || mode == 'edit' || !watch('doc_7_perm_lod_4')) ? true : false}
+                                // disabled={(idChudTee4 && mode == 'edit') || !watch('doc_7_perm_lod_4') ? true : false} // kom test
+                                disabled={mode == 'view' || !watch('doc_7_perm_lod_4') || isShipper || idChudTee4 ? true : false} // kom test 2
+                                valueWatch={watch("doc_7_nom_point_4") || ""}
+                                handleChange={(e) => {
+                                    handletrickerEdit();
+                                    setValue("doc_7_nom_point_4", e.target.value);
+                                    getShipperOfNomPoint(e.target.value, 4)
+                                    clearErrors('doc_7_nom_point_4')
+                                    if (errors?.doc_7_nom_point_4) { clearErrors('doc_7_nom_point_4') }
+                                }}
+                                errors={errors?.doc_7_nom_point_4}
+                                errorsText={'Select Point'}
+                                options={dataNomPoint4}
+                                optionsKey={'id'}
+                                optionsValue={'id'}
+                                optionsText={'nomination_point'}
+                                optionsResult={'nomination_point'}
+                                placeholder={'Select Point'}
+                                pathFilter={'nomination_point'}
+                            />
+                        </div>
+
+                        {/* <div className="flex flex-wrap flex-auto ">
+                            <label className={`${labelClass} `}>{`คิดเป็นปริมาณ (MMSCFH)`}</label>
+                            <NumericFormat
+                                id="doc_7_nom_value_4"
+                                placeholder="0.0000"
+                                value={watch("doc_7_nom_value_4")}
+                                // readOnly={(mode == 'view' || mode == 'edit' || !watch('doc_7_perm_lod_4')) ? true : false}
+                                // readOnly={(idChudTee4 && mode == 'edit') || !watch('doc_7_perm_lod_4') ? true : false} // kom test
+                                disabled={mode == 'view' || !watch('doc_7_perm_lod_4') || isShipper ? true : false} // kom test 2
+                                {...register("doc_7_nom_value_4", { required: false })}
+                                className={`${inputClass} ${errors.doc_7_nom_value_4 && "border-red-500"}  ${(mode == 'view' || isShipper) && '!bg-[#EFECEC]'} text-right`}
+                                thousandSeparator={true}
+                                decimalScale={4}
+                                fixedDecimalScale={true}
+                                allowNegative={false}
+                                displayType="input"
+                                onValueChange={(values) => {
+                                    const { value } = values;
+                                    setValue("doc_7_nom_value_4", value, { shouldValidate: true, shouldDirty: true });
+                                }}
+                            />
+                        </div> */}
+
+                        <div className="flex flex-wrap flex-auto">
+                            <label className={`${labelClass}`}>{`Shipper`}</label>
+                            <Select
+                                id="shipper_id_4"
+                                multiple
+                                IconComponent={(props) => <ExpandMoreIcon {...props} fontSize="medium" />}
+                                {...register("shipper_id_4", { required: false })}
+                                disabled={(mode == 'view' || !watch('doc_7_perm_lod_4') || isShipper) ? true : false}
+                                value={selectedShippers4}
+                                onChange={(e: any) => handleSelectChange(e, 4)}
+                                className={`${selectboxClass} ${(mode == 'view') && "!bg-[#EFECEC]"}`}
+                                sx={selectSx}
+                                displayEmpty
+                                renderValue={(selected) => {
+                                    if (selected.length === 0) {
+                                        return <Typography color="#9CA3AF" fontSize={14}>Select Shipper Name</Typography>;
+                                    }
+                                    // return selected.map((id) => dataShipper4.find((item: any) => item.id === id)?.name).join(", ");
+                                    const shipper_data = dataShipper4?.filter((item: any) => !defaultShippersId4?.includes(item.id))
+                                    return (
+                                        <span className={`pl-[10px] text-[14px]`}>
+                                            {shipper_data?.length == selectedShippers4?.length ? `Select All` : selected.map((id) => dataShipper4?.filter((item: any) => !defaultShippersId4?.includes(item.id)).find((item: any) => item.id === id)?.name).join(", ")}
+                                        </span>
+                                    );
+                                }}
+                                MenuProps={{ PaperProps: { style: { maxHeight: 48 * 4.5 + 8 } } }}
+                            >
+                                {userDT?.account_manage?.[0]?.user_type_id !== 3 && (
+                                    <MenuItem value="all">
+                                        <Checkbox checked={selectedShippers4.length === dataShipper4?.length && dataShipper4?.length > 0} />
+                                        <ListItemText
+                                            primary="Select All"
+                                            // sx={{ fontWeight: 'bold' }}
+                                            primaryTypographyProps={{ sx: { fontWeight: 'bold' } }}
+                                        />
+                                    </MenuItem>
+                                )}
+
+                                {/* {dataShipper4?.length > 0 && dataShipper4
+                                    ?.filter((item: any) => !defaultShippersId4?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                    ?.map((item: any) => (
+                                        <MenuItem
+                                            key={item.id}
+                                            value={item.id}
+                                            disabled={false}
+                                        >
+                                            <Checkbox checked={selectedShippers4.includes(item.id)} />
+                                            <ListItemText primary={item.name} />
+                                        </MenuItem>
+                                    ))
+                                } */}
+                                {dataShipper4?.length > 0 && dataShipper4
+                                    ?.filter((item: any) => !defaultShippersId1?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId2?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId3?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId4?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId5?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+
+                                    ?.filter((item: any) => !selectedShippers1.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !selectedShippers2.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !selectedShippers3.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    // ?.filter((item: any) => !selectedShippers4.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !selectedShippers5.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                    ?.map((item: any) => (
+                                        <MenuItem
+                                            key={item.id}
+                                            value={item.id}
+                                            disabled={false}
+                                        >
+                                            <Checkbox checked={selectedShippers4.includes(item.id)} />
+                                            <ListItemText primary={item.name} />
+                                        </MenuItem>
+                                    ))
+                                }
+                            </Select>
+                        </div>
+                    </div>
+                </div>
+
+                {
+                    watch('doc_7_perm_lod_4') && <>
+                        <div className="gap-2 w-full flex items-center">
+
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+
+                            <div className="grid grid-cols-3 w-full gap-4">
+                                <div></div>
+                                {/* <div></div> */}
+                                <div className="w-full flex flex-wrap items-end justify-end gap-4">
+                                    <div className="flex flex-wrap gap-2 pt-2 mt-2 w-full max-h-[120px] overflow-y-auto">
+                                        {/* ลบไม่ได้เว่ย */}
+                                        {defaultShippersRender4?.map((item: any, index: number) => (
+                                            <div
+                                                key={`default-${index}`}
+                                                className="relative w-fit h-[40px] p-2 text-[13px] bg-[#CFF2FF] border border-[#DFE4EA] rounded-[6px] text-[#58585A] break-all"
+                                            >
+                                                {item?.name}
+                                            </div>
+                                        ))}
+
+                                        {
+                                            selectedShippersRender4?.map((item: any, index: number) => (
+                                                <div
+                                                    key={index}
+                                                    className="relative w-fit h-[40px] p-2 text-[13px] bg-[#CFF2FF] border border-[#DFE4EA] rounded-[6px] text-[#58585A] break-all"
+                                                >
+                                                    {item?.name}
+                                                    <button
+                                                        type="button"
+                                                        className="absolute top-[-6px] right-[-4px] w-[15px] h-[15px] rounded-full bg-[#58585A] text-white flex justify-center items-center text-[8px]"
+                                                        onClick={() => removeShipper(item?.id, 4)}
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="gap-2 w-full flex items-center pt-4">
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+                            <div className="w-full col-span-2">
+                                <label className={`${labelClass} `}>{`คิดเป็นปริมาณ (MMSCFH)`}</label>
+                                <TextField
+                                    {...register("doc_7_nom_value_4")}
+                                    value={watch("doc_7_nom_value_4") || ""}
+                                    label=""
+                                    multiline
+                                    onChange={(e) => {
+                                        if (e.target.value.length <= 255) {
+                                            setValue("doc_7_nom_value_4", e.target.value);
+                                            handletrickerEdit();
+                                        }
+                                    }}
+                                    placeholder="ระบุรายละเอียด"
+                                    // disabled={mode == 'view' ? true : false}
+                                    disabled={mode == 'view' || !watch('doc_7_perm_lod_4') || isShipper ? true : false} // kom test 2
+                                    rows={2}
+                                    sx={textFieldSx}
+                                    className={`${mode == 'view' && 'bg-[#EFECEC] rounded-[8px]'}`}
+                                    InputProps={inputPropsTextField}
+                                    fullWidth
+                                />
+                                <div className="flex justify-end text-sm text-[#B6B6B6] mt-1">
+                                    <span className="text-[13px]">
+                                        {watch("doc_7_nom_value_4")?.length || 0} / 255
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="gap-2 w-full flex items-center pt-4">
+
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+
+                            <div className="grid grid-cols-2 w-full gap-4">
+                                <div className="">
+                                    <label htmlFor="doc_7_gas_command_4" className={labelClass}> {`การสั่งการ`}</label>
+                                    <input
+                                        id="doc_7_gas_command_4"
+                                        type="text"
+                                        placeholder="รายละเอียด"
+                                        // readOnly={isReadOnly}
+                                        // readOnly={(idChudTee4 && mode == 'edit') || !watch('doc_7_perm_lod_4') ? true : false} // kom test
+                                        readOnly={mode == 'view' || !watch('doc_7_perm_lod_4') || isShipper ? true : false} // kom test 2
+                                        {...register("doc_7_gas_command_4", { required: false })}
+                                        onChange={(e) => {
+                                            if (e.target.value.length <= 255) {
+                                                setValue('doc_7_gas_command_4', e.target.value);
+                                                handletrickerEdit();
+                                            }
+                                        }}
+                                        maxLength={255}
+                                        className={`${inputClass} ${errors.doc_7_gas_command_4 && "border-red-500"}  ${isReadOnly && '!bg-[#EFECEC]'}`}
+                                    />
+                                    <div className="flex justify-end text-sm text-[#B6B6B6] mt-1"><span className="text-[13px]">{watch('doc_7_gas_command_4')?.length || 0} / 255</span></div>
+                                </div>
+
+                                <div className="">
+                                    <label htmlFor="doc_7_gas_more_4" className={labelClass}> {`ข้อมูลเพิ่มเติม`}</label>
+                                    <input
+                                        id="doc_7_gas_more_4"
+                                        type="text"
+                                        placeholder="รายละเอียด"
+                                        // readOnly={isReadOnly}
+                                        // readOnly={(idChudTee4 && mode == 'edit') || !watch('doc_7_perm_lod_4') ? true : false} // kom test
+                                        readOnly={mode == 'view' || !watch('doc_7_perm_lod_4') || isShipper ? true : false} // kom test 2
+                                        {...register("doc_7_gas_more_4", { required: false })}
+                                        onChange={(e) => {
+                                            if (e.target.value.length <= 255) {
+                                                setValue('doc_7_gas_more_4', e.target.value);
+                                                handletrickerEdit();
+                                            }
+                                        }}
+                                        maxLength={255}
+                                        className={`${inputClass} ${errors.doc_7_gas_more_4 && "border-red-500"}  ${isReadOnly && '!bg-[#EFECEC]'}`}
+                                    />
+                                    <div className="flex justify-end text-sm text-[#B6B6B6] mt-1"><span className="text-[13px]">{watch('doc_7_gas_more_4')?.length || 0} / 255</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="gap-2 w-full flex items-center ">
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+
+                            {/* File */}
+                            {/* ถ้าเป็น create แสดงอันนี้ */}
+                            {
+                                // userDT?.account_manage?.[0]?.user_type_id !== 3 && mode == 'create' &&
+                                userDT?.account_manage?.[0]?.user_type_id !== 3 && mode !== 'view' &&
+                                <div className="grid grid-cols-2 w-full">
+                                    <label className={`${labelClass}`}>{`File`}</label>
+                                    <div className={`flex items-center col-span-2 ${IsErrorChudTee == '4' ? 'border  border-[#ff0000] rounded-r-lg rounded-l-lg' : ''}`}>
+                                        <label className={`flex bg-[#00ADEF] text-white items-center justify-center font-light rounded-l-[6px] text-[16px] text-justify w-[20%] !h-[44px] px-2 cursor-pointer`}>
+                                            {`Choose File`}
+                                            {isUploading && (
+                                                <span className="ml-2 w-[14px] h-[14px] border-[2px] border-white border-t-transparent rounded-full animate-spin"></span>
+                                            )}
+                                            <input
+                                                id="url"
+                                                type="file"
+                                                className="hidden"
+                                                {...register('file')}
+                                                // accept=".xls, .xlsx"
+                                                // onChange={handleFileChange}
+                                                onChange={(e) => handleFileChange(e, 4)}
+                                            />
+                                        </label>
+
+                                        <div className="bg-white text-[#9CA3AF] text-sm w-[80%] !h-[44px] px-2 py-2 rounded-r-[6px] border-l-0 border border-gray-300 truncate overflow-hidden flex items-center">
+                                            <span className="truncate">
+                                                {fileName4}
+                                            </span>
+                                            {fileName4 !== "Maximum File 10 MB" && (
+                                                <CloseOutlinedIcon
+                                                    onClick={() => handleRemoveFile(4)}
+                                                    className="cursor-pointer ml-2 text-[#9CA3AF] z-10"
+                                                    sx={{ color: '#323232', fontSize: 18 }}
+                                                    style={{ fontSize: 18 }}
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className={`w-full flex items-center justify-between text-[14px] text-red-500 `}>
+                                        {IsErrorChudTee == '4' && 'The file is larger than 10 MB.'}
+                                    </div>
+                                </div>
+                            }
+
+                            {/* File */}
+                            {/* ถ้าเป็น edit view แสดงอันนี้ */}
+                            {
+                                // (mode == 'edit' || mode == 'view') && fileNameEditTextUrl4 !== '' &&
+                                (mode == 'view') && fileNameEditTextUrl4 !== '' &&
+                                <div className="grid grid-cols-2 w-full gap-4 ">
+                                    <div className="col-span-2 ">
+                                        <label className={`${labelClass}`}>
+                                            {`File`}
+                                        </label>
+                                        <div className="h-[46px] text-[#464255] p-3 rounded-[6px] bg-[#F3F2F2] flex justify-between w-full">
+                                            <div className="flex items-center gap-2">
+                                                <InsertDriveFileOutlinedIcon sx={{ fontSize: '20px' }} /> {fileNameEditText4}
+                                            </div>
+
+                                            <button
+                                                type="button"
+                                                className={`flex items-center justify-center px-[2px] py-[2px] rounded-[4px] relative ${fileNameEditTextUrl4 === '' ? 'bg-[#f0f0f0] cursor-not-allowed pointer-events-none' : 'hover:bg-[#DFE4EA] hover:border hover:border-[#DFE4EA]'}`}
+                                                onClick={() => downloadFile(4)}
+                                                disabled={fileNameEditTextUrl4 !== '' ? false : true}
+                                            >
+                                                <FileDownloadIcon sx={{ fontSize: 23, color: '#1473A1', backgroundColor: '#ffffff', borderRadius: '4px', borderColor: '#DFE4EA' }} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                    </>
+                }
+            </div>
+
+
+            {horizoneDivide()}
+
+
+            {/* =============== ชุด 5 ===============*/}
+            <div className="pb-2">
+
+                <div className="gap-2 w-full flex items-center">
+                    {/* เพิ่ม - ลด */}
+                    <div className="grid grid-cols-2 gap-1 pt-4">
+                        <label className="w-[85px] text-[#58585A]">
+                            <input
+                                type="radio"
+                                // {...register("doc_7_perm_lod_5", { required: !watch("doc_7_perm_lod_5") ? true : false })}
+                                {...register("doc_7_perm_lod_5", { required: false })}
+                                value={1}
+                                disabled={(mode == 'view' || isShipper || idChudTee5) ? true : false || watch('doc_7_perm_lod_4') ? false : true}
+                                checked={watch("doc_7_perm_lod_5") == 1 || watch("doc_7_perm_lod_5") == "1"}
+                                // defaultChecked={watch("doc_7_perm_lod_5") == 1}
+                                onChange={(e) => {
+                                    setValue('doc_7_perm_lod_5', e.target.value)
+                                    // handletrickerEdit();
+                                }}
+                                className="mr-1 accent-[#1473A1]"
+                            />
+                            {`เพิ่ม`}
+                        </label>
+
+                        <label className="w-[85px] text-[#58585A]">
+                            <input
+                                type="radio"
+                                // {...register("doc_7_perm_lod_5", { required: !watch("doc_7_perm_lod_5") ? true : false })}
+                                {...register("doc_7_perm_lod_5", { required: false })}
+                                value={2}
+                                disabled={(mode == 'view' || isShipper || idChudTee5) ? true : false || watch('doc_7_perm_lod_4') ? false : true}
+                                // checked={watch("doc_7_perm_lod_5") == 2}
+                                checked={watch("doc_7_perm_lod_5") == 2 || watch("doc_7_perm_lod_5") == "2"}
+                                onChange={(e) => {
+                                    setValue('doc_7_perm_lod_5', e.target.value)
+                                    // handletrickerEdit();
+                                }}
+                                className="mr-1 accent-[#1473A1]"
+                            />
+                            {`ลด`}
+                        </label>
+                    </div>
+
+                    {/* จุดส่งเข้า - จุดส่งออก */}
+                    {
+                        watch('doc_7_perm_lod_5') && <div className="grid grid-cols-2 gap-1 pt-4">
+                            <label className="w-[100px] text-[#58585A]">
+                                <input
+                                    type="radio"
+                                    {...register("doc_7_jud_soong_kaw_ook_5", { required: false })}
+                                    value={3}
+                                    disabled={(mode == 'view' || isShipper || idChudTee5) ? true : false}
+                                    checked={watch("doc_7_jud_soong_kaw_ook_5") == 3 || watch("doc_7_jud_soong_kaw_ook_5") == "3"}
+                                    onChange={(e) => {
+                                        setValue('doc_7_jud_soong_kaw_ook_5', e.target.value)
+                                        filterAreaEntryExit(e.target.value, 5)
+                                    }}
+                                    className="mr-1 accent-[#1473A1] disabled:accent-[#1473A1]"
+                                />
+                                {`จุดส่งเข้า`}
+                            </label>
+
+                            <label className="w-[100px] text-[#58585A]">
+                                <input
+                                    type="radio"
+                                    {...register("doc_7_jud_soong_kaw_ook_5", { required: false })}
+                                    value={4}
+                                    disabled={(mode == 'view' || isShipper || idChudTee5) ? true : false}
+                                    checked={watch("doc_7_jud_soong_kaw_ook_5") == 4 || watch("doc_7_jud_soong_kaw_ook_5") == "4"}
+                                    onChange={(e) => {
+                                        setValue('doc_7_jud_soong_kaw_ook_5', e.target.value)
+                                        filterAreaEntryExit(e.target.value, 5)
+                                    }}
+                                    className="mr-1 accent-[#1473A1]"
+                                />
+                                {`จุดส่งออก`}
+                            </label>
+                        </div>
+                    }
+
+                </div>
+
+
+                {/* Area */}
+                {
+                    watch('doc_7_perm_lod_5') &&
+                    <div className="gap-2 w-full flex items-center pt-4">
+                        <div className="grid grid-cols-2 gap-1 pt-4">
+                            <label className="w-[100px] text-[#58585A]"></label>
+                            <label className="w-[100px] text-[#58585A]"></label>
+                        </div>
+
+                        <div className="grid grid-cols-3 w-full gap-4">
+                            <div className="flex flex-wrap flex-auto ">
+                                <label className={`${labelClass}`}>{`Area`}</label>
+                                <SelectFormProps
+                                    id={'doc_7_area_5'}
+                                    register={register("doc_7_area_5", { required: false })}
+                                    // disabled={(mode == 'view' || mode == 'edit' || !watch('doc_7_perm_lod_5')) ? true : false}
+                                    // disabled={(idChudTee2 && mode == 'edit') || !watch('doc_7_perm_lod_5') ? true : false} // kom test
+                                    disabled={mode == 'view' || !watch('doc_7_perm_lod_5') || isShipper || idChudTee5 ? true : false} // kom test 2
+                                    valueWatch={watch("doc_7_area_5") || ""}
+                                    handleChange={(e) => {
+                                        setValue("doc_7_area_5", e.target.value);
+                                        getNomPointOfArea(e.target.value, 5) // หา nom
+                                        clearErrors('doc_7_area_5')
+                                        if (errors?.doc_7_area_5) { clearErrors('doc_7_area_5') }
+                                    }}
+                                    errors={errors?.doc_7_area_5}
+                                    errorsText={'Select Area'}
+                                    // options={dataNomPointForDoc7}
+                                    options={dataAreaChud5}
+                                    optionsKey={'id'}
+                                    optionsValue={'id'}
+                                    optionsText={'name'}
+                                    optionsResult={'name'}
+                                    placeholder={'Select Area'}
+                                    pathFilter={'name'}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                {/* ปริมาณก๊าซที่ */}
+                <div className="gap-2 w-full flex items-center pt-4">
+                    <div className="grid grid-cols-2 gap-1 pt-4">
+                        <label className="w-[100px] text-[#58585A]"></label>
+                        <label className="w-[100px] text-[#58585A]"></label>
+                    </div>
+
+                    <div className="grid grid-cols-3 w-full gap-4">
+                        <div className="flex flex-wrap flex-auto ">
+                            <label className={`${labelClass}`}>{`ปริมาณก๊าซที่`}</label>
+                            <SelectFormProps
+                                id={'doc_7_nom_point_5'}
+                                register={register("doc_7_nom_point_5", { required: false })}
+                                // disabled={(mode == 'view' || mode == 'edit' || !watch('doc_7_perm_lod_5')) ? true : false}
+                                // disabled={(idChudTee2 && mode == 'edit') || !watch('doc_7_perm_lod_5') ? true : false} // kom test
+                                disabled={mode == 'view' || !watch('doc_7_perm_lod_5') || isShipper || idChudTee5 ? true : false} // kom test 2
+                                valueWatch={watch("doc_7_nom_point_5") || ""}
+                                handleChange={(e) => {
+                                    handletrickerEdit();
+                                    setValue("doc_7_nom_point_5", e.target.value);
+                                    getShipperOfNomPoint(e.target.value, 5)
+                                    clearErrors('doc_7_nom_point_5')
+                                    if (errors?.doc_7_nom_point_5) { clearErrors('doc_7_nom_point_5') }
+                                }}
+                                errors={errors?.doc_7_nom_point_5}
+                                errorsText={'Select Point'}
+                                options={dataNomPoint5}
+                                optionsKey={'id'}
+                                optionsValue={'id'}
+                                optionsText={'nomination_point'}
+                                optionsResult={'nomination_point'}
+                                placeholder={'Select Point'}
+                                pathFilter={'nomination_point'}
+                            />
+                        </div>
+
+                        {/* <div className="flex flex-wrap flex-auto ">
+                            <label className={`${labelClass} `}>{`คิดเป็นปริมาณ (MMSCFH)`}</label>
+                            <NumericFormat
+                                id="doc_7_nom_value_5"
+                                placeholder="0.0000"
+                                value={watch("doc_7_nom_value_5")}
+                                // readOnly={(mode == 'view' || mode == 'edit' || !watch('doc_7_perm_lod_5')) ? true : false}
+                                // readOnly={(idChudTee5 && mode == 'edit') || !watch('doc_7_perm_lod_5') ? true : false} // kom test
+                                disabled={mode == 'view' || !watch('doc_7_perm_lod_5') || isShipper ? true : false} // kom test 2
+                                {...register("doc_7_nom_value_5", { required: false })}
+                                className={`${inputClass} ${errors.doc_7_nom_value_5 && "border-red-500"}  ${(mode == 'view' || isShipper) && '!bg-[#EFECEC]'} text-right`}
+                                thousandSeparator={true}
+                                decimalScale={4}
+                                fixedDecimalScale={true}
+                                allowNegative={false}
+                                displayType="input"
+                                onValueChange={(values) => {
+                                    const { value } = values;
+                                    setValue("doc_7_nom_value_5", value, { shouldValidate: true, shouldDirty: true });
+                                }}
+                            />
+                        </div> */}
+
+                        <div className="flex flex-wrap flex-auto">
+                            <label className={`${labelClass}`}>{`Shipper`}</label>
+                            <Select
+                                id="shipper_id_5"
+                                multiple
+                                IconComponent={(props) => <ExpandMoreIcon {...props} fontSize="medium" />}
+                                {...register("shipper_id_5", { required: false })}
+                                disabled={(mode == 'view' || !watch('doc_7_perm_lod_5') || isShipper) ? true : false}
+                                value={selectedShippers5}
+                                onChange={(e: any) => handleSelectChange(e, 5)}
+                                className={`${selectboxClass} ${(mode == 'view') && "!bg-[#EFECEC]"}`}
+                                sx={selectSx}
+                                displayEmpty
+                                renderValue={(selected) => {
+                                    if (selected.length === 0) {
+                                        return <Typography color="#9CA3AF" fontSize={14}>Select Shipper Name</Typography>;
+                                    }
+                                    // return selected.map((id) => dataShipper5.find((item: any) => item.id === id)?.name).join(", ");
+                                    const shipper_data = dataShipper5?.filter((item: any) => !defaultShippersId5?.includes(item.id))
+                                    return (
+                                        <span className={`pl-[10px] text-[14px]`}>
+                                            {shipper_data?.length == selectedShippers5?.length ? `Select All` : selected.map((id) => dataShipper5?.filter((item: any) => !defaultShippersId5?.includes(item.id)).find((item: any) => item.id === id)?.name).join(", ")}
+                                        </span>
+                                    );
+                                }}
+                                MenuProps={{ PaperProps: { style: { maxHeight: 48 * 4.5 + 8 } } }}
+                            >
+                                {userDT?.account_manage?.[0]?.user_type_id !== 3 && (
+                                    <MenuItem value="all">
+                                        <Checkbox checked={selectedShippers5.length === dataShipper5?.length && dataShipper5?.length > 0} />
+                                        <ListItemText
+                                            primary="Select All"
+                                            // sx={{ fontWeight: 'bold' }}
+                                            primaryTypographyProps={{ sx: { fontWeight: 'bold' } }}
+                                        />
+                                    </MenuItem>
+                                )}
+
+                                {/* {dataShipper5?.length > 0 && dataShipper5
+                                    ?.filter((item: any) => !defaultShippersId5?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                    ?.map((item: any) => (
+                                        <MenuItem
+                                            key={item.id}
+                                            value={item.id}
+                                            disabled={false}
+                                        >
+                                            <Checkbox checked={selectedShippers5.includes(item.id)} />
+                                            <ListItemText primary={item.name} />
+                                        </MenuItem>
+                                    ))
+                                } */}
+                                {dataShipper5?.length > 0 && dataShipper5
+                                    ?.filter((item: any) => !defaultShippersId1?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId2?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId3?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId4?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !defaultShippersId5?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+
+                                    ?.filter((item: any) => !selectedShippers1.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !selectedShippers2.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !selectedShippers3.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.filter((item: any) => !selectedShippers4.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    // ?.filter((item: any) => !selectedShippers5.includes(item.id)) // เอาอันที่เลือกอยู่แล้วออกจาก option 
+                                    ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                    ?.map((item: any) => (
+                                        <MenuItem
+                                            key={item.id}
+                                            value={item.id}
+                                            disabled={false}
+                                        >
+                                            <Checkbox checked={selectedShippers5.includes(item.id)} />
+                                            <ListItemText primary={item.name} />
+                                        </MenuItem>
+                                    ))
+                                }
+                            </Select>
+                        </div>
+                    </div>
+                </div>
+
+                {
+                    watch('doc_7_perm_lod_5') && <>
+                        <div className="gap-2 w-full flex items-center">
+
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+
+                            <div className="grid grid-cols-3 w-full gap-4">
+                                <div></div>
+                                {/* <div></div> */}
+                                <div className="w-full flex flex-wrap items-end justify-end gap-4">
+                                    <div className="flex flex-wrap gap-2 pt-2 mt-2 w-full max-h-[120px] overflow-y-auto">
+                                        {/* ลบไม่ได้เว่ย */}
+                                        {defaultShippersRender5?.map((item: any, index: number) => (
+                                            <div
+                                                key={`default-${index}`}
+                                                className="relative w-fit h-[40px] p-2 text-[13px] bg-[#CFF2FF] border border-[#DFE4EA] rounded-[6px] text-[#58585A] break-all"
+                                            >
+                                                {item?.name}
+                                            </div>
+                                        ))}
+
+                                        {
+                                            selectedShippersRender5?.map((item: any, index: number) => (
+                                                <div
+                                                    key={index}
+                                                    className="relative w-fit h-[40px] p-2 text-[13px] bg-[#CFF2FF] border border-[#DFE4EA] rounded-[6px] text-[#58585A] break-all"
+                                                >
+                                                    {item?.name}
+                                                    <button
+                                                        type="button"
+                                                        className="absolute top-[-6px] right-[-4px] w-[15px] h-[15px] rounded-full bg-[#58585A] text-white flex justify-center items-center text-[8px]"
+                                                        onClick={() => removeShipper(item?.id, 5)}
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="gap-2 w-full flex items-center pt-4">
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+                            <div className="w-full col-span-2">
+                                <label className={`${labelClass} `}>{`คิดเป็นปริมาณ (MMSCFH)`}</label>
+                                <TextField
+                                    {...register("doc_7_nom_value_5")}
+                                    value={watch("doc_7_nom_value_5") || ""}
+                                    label=""
+                                    multiline
+                                    onChange={(e) => {
+                                        if (e.target.value.length <= 255) {
+                                            setValue("doc_7_nom_value_5", e.target.value);
+                                            handletrickerEdit();
+                                        }
+                                    }}
+                                    placeholder="ระบุรายละเอียด"
+                                    // disabled={mode == 'view' ? true : false}
+                                    disabled={mode == 'view' || !watch('doc_7_perm_lod_5') || isShipper ? true : false} // kom test 2
+                                    rows={2}
+                                    sx={textFieldSx}
+                                    className={`${mode == 'view' && 'bg-[#EFECEC] rounded-[8px]'}`}
+                                    InputProps={inputPropsTextField}
+                                    fullWidth
+                                />
+                                <div className="flex justify-end text-sm text-[#B6B6B6] mt-1">
+                                    <span className="text-[13px]">
+                                        {watch("doc_7_nom_value_5")?.length || 0} / 255
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div className="gap-2 w-full flex items-center pt-4">
+
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+
+                            <div className="grid grid-cols-2 w-full gap-4">
+                                <div className="">
+                                    <label htmlFor="doc_7_gas_command_5" className={labelClass}> {`การสั่งการ`}</label>
+                                    <input
+                                        id="doc_7_gas_command_5"
+                                        type="text"
+                                        placeholder="รายละเอียด"
+                                        // readOnly={isReadOnly}
+                                        // readOnly={(idChudTee5 && mode == 'edit') || !watch('doc_7_perm_lod_5') ? true : false} // kom test
+                                        readOnly={mode == 'view' || !watch('doc_7_perm_lod_5') ? true : false} // kom test 2
+
+                                        {...register("doc_7_gas_command_5", { required: false })}
+                                        onChange={(e) => {
+                                            if (e.target.value.length <= 255) {
+                                                setValue('doc_7_gas_command_5', e.target.value);
+                                                handletrickerEdit();
+                                            }
+                                        }}
+                                        maxLength={255}
+                                        className={`${inputClass} ${errors.doc_7_gas_command_5 && "border-red-500"}  ${isReadOnly && '!bg-[#EFECEC]'}`}
+                                    />
+                                    <div className="flex justify-end text-sm text-[#B6B6B6] mt-1"><span className="text-[13px]">{watch('doc_7_gas_command_5')?.length || 0} / 255</span></div>
+                                </div>
+
+                                <div className="">
+                                    <label htmlFor="doc_7_gas_more_5" className={labelClass}> {`ข้อมูลเพิ่มเติม`}</label>
+                                    <input
+                                        id="doc_7_gas_more_5"
+                                        type="text"
+                                        placeholder="รายละเอียด"
+                                        // readOnly={isReadOnly}
+                                        // readOnly={(idChudTee5 && mode == 'edit') || !watch('doc_7_perm_lod_5') ? true : false} // kom test
+                                        readOnly={mode == 'view' || !watch('doc_7_perm_lod_5') ? true : false} // kom test 2
+                                        {...register("doc_7_gas_more_5", { required: false })}
+                                        onChange={(e) => {
+                                            if (e.target.value.length <= 255) {
+                                                setValue('doc_7_gas_more_5', e.target.value);
+                                                handletrickerEdit();
+                                            }
+                                        }}
+                                        maxLength={255}
+                                        className={`${inputClass} ${errors.doc_7_gas_more_5 && "border-red-500"}  ${isReadOnly && '!bg-[#EFECEC]'}`}
+                                    />
+                                    <div className="flex justify-end text-sm text-[#B6B6B6] mt-1"><span className="text-[13px]">{watch('doc_7_gas_more_5')?.length || 0} / 255</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="gap-2 w-full flex items-center ">
+                            <div className="grid grid-cols-2 gap-1 pt-4">
+                                <label className="w-[100px] text-[#58585A]"></label>
+                                <label className="w-[100px] text-[#58585A]"></label>
+                            </div>
+
+                            {/* File */}
+                            {/* ถ้าเป็น create แสดงอันนี้ */}
+                            {
+                                // userDT?.account_manage?.[0]?.user_type_id !== 3 && mode == 'create' &&
+                                userDT?.account_manage?.[0]?.user_type_id !== 3 && mode !== 'view' &&
+                                <div className="grid grid-cols-2 w-full">
+                                    <label className={`${labelClass}`}>{`File`}</label>
+                                    <div className={`flex items-center col-span-2 ${IsErrorChudTee == '5' ? 'border  border-[#ff0000] rounded-r-lg rounded-l-lg' : ''}`}>
+                                        <label className={`flex bg-[#00ADEF] text-white items-center justify-center font-light rounded-l-[6px] text-[16px] text-justify w-[20%] !h-[44px] px-2 cursor-pointer`}>
+                                            {`Choose File`}
+                                            {isUploading && (
+                                                <span className="ml-2 w-[14px] h-[14px] border-[2px] border-white border-t-transparent rounded-full animate-spin"></span>
+                                            )}
+                                            <input
+                                                id="url"
+                                                type="file"
+                                                className="hidden"
+                                                {...register('file')}
+                                                // accept=".xls, .xlsx"
+                                                // onChange={handleFileChange}
+                                                onChange={(e) => handleFileChange(e, 5)}
+                                            />
+                                        </label>
+
+                                        <div className="bg-white text-[#9CA3AF] text-sm w-[80%] !h-[44px] px-2 py-2 rounded-r-[6px] border-l-0 border border-gray-300 truncate overflow-hidden flex items-center">
+                                            <span className="truncate">
+                                                {fileName5}
+                                            </span>
+                                            {fileName5 !== "Maximum File 10 MB" && (
+                                                <CloseOutlinedIcon
+                                                    onClick={() => handleRemoveFile(5)}
+                                                    className="cursor-pointer ml-2 text-[#9CA3AF] z-10"
+                                                    sx={{ color: '#323232', fontSize: 18 }}
+                                                    style={{ fontSize: 18 }}
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className={`w-full flex items-center justify-between text-[14px] text-red-500 `}>
+                                        {IsErrorChudTee == '5' && 'The file is larger than 10 MB.'}
+                                    </div>
+                                </div>
+                            }
+
+                            {/* File */}
+                            {/* ถ้าเป็น edit view แสดงอันนี้ */}
+                            {
+                                // (mode == 'edit' || mode == 'view') && fileNameEditTextUrl5 !== '' &&
+                                (mode == 'view') && fileNameEditTextUrl5 !== '' &&
+                                <div className="grid grid-cols-2 w-full gap-4 ">
+                                    <div className="col-span-2 ">
+                                        <label className={`${labelClass}`}>
+                                            {`File`}
+                                        </label>
+                                        <div className="h-[46px] text-[#464255] p-3 rounded-[6px] bg-[#F3F2F2] flex justify-between w-full">
+                                            <div className="flex items-center gap-2">
+                                                <InsertDriveFileOutlinedIcon sx={{ fontSize: '20px' }} /> {fileNameEditText5}
+                                            </div>
+
+                                            <button
+                                                type="button"
+                                                className={`flex items-center justify-center px-[2px] py-[2px] rounded-[4px] relative ${fileNameEditTextUrl5 === '' ? 'bg-[#f0f0f0] cursor-not-allowed pointer-events-none' : 'hover:bg-[#DFE4EA] hover:border hover:border-[#DFE4EA]'}`}
+                                                onClick={() => downloadFile(5)}
+                                                disabled={fileNameEditTextUrl5 !== '' ? false : true}
+                                            >
+                                                <FileDownloadIcon sx={{ fontSize: 23, color: '#1473A1', backgroundColor: '#ffffff', borderRadius: '4px', borderColor: '#DFE4EA' }} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                    </>
+                }
+            </div>

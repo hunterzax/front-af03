@@ -1,0 +1,25 @@
+{
+    "ref_document": 6,
+    "longdo_dict": "ทดสอบ 01",
+    "event_date": "2025-10-09",
+    "doc_6_input_ref_doc_at": "1",
+    "doc_6_input_when_date": "2026-04-29",
+    "doc_6_input_when_time": "18:21",
+    "doc_6_input_note": "ทดสอบ 06",
+    "gas_shipper": [
+        {
+            "id": null,
+            "ir": 1,
+            "nom_point": 17,
+            "nom_value_mmscfh": "0.000000",
+            "gas_command": "-",
+            "gas_more": "-",
+            "shipper": [
+                62
+            ],
+            "file": []
+        }
+    ],
+    "email_event_for_shipper": [],
+    "cc_email": []
+}

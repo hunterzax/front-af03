@@ -1,0 +1,48 @@
+/* ตัวอย่างการปรับแต่งปฏิทินใน DatePicker */
+.react-datepicker {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    /* font-family: "Roboto","Helvetica","Arial",sans-serif !important; */
+  }
+  
+  .react-datepicker__header {
+    background-color: #fff;
+    border-bottom: none;
+  }
+  
+  .react-datepicker__day-name,
+  .react-datepicker__day {
+    color: #333;
+    font-size: 14px;
+    padding: 5px;
+  }
+  
+  .react-datepicker__day--selected {
+    background-color: #1473A1;
+    color: white;
+  }
+  
+  .react-datepicker__day--today {
+    font-weight: bold;
+    border: 1px solid #259cd8;
+    background-color: #5fa8cc;
+    color: #fff;
+    border-radius: 5px;
+  }
+  
+  .react-datepicker__day:hover {
+    background-color: #1473A1;
+    color: #fff;
+  }
+
+  .react-datepicker-popper {
+    z-index: 15 !important;
+  }
+
+  .react-datepicker__current-month {
+    color: #333;
+    font-weight: 300 !important;
+  }
+  

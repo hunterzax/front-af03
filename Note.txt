@@ -1,0 +1,13 @@
+export COVERITY_UNSUPPORTED=1
+/Users/zax/Documents/Cov_Scan2/bin/coverity capture \
+  --project-dir /Users/zax/Documents/Project_TPA_SCAN/210869/TPA-CODE-SCAN-FULL/tpa-front-end
+
+export COVERITY_UNSUPPORTED=1
+/Users/zax/Documents/Cov_Scan2/bin/coverity capture \
+ --dir cov-int --project-dir /Users/zax/Documents/Project_TPA_SCAN/210869/TPA-CODE-SCAN-FULL/tpa-front-end
+
+cat cov-int/output/cli-diagnostics.json | grep capture-percentage
+
+tar czvf myproject.tgz cov-int
+
+#Test ABC

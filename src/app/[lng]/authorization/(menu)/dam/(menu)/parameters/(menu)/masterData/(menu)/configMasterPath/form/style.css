@@ -1,0 +1,54 @@
+.custom-node {
+    background-color: #f9f9f9;
+    /* background: conic-gradient(
+      from -160deg at 50% 50%,
+      #e92a67 0deg,
+      #a853ba 120deg,
+      #2a8af6 240deg,
+      #e92a67 360deg
+    ); */
+    /* background: conic-gradient(
+        from -160deg at 50% 50%,
+        #cefa1f 0deg,
+        #8caf00 120deg,
+        #5f7602 240deg,
+        #435012 360deg
+    ); */
+    box-shadow:
+    6px 2px 15px rgba(42, 138, 246, 0.3),
+    -6px 2px 15px rgba(233, 42, 103, 0.3);
+    border: 2px solid #cefa1f;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    width: 200px;
+    height: 200px;
+}
+  
+.custom-node-content {
+    font-weight: bold;
+}
+
+/* .gradient:before {
+    content: '';
+    position: absolute;
+    padding-bottom: calc(100% * 1.41421356237);
+    width: calc(100% * 1.41421356237);
+    background: conic-gradient(
+      from -160deg at 50% 50%,
+      #e92a67 0deg,
+      #a853ba 120deg,
+      #2a8af6 240deg,
+      #e92a67 360deg
+    );
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 100%;
+} */
+
+
+  

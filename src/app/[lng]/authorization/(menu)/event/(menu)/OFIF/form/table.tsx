@@ -1,0 +1,1104 @@
+import { useEffect, useRef, useState } from "react";
+import { ArrowDropUp, ArrowDropDown } from '@mui/icons-material';
+import { table_col_arrow_sort_style, table_header_style, table_row_style, table_sort_header_style } from "@/utils/styles";
+import Spinloading from "@/components/other/spinLoading";
+import TableSkeleton from "@/components/material_custom/DefaultSkeleton";
+import BtnActionTable from "@/components/other/btnActionInTable";
+import { handleSort } from "@/utils/sortTable";
+import { formatDate, getAcknowledgeStatus, handleDownloadPDFOfIf, toDayjs } from "@/utils/generalFormatter";
+import NodataTable from "@/components/other/nodataTable";
+import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import ModalConfirmSave from "@/components/other/modalConfirmSave";
+import { getService } from "@/utils/postService";
+import 'react-toastify/dist/ReactToastify.css';
+import Tooltip from '@mui/material/Tooltip';
+import Zoom from "@mui/material/Zoom";
+
+interface TableProps {
+    tableData: any;
+    isLoading?: boolean;
+    setisLoading?: any;
+    columnVisibility?: any;
+    initialColumns?: any;
+    openViewForm: (id: any) => void;
+    selectedKey: any;
+    userPermission?: any;
+    userDT?: any;
+    handleFormSubmit?: any;
+    setWhichDocumentOpen?: any; // เปิดเอกสารเบอร์ไหน -> 'document_1', 'document_2', 'document_3'
+    setModeOpenDocument?: any; // mode -> 'view', 'edit'
+    setIsOpenDocument?: any;  // set เปิด-ปิด
+    setDataOpenDocument?: any; // ข้อมูลของ doc ตอนเปิด view, edit
+    updateMainStat?: any; // ฟังก์ชั่นอัพเดท stat ของ row หลัก ที่เป็น close หรือ open
+    setIsOpenHistory?: any;  // set เปิด-ปิด history
+    setdataHistory?: any
+    setmodePage?: any
+    setrowselected?: any
+}
+
+const class_btn_ = `flex items-center justify-center px-[2px] py-[2px] border border-[#EAECF0] rounded-md hover:bg-[#DFE4EA] hover:border hover:border-[#DFE4EA] relative `
+
+const TableOfIf: React.FC<TableProps> = ({
+    tableData,
+    isLoading = false,
+    setisLoading,
+    openViewForm,
+    columnVisibility,
+    initialColumns,
+    selectedKey,
+    userPermission,
+    userDT,
+    handleFormSubmit,
+    setWhichDocumentOpen,
+    setModeOpenDocument,
+    setIsOpenDocument,
+    setDataOpenDocument,
+    updateMainStat,
+    setIsOpenHistory,
+    setdataHistory,
+    setmodePage,
+    setrowselected
+}) => {
+
+    const [sortState, setSortState] = useState({ column: null, direction: null });
+    const [sortedData, setSortedData] = useState(tableData);
+    const [openPopoverId, setOpenPopoverId] = useState(null);
+    const popoverRef = useRef<HTMLDivElement>(null);
+
+    // เอาไว้ span column แบบ dynamic เคสเปิด ปิดไส้ใน
+    const getVisibleChildCount = (parentKey: string) => initialColumns?.filter((col: any) => col.parent_id === parentKey && columnVisibility[col.key]).length || 1;
+
+    {/* Confirm Save */ }
+    const [modaConfirmSave, setModaConfirmSave] = useState<any>(false)
+    const [dataSubmit, setDataSubmit] = useState<any>()
+
+    useEffect(() => {
+        if (tableData && tableData.length > 0) {
+            setSortedData(tableData);
+        } else {
+            setSortedData([]);
+        }
+    }, [tableData]);
+
+    const getArrowIcon = (column: string) => {
+        return <div className={`${table_col_arrow_sort_style}`}>
+            <ArrowDropUp sx={{ fontSize: 18, opacity: sortState.column === column && sortState.direction === "asc" ? 1 : 0.4, }} />
+            <ArrowDropDown sx={{ fontSize: 18, opacity: sortState.column === column && sortState.direction === "desc" ? 1 : 0.4, }} />
+        </div>
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
+            setOpenPopoverId(null);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [popoverRef]);
+
+    const togglePopover = (id: any) => {
+        if (openPopoverId === id) {
+            setOpenPopoverId(null); // Close the popover if it's already open
+        } else {
+            setOpenPopoverId(id); // Open the popover for the clicked row
+        }
+    };
+
+    const toggleMenu = (mode: any, id: any) => {
+
+        switch (mode) {
+            case "view":
+                // openViewForm(id);
+                // setOpenPopoverId(null);
+                break;
+            case "edit":
+                let data_ = {
+                    "id": id,
+                    "event_status_id": 2 // 1 Open, 2 Closed
+                }
+                setDataSubmit(data_)
+                setTimeout(() => {
+                    {/* Confirm Save */ }
+                    setModaConfirmSave(true)
+                }, 300);
+                // updateMainStat(id, 2)  // 1 Open, 2 Closed
+                break;
+        }
+    }
+
+    // #region OPEN DOCUMENT
+    // ############### OPEN DOCUMENT ###############
+    const getDataDocument = async (id: String, doc_no: any) => {
+        try {
+            const res_document_data = await getService(`/master/event/ofo/doc${doc_no}/${id}`)
+            return res_document_data
+        } catch (error) {
+            // error fetch getDataDocument
+        }
+    }
+
+    const openDocument = async (document: String, mode?: String, data?: any) => {
+        setWhichDocumentOpen(document)
+        setModeOpenDocument(mode)
+        setmodePage(mode)
+
+        if (document == 'document_8') {
+            const data_doc_8 = await getDataDocument(data.id, 8)
+            setDataOpenDocument(data_doc_8)
+        }
+
+        setIsOpenDocument(true)
+    }
+
+    // #region OPEN HISTORY
+    // ############### OPEN DOCUMENT HISTORY ###############
+    const getDataDocumentHistory = async (id: String, doc_no: any) => {
+        try {
+            let url = `/master/event/ofo/doc${doc_no}/history/${id}`
+            if ((doc_no == 8) && (userDT?.account_manage?.[0]?.user_type_id == 2 || userDT?.account_manage?.[0]?.user_type_id == 1)) {
+                url += '?tso=true'
+            }
+            const res_document_data_history = await getService(url)
+            return res_document_data_history
+        } catch (error) {
+            // error fetch doc
+        }
+    }
+
+    const getDataDocumentHistoryAndVersion = async (id: String, doc_no: any) => {
+        try {
+            let url = `/master/event/ofo/doc${doc_no}/version/${id}`
+            if ((doc_no == 39) && (userDT?.account_manage?.[0]?.user_type_id == 2 || userDT?.account_manage?.[0]?.user_type_id == 1)) {
+                url += '?tso=true'
+            }
+            const res_document_data_version = await getService(url)
+            return res_document_data_version
+        } catch (error) {
+            // error fetch doc
+        }
+    }
+
+    const openDocumentHistory = async (document: String, mode?: String, data?: any) => {
+        setrowselected(data)
+
+        setWhichDocumentOpen(document)
+        setModeOpenDocument(mode)
+        setmodePage(mode)
+
+        if (document == 'document_8') {
+            // doc3.9 history (id document) tso ส่ง id runnumber
+            // master/event/emer/doc39/history/14?tso=true
+            let doc_8_id: any = data?.document39?.id
+            if (userDT?.account_manage?.[0]?.user_type_id == 2 || userDT?.account_manage?.[0]?.user_type_id == 1) {
+                doc_8_id = data?.id
+            }
+
+            const data_doc_8 = await getDataDocumentHistory(doc_8_id, 8)
+            setDataOpenDocument(data_doc_8)
+            setdataHistory(data_doc_8);
+
+        } else if (document == 'document_7') {
+            const data_doc_7 = await getDataDocumentHistoryAndVersion(data.id, 7)
+            setDataOpenDocument(data_doc_7)
+            setdataHistory(data_doc_7);
+        }
+
+        setIsOpenHistory(true)
+    }
+
+    const renderSectionBorder = (key: string, section?: 'section1' | 'section2', parentID?: string) => {
+        // เคสพิเศษ: ถ้า key คือ 'zone'
+        if (section == 'section1') {
+            if (key === 'zone') {
+                if (columnVisibility[key]) {
+                    return { borderRight: '1px solid #eeeeee' };
+                }
+                return { border: 'none' };
+            }
+
+            const zoneIndex = initialColumns.findIndex((col: any) => col.key === 'zone');
+            if (zoneIndex === -1 || columnVisibility['zone']) {
+                return { border: 'none' };
+            }
+
+            // หา column แรก (ก่อนหน้า zone) ที่เปิดอยู่
+            for (let i = zoneIndex - 1; i >= 0; i--) {
+                const currentKey = initialColumns[i]?.key;
+                if (columnVisibility[currentKey]) {
+                    // เจอ column ที่เปิด → ถ้า key นี้คือ key ที่ถูกส่งเข้ามา → return border
+                    if (currentKey === key) {
+                        return { borderRight: '1px solid #eeeeee' };
+                    } else {
+                        // ตัวอื่นที่ไม่ใช่ตัวแรกที่เปิดอยู่ → ไม่ต้องมี border
+                        return { border: 'none' };
+                    }
+                }
+            }
+
+
+            if (key === 'event_date') {
+                if (columnVisibility[key]) {
+                    return { borderRight: '1px solid #eeeeee' };
+                }
+                return { border: 'none' };
+            }
+
+            const colIndex = initialColumns.findIndex((col: any) => col.key === 'event_date');
+            if (colIndex === -1 || columnVisibility['event_date']) {
+                return { border: 'none' };
+            }
+
+            // หา column แรก (ก่อนหน้า zone) ที่เปิดอยู่
+            for (let i = colIndex - 1; i >= 0; i--) {
+                const currentKey = initialColumns[i]?.key;
+                if (columnVisibility[currentKey]) {
+                    // เจอ column ที่เปิด → ถ้า key นี้คือ key ที่ถูกส่งเข้ามา → return border
+                    if (currentKey === key) {
+                        return { borderRight: '1px solid #eeeeee' };
+                    } else {
+                        // ตัวอื่นที่ไม่ใช่ตัวแรกที่เปิดอยู่ → ไม่ต้องมี border
+                        return { border: 'none' };
+                    }
+                }
+            }
+        } else if (section == 'section2') {
+            // master
+            if (!parentID) {
+                let findMaster = initialColumns?.find((item: any) => item?.key == key)
+                if (columnVisibility[findMaster?.key]) {
+                    return { borderRight: '1px solid #eeeeee' };
+                }
+                return { border: 'none' };
+            }
+
+            // 2. ถ้ามี parentID → เป็น child column ของ master
+            const parentList = initialColumns.filter(
+                (col: any) => col.parent_id === parentID
+            );
+
+            // วนถอยหลังจากตัวท้ายสุด
+            for (let i = parentList.length - 1; i >= 0; i--) {
+                const currentKey = parentList[i]?.key;
+                if (columnVisibility[currentKey]) {
+                    return currentKey === key
+                        ? { borderRight: '1px solid #eeeeee' }
+                        : { border: 'none' };
+                }
+            }
+
+            // ถ้าไม่มีตัวไหนเปิดอยู่เลย
+            return { border: 'none' };
+        }
+
+        return { border: 'none' }; // ไม่มี column ไหนเปิดอยู่เลย
+    };
+
+    return (
+        <>
+            <div className="h-[calc(100vh-380px)] overflow-y-auto overflow-x-auto rounded-t-md relative z-1">
+                <Spinloading spin={isLoading} rounded={20} />
+                {!isLoading ?
+                    <table className="min-w-full text-sm text-left rtl:text-right text-gray-500 whitespace-nowrap">
+                        <thead className="text-xs text-[#ffffff] bg-[#1473A1] sticky top-0 z-10">
+
+                            <tr className="h-9">
+                                {columnVisibility?.event_code && (
+                                    <th
+                                        scope="col"
+                                        className={`${table_sort_header_style} `}
+                                        rowSpan={2}
+                                        onClick={() => handleSort("event_nember", sortState, setSortState, setSortedData, tableData)}
+                                        style={renderSectionBorder('event_code', 'section1')}
+                                    >
+                                        {`Event Code`}
+                                        {getArrowIcon("event_nember")}
+                                    </th>
+                                )}
+
+                                {columnVisibility?.type && (
+                                    <th
+                                        scope="col"
+                                        className={`${table_sort_header_style} text-center`}
+                                        rowSpan={2}
+                                        onClick={() => handleSort("event_doc_ofo_type_id", sortState, setSortState, setSortedData, tableData)}
+                                        style={renderSectionBorder('type', 'section1')}
+                                    >
+                                        {`Type`}
+                                        {getArrowIcon("event_doc_ofo_type_id")}
+                                    </th>
+                                )}
+
+                                {columnVisibility?.event_date && (
+                                    <th
+                                        scope="col"
+                                        className={`${table_sort_header_style}`}
+                                        rowSpan={2}
+                                        onClick={() => handleSort("event_date", sortState, setSortState, setSortedData, tableData)}
+                                        style={renderSectionBorder('event_date', 'section1')}
+                                    >
+                                        {`Event Date`}
+                                        {getArrowIcon("event_date")}
+                                    </th>
+                                )}
+
+                                 {columnVisibility?.zone && (
+                                    <th
+                                        scope="col"
+                                        className={`${table_sort_header_style} text-center duration-200 ease-in-out`}
+                                        rowSpan={2}
+                                        onClick={() => handleSort("zone", sortState, setSortState, setSortedData, tableData)}
+                                        style={renderSectionBorder('zone', 'section1')}
+                                    >
+                                        {`Zone`}
+                                        {getArrowIcon("zone")}
+                                    </th>
+                                )}
+
+                                {columnVisibility?.document_7 && (
+                                    <th
+                                        scope="col"
+                                        className={`${table_header_style} text-center`}
+                                        colSpan={getVisibleChildCount("document_7")}
+                                        style={renderSectionBorder('document_7', 'section2')}
+                                    >
+                                        {`Document 7`}
+                                    </th>
+                                )}
+
+                                {columnVisibility?.document_8 && (
+                                    <th
+                                        scope="col"
+                                        className={`${table_header_style} text-center`}
+                                        colSpan={getVisibleChildCount("document_8")}
+                                        style={renderSectionBorder('document_8', 'section2')}
+                                    >
+                                        {`Document 8`}
+                                    </th>
+                                )}
+
+                                {(userDT?.account_manage?.[0]?.user_type_id !== 3 && userDT?.account_manage?.[0]?.user_type_id !== 4) && columnVisibility?.created_by && (
+                                    <th scope="col" className={`${table_sort_header_style} text-center`} rowSpan={2} onClick={() => handleSort("create_by_account.first_name", sortState, setSortState, setSortedData, tableData)}>
+                                        {`Created by`}
+                                        {getArrowIcon("create_by_account.first_name")}
+                                    </th>
+                                )}
+
+                                {columnVisibility?.event_status && (
+                                    <th scope="col" className={`${table_sort_header_style} text-center`} rowSpan={2} onClick={() => handleSort("event_status.name", sortState, setSortState, setSortedData, tableData)}>
+                                        {`Event Status`}
+                                        {getArrowIcon("event_status.name")}
+                                    </th>
+                                )}
+
+                                {/* SHIPPER ไม่เห็น column action */}
+                                {/* กันบอกให้จับจากสิทธิไม่ใช่ user_type */}
+                                {/* {columnVisibility.action && userPermission?.f_approve && ( */}
+                                {columnVisibility.action && (userDT?.account_manage?.[0]?.user_type_id !== 3 && userDT?.account_manage?.[0]?.user_type_id !== 4) && (
+                                    <th scope="col" className={`${table_header_style} text-center`} rowSpan={2}>
+                                        {`Action`}
+                                    </th>
+                                )}
+                            </tr>
+
+                            <tr className="h-9 !bg-[#00ADEF]">
+
+                                {columnVisibility?.document_7 && (<>
+                                    {columnVisibility?.info_document_7 && (
+                                        <th
+                                            scope="col"
+                                            className={`${table_header_style} text-center`}
+                                            style={renderSectionBorder('info_document_7', 'section2', 'document_7')}
+                                        >
+                                            {`Info`}
+                                        </th>
+                                    )}
+
+                                    {columnVisibility?.shipper_document_7 && (
+                                        <th
+                                            scope="col"
+                                            className={`${table_header_style} text-center`}
+                                            style={renderSectionBorder('shipper_document_7', 'section2', 'document_7')}
+                                        >
+                                            {`Shipper`}
+                                        </th>
+                                    )}
+
+                                    {columnVisibility?.status_document_7 && (
+                                        <th
+                                            scope="col"
+                                            className={`${table_header_style} text-center`}
+                                            style={renderSectionBorder('status_document_7', 'section2', 'document_7')}
+                                        >
+                                            {`Status`}
+                                        </th>
+                                    )}
+
+                                    {columnVisibility?.acknowledge_document_7 && (
+                                        <th
+                                            scope="col"
+                                            className={`${table_header_style} text-center`}
+                                            style={renderSectionBorder('acknowledge_document_7', 'section2', 'document_7')}
+                                        >
+                                            {`Acknowledge`}
+                                        </th>
+                                    )}
+                                </>)}
+
+
+                                {columnVisibility?.document_8 && (<>
+                                    {columnVisibility?.info_document_8 && (
+                                        <th
+                                            scope="col"
+                                            className={`${table_header_style} text-center`}
+                                            style={renderSectionBorder('info_document_8', 'section2', 'document_8')}
+                                        >
+                                            {`Info`}
+                                        </th>
+                                    )}
+
+                                    {columnVisibility?.shipper_document_8 && (
+                                        <th
+                                            scope="col"
+                                            className={`${table_header_style} text-center`}
+                                            style={renderSectionBorder('shipper_document_8', 'section2', 'document_8')}
+                                        >
+                                            {`Shipper`}
+                                        </th>
+                                    )}
+                                    {columnVisibility?.status_document_8 && (
+                                        <th
+                                            scope="col"
+                                            className={`${table_header_style} text-center`}
+                                            style={renderSectionBorder('status_document_8', 'section2', 'document_8')}
+                                        >
+                                            {`Status`}
+                                        </th>
+                                    )}
+
+                                    {columnVisibility?.acknowledge_document_8 && (
+                                        <th
+                                            scope="col"
+                                            className={`${table_header_style} text-center`}
+                                            style={renderSectionBorder('acknowledge_document_8', 'section2', 'document_8')}
+                                        >
+                                            {`Acknowledge`}
+                                        </th>
+                                    )}
+                                </>)}
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            {sortedData && sortedData?.map((row: any, index: any) => {
+
+                                return (
+                                    <tr
+                                        key={row?.id}
+                                        className={`${table_row_style}`}
+                                    >
+
+                                        {columnVisibility?.event_code && (
+                                            <td
+                                                className={`px-2 py-1 text-[#464255] min-w-[120px] `}
+                                                style={renderSectionBorder('event_code', 'section1')}
+                                            >
+                                                {row?.event_nember}
+                                            </td>
+                                        )}
+
+                                        {columnVisibility?.type && (
+                                            <td
+                                                className={`px-2 py-1 text-[#464255] min-w-[120px] `}
+                                                style={renderSectionBorder('type', 'section1')}
+                                            >
+                                                {
+                                                    <div
+                                                        className="flex justify-center items-center rounded-full p-1 text-[#464255]"
+                                                        style={{ backgroundColor: row?.event_doc_ofo_type?.color, width: '140px', height: '40px', color: '#464255' }}
+                                                    >
+                                                        {row?.event_doc_ofo_type?.name_en}
+                                                    </div>
+                                                }
+                                            </td>
+                                        )}
+
+                                        {columnVisibility?.event_date && (
+                                            <td
+                                                className={`px-2 py-1 text-[#464255] min-w-[120px] `}
+                                                style={renderSectionBorder('event_date', 'section1')}
+                                            >
+                                                {row?.event_date ? toDayjs(row?.event_date).format("DD/MM/YYYY") : ''}
+                                            </td>
+                                        )}
+
+                                        {columnVisibility?.zone && (
+                                        <td
+                                            className={`px-2 py-1 text-[#464255] min-w-[120px] text-center`}
+                                            style={renderSectionBorder('zone', 'section1')}
+                                        >
+                                            {
+                                                row?.event_doc_ofo_gas_tranmiss ?
+                                                    row?.event_doc_ofo_gas_tranmiss?.name == "Onshore East" ? 'East'
+                                                        : row?.event_doc_ofo_gas_tranmiss?.name == "Onshore West" ? 'West'
+                                                            : row?.event_doc_ofo_gas_tranmiss?.name == "Onshore East - West" ? 'East - West'
+                                                                : 'Other'
+                                                    : ''
+                                            }
+                                        </td>
+                                    )}
+
+
+
+                                        {/* ======================== DOCUMENT 7 ======================== */}
+                                        {/* UNDER DOC 7 */}
+                                        {columnVisibility?.info_document_7 && (
+                                            <td
+                                                className={`px-2 py-1 text-[#464255] text-center min-w-[120px] `}
+                                                style={renderSectionBorder('info_document_7', 'section2', 'document_7')}
+                                            >
+
+                                                {(() => {
+                                                    const isShipper = (userDT?.account_manage?.[0]?.user_type_id === 3 || userDT?.account_manage?.[0]?.user_type_id === 4);
+                                                    const isTSO = !isShipper;
+                                                    const eventStatus = row?.event_status_id; // stat ของ main row (open, close)
+                                                    // const docStatus = row?.document7?.event_doc_status_id;
+                                                    const docStatus = row?.document7?.map((doc: any) => doc.event_doc_status_id);
+                                                    const allAcknowledged = row?.document7?.every((doc: any) => doc.event_doc_status_id === 5);
+                                                    const hasDocument7 = Array.isArray(row?.document7) ? row.document7.length > 0 : !!row?.document7;
+                                                    // const canShipperView = [3,4,5].includes(docStatus); // Accepted / Rejected / Cancelled 
+                                                    const canShipperView = allAcknowledged; // Accepted / Rejected / Cancelled 
+
+                                                    const shouldShowViewButton = eventStatus === 2 || (isShipper && canShipperView);
+                                                    const shouldShowEditButton = (isShipper && !canShipperView) || (isTSO && hasDocument7);
+
+                                                     if(isShipper && row?.document7?.[0]?.event_doc_status_id === 1){
+                                                            return
+                                                        }
+
+                                                    const commonButtons = (
+                                                        <>
+                                                            <Tooltip
+                                                                title="Download"
+                                                                placement="top"
+                                                                arrow
+                                                                slots={{
+                                                                    transition: Zoom,
+                                                                }}
+                                                                slotProps={{
+                                                                    transition: { timeout: 300 },
+                                                                }}
+                                                            >
+                                                                <button type="button" className={class_btn_} disabled={false}
+                                                                    onClick={() => handleDownloadPDFOfIf('doc7', (userDT?.account_manage?.[0]?.user_type_id !== 3 && userDT?.account_manage?.[0]?.user_type_id !== 4) ? row?.document7TSOID : row?.document7?.[0]?.id)}
+                                                                >
+                                                                    <FileDownloadIcon sx={{ fontSize: 20, color: '#1473A1' }} />
+                                                                </button>
+                                                            </Tooltip>
+
+                                                            {
+                                                                !isShipper &&
+                                                                <Tooltip
+                                                                    title="History"
+                                                                    placement="top"
+                                                                    arrow
+                                                                    slots={{
+                                                                        transition: Zoom,
+                                                                    }}
+                                                                    slotProps={{
+                                                                        transition: { timeout: 300 },
+                                                                    }}
+                                                                >
+                                                                    <button
+                                                                        type="button"
+                                                                        disabled={!userPermission?.f_view}
+                                                                        className={`${class_btn_} ${!userPermission?.f_view ? 'opacity-50 cursor-not-allowed bg-gray-200' : ''}`}
+                                                                        // onClick={() => openDocumentHistory('document_7', 'view', row)}
+                                                                        onClick={() => openDocumentHistory('document_7', 'history', row)}
+                                                                    >
+                                                                        <HistoryOutlinedIcon sx={{ fontSize: 20, color: '#1473A1' }} />
+                                                                    </button>
+                                                                </Tooltip>
+                                                            }
+
+                                                        </>
+                                                    );
+
+                                                    if (!hasDocument7) return null; // ถ้าไม่มี document7 ไม่โชว์ปุ่มนะ
+
+                                                    if (shouldShowViewButton) {
+                                                        return (
+                                                            <div className="flex gap-2 items-center text-center justify-center">
+                                                                <Tooltip
+                                                                    title="View"
+                                                                    placement="top"
+                                                                    arrow
+                                                                    slots={{
+                                                                        transition: Zoom,
+                                                                    }}
+                                                                    slotProps={{
+                                                                        transition: { timeout: 300 },
+                                                                    }}
+                                                                >
+                                                                    <button
+                                                                        type="button"
+                                                                        disabled={!userPermission?.f_view}
+                                                                        className={`${class_btn_} ${!userPermission?.f_view ? 'opacity-50 cursor-not-allowed bg-gray-200' : ''}`}
+                                                                        onClick={() => openDocumentHistory('document_7', 'view', row)}
+                                                                    >
+                                                                        <RemoveRedEyeOutlinedIcon sx={{ fontSize: 20, color: '#1473A1' }} />
+                                                                    </button>
+                                                                </Tooltip>
+                                                                {commonButtons}
+                                                            </div>
+                                                        );
+                                                    }
+
+                                                    if (shouldShowEditButton) {
+                                                        return (
+                                                            <div className="flex gap-2 items-center text-center justify-center">
+                                                                <Tooltip
+                                                                    title="Edit"
+                                                                    placement="top"
+                                                                    arrow
+                                                                    slots={{
+                                                                        transition: Zoom,
+                                                                    }}
+                                                                    slotProps={{
+                                                                        transition: { timeout: 300 },
+                                                                    }}
+                                                                >
+                                                                    <button
+                                                                        type="button"
+                                                                        disabled={!userPermission?.f_edit}
+                                                                        className={`${class_btn_} ${!userPermission?.f_edit ? 'opacity-50 cursor-not-allowed bg-gray-200' : ''}`}
+                                                                        // onClick={() => openDocument('document_7', 'edit', row)}
+                                                                        onClick={() => openDocumentHistory('document_7', 'version_edit', row)}
+                                                                    >
+                                                                        <EditOutlinedIcon sx={{ fontSize: 20, color: '#1473A1' }} />
+                                                                    </button>
+                                                                </Tooltip>
+                                                                {commonButtons}
+                                                            </div>
+                                                        );
+                                                    }
+
+                                                    return null;
+                                                })()}
+
+                                            </td>
+                                        )}
+
+                                        {/* col นี้่ TSO เห็นอย่างเดียว */}
+                                        {/* แสดงการนับจำนวนกด acknowledge ของ shipper */}
+                                        {columnVisibility?.shipper_document_7 && (
+                                            <td
+                                                className={`px-2 py-1 text-[#464255] text-center min-w-[120px] `}
+                                                style={renderSectionBorder('shipper_document_7', 'section2', 'document_7')}
+                                            >
+                                                {(() => {
+                                                       const checkDraft = row?.document7?.find((f:any) => f?.user_type_id === 2 && f?.event_doc_status_id === 1)
+                                                        if(checkDraft){
+                                                            return <div className="flex w-[120px] justify-center rounded-full px-1 py-2 text-[#464255]" style={{ backgroundColor: checkDraft?.event_doc_status?.color }}>
+                                                                        {checkDraft?.event_doc_status?.name ?? ''}
+                                                                    </div>
+                                                        }else{
+                                                            
+                                                            if (row?.document7?.length > 0) {
+                                                                return getAcknowledgeStatus(row?.document7)
+                                                            }
+                                                        }
+                                                    return ''
+                                                })()}
+                                            </td>
+                                        )}
+
+
+                                        {/* col นี้่ TSO เห็นอย่างเดียว */}
+                                        {columnVisibility?.status_document_7 && (
+                                            // status ของเอกสารจะแสดงแค่ Accepted (id 3), Rejected (id 4), Acknowledge (id 5) เท่านั้น
+                                            <td
+                                                className={`px-2 py-1 text-[#464255] text-center min-w-[120px] `}
+                                                style={renderSectionBorder('status_document_7', 'section2', 'document_7')}
+                                            >
+                                                {
+                                                    // Accepted == 3, Rejected == 4, Acknowledge == 5, Generated == 6
+                                                    Array.isArray(row?.document7) && row.document7.length > 0 ? (
+                                                        // ถ้ามี status Generated อยู่ใน document7 จะแสดงเป็นคำว่า Generated
+                                                        row.document7.some((doc: any) => doc?.event_doc_status?.id === 6) ? (
+                                                            <div className="flex w-[120px] justify-center rounded-full px-1 py-2 text-[#464255]" style={{ backgroundColor: '#D3C9ED' }}>
+                                                                {`Generated`}
+                                                            </div>
+                                                        ) :
+                                                            // ถ้าไม่มี status Generated ให้นับจำนวนการกด accept ของ shipper
+                                                            // ถ้าเท่ากัน close 
+                                                            // ถ้าไม่เท่า open
+                                                            (() => {
+                                                                if (row?.document7?.length > 0) {
+                                                                    const acknow_stat = getAcknowledgeStatus(row?.document7).split("/")
+                                                                    if (acknow_stat?.[0] == acknow_stat?.[1]) {
+                                                                        return (
+                                                                            <div className="flex w-[120px] justify-center rounded-full px-1 py-2 text-[#464255]" style={{ backgroundColor: '#FDD0D0' }}>
+                                                                                {`Close`}
+                                                                            </div>
+                                                                        )
+                                                                    } else {
+                                                                        return (
+                                                                            <div className="flex w-[120px] justify-center rounded-full px-1 py-2 text-[#464255]" style={{ backgroundColor: '#C9DAED' }}>
+                                                                                {`Open`}
+                                                                            </div>
+                                                                        )
+                                                                    }
+                                                                }
+                                                            })()
+                                                    ) : null
+                                                }
+                                            </td>
+                                        )}
+
+
+                                        {/* col นี้่ shipper เห็นอย่างเดียว */}
+                                        {columnVisibility?.acknowledge_document_7 && (
+                                            <td
+                                                className={`px-2 py-1 text-[#464255] text-center min-w-[120px] `}
+                                                style={renderSectionBorder('acknowledge_document_7', 'section2', 'document_7')}
+                                            >
+                                                {(() => {
+                                                    if (row?.document7?.length > 0) {
+                                                        const allAcknowledged = row?.document7?.every((doc: any) => doc.event_doc_status_id === 5);
+                                                        if (allAcknowledged) {
+                                                            return <DoneOutlinedIcon sx={{ fontSize: 20, color: '#1473A1' }} />
+                                                        }
+                                                    }
+                                                    return ''
+                                                })()}
+                                            </td>
+                                        )}
+
+
+                                        {/* ======================== DOCUMENT 8 ======================== */}
+                                        {/* UNDER DOC 8 */}
+                                        {columnVisibility?.info_document_8 && (
+                                            <td
+                                                className={`px-2 py-1 text-[#464255] text-center min-w-[120px] `}
+                                                style={renderSectionBorder('info_document_8', 'section2', 'document_8')}
+                                            >
+
+                                                {(() => {
+                                                    const isShipper = (userDT?.account_manage?.[0]?.user_type_id === 3 || userDT?.account_manage?.[0]?.user_type_id === 4);
+                                                    const isTSO = !isShipper;
+                                                    const eventStatus = row?.event_status_id; // stat ของ main row (open, close)
+                                                    const docStatus = row?.document8?.event_doc_status_id;
+                                                    const hasdocument8 = Array.isArray(row?.document8) ? row.document8.length > 0 : !!row?.document8;
+                                                    const canShipperView = [3, 4, 5].includes(docStatus); // Accepted / Rejected / Cancelled /
+
+                                                    const shouldShowViewButton = eventStatus === 2 || (isShipper && canShipperView);
+                                                    const shouldShowEditButton = (isShipper && !canShipperView) || (isTSO && hasdocument8);
+
+                                                    if(isShipper && docStatus === 1){
+                                                        return
+                                                    }
+
+                                                    const commonButtons = (
+                                                        <>
+                                                            <Tooltip
+                                                                title="Download"
+                                                                placement="top"
+                                                                arrow
+                                                                slots={{
+                                                                    transition: Zoom,
+                                                                }}
+                                                                slotProps={{
+                                                                    transition: { timeout: 300 },
+                                                                }}
+                                                            >
+                                                                <button type="button" className={class_btn_} disabled={false}
+                                                                    onClick={() => handleDownloadPDFOfIf('doc8', (userDT?.account_manage?.[0]?.user_type_id !== 3 && userDT?.account_manage?.[0]?.user_type_id !== 4) ? row?.document8TSOID : row?.document8?.id)}
+                                                                >
+                                                                    <FileDownloadIcon sx={{ fontSize: 20, color: '#1473A1' }} />
+                                                                </button>
+                                                            </Tooltip>
+
+                                                            {
+                                                                !isShipper &&
+                                                                <Tooltip
+                                                                    title="History"
+                                                                    placement="top"
+                                                                    arrow
+                                                                    slots={{
+                                                                        transition: Zoom,
+                                                                    }}
+                                                                    slotProps={{
+                                                                        transition: { timeout: 300 },
+                                                                    }}
+                                                                >
+                                                                    <button
+                                                                        type="button"
+                                                                        // className={class_btn_} 
+                                                                        // disabled={false}
+                                                                        disabled={!userPermission?.f_view}
+                                                                        className={`${class_btn_} ${!userPermission?.f_view ? 'opacity-50 cursor-not-allowed bg-gray-200' : ''}`}
+                                                                        // onClick={() => underDevelopment()}
+                                                                        onClick={() => openDocumentHistory('document_8', 'history', row)}
+                                                                    >
+                                                                        <HistoryOutlinedIcon sx={{ fontSize: 20, color: '#1473A1' }} />
+                                                                    </button>
+                                                                </Tooltip>
+                                                            }
+
+                                                        </>
+                                                    );
+
+                                                    if (!hasdocument8) return null; // ถ้าไม่มี document8 ไม่โชว์ปุ่มนะ
+
+                                                    if (shouldShowViewButton) {
+                                                        return (
+                                                            <div className="flex gap-2 items-center text-center justify-center">
+                                                                <Tooltip
+                                                                    title="View"
+                                                                    placement="top"
+                                                                    arrow
+                                                                    slots={{
+                                                                        transition: Zoom,
+                                                                    }}
+                                                                    slotProps={{
+                                                                        transition: { timeout: 300 },
+                                                                    }}
+                                                                >
+                                                                    <button
+                                                                        type="button"
+                                                                        // className={class_btn_}
+                                                                        disabled={!userPermission?.f_view}
+                                                                        className={`${class_btn_} ${!userPermission?.f_view ? 'opacity-50 cursor-not-allowed bg-gray-200' : ''}`}
+                                                                        onClick={() => openDocument('document_8', 'view', row)}
+                                                                    >
+                                                                        <RemoveRedEyeOutlinedIcon sx={{ fontSize: 20, color: '#1473A1' }} />
+                                                                    </button>
+                                                                </Tooltip>
+                                                                {commonButtons}
+                                                            </div>
+                                                        );
+                                                    }
+
+                                                    if (shouldShowEditButton) {
+                                                        return (
+                                                            <div className="flex gap-2 items-center text-center justify-center">
+                                                                <Tooltip
+                                                                    title="Edit"
+                                                                    placement="top"
+                                                                    arrow
+                                                                    slots={{
+                                                                        transition: Zoom,
+                                                                    }}
+                                                                    slotProps={{
+                                                                        transition: { timeout: 300 },
+                                                                    }}
+                                                                >
+                                                                    <button
+                                                                        type="button"
+                                                                        // className={class_btn_}
+                                                                        disabled={!userPermission?.f_edit}
+                                                                        className={`${class_btn_} ${!userPermission?.f_edit ? 'opacity-50 cursor-not-allowed bg-gray-200' : ''}`}
+                                                                        onClick={() => openDocument('document_8', 'edit', row)}
+                                                                    >
+                                                                        <EditOutlinedIcon sx={{ fontSize: 20, color: '#1473A1' }} />
+                                                                    </button>
+                                                                </Tooltip>
+                                                                {commonButtons}
+                                                            </div>
+                                                        );
+                                                    }
+
+                                                    return null;
+                                                })()}
+                                            </td>
+                                        )}
+
+                                        {columnVisibility?.shipper_document_8 && (
+                                            <td
+                                                className={`px-2 py-1 text-[#464255] text-center min-w-[120px] `}
+                                                style={renderSectionBorder('shipper_document_8', 'section2', 'document_8')}
+                                            >
+                                                {(() => {
+                                                    const checkDraft = row?.document8?.find((f:any) => (f?.user_type_id === 2 || f?.user_type_id === 1) && f?.event_doc_status_id === 1)
+                                                if(checkDraft){
+                                                    return <div className="flex w-[120px] justify-center rounded-full px-1 py-2 text-[#464255]" style={{ backgroundColor: checkDraft?.event_doc_status?.color }}>
+                                                                {checkDraft?.event_doc_status?.name ?? ''}
+                                                            </div>
+                                                }else{
+                                                    if (row?.document8?.length > 0) {
+                                                        // count จำนวนที่ shipper accept หรือ reject
+                                                        // const count_document_2_shipper_edited = row?.document8?.filter((item: any) => [5].includes(item.event_doc_status_id)) // 3 = Accepted / 4= Rejected  / 5=Acknowledge
+                                                        // return `${count_document_2_shipper_edited?.length}/${row?.document8?.length}`
+
+                                                        // const count_document_2_shipper_edited = row?.document8?.filter((x: any) => x?.user_type_id !== 2).filter((item: any) => [5].includes(item.event_doc_status_id)) // 3 = Accepted / 4= Rejected  / 5=Acknowledge
+                                                        const count_document_2_shipper_edited = row?.document8?.filter((it: any) => (it?.user_type_id !== 2 && it?.user_type_id !== 1) && it?.event_doc_status_id === 5) ?? [];
+                                                        const count_only_shipper = row?.document8?.filter((x: any) => (x?.user_type_id !== 2 && x?.user_type_id !== 1))
+
+                                                        return `${count_document_2_shipper_edited?.length}/${count_only_shipper?.length}`
+                                                    }
+                                                }
+
+                                                    return ''
+                                                })()}
+                                            </td>
+                                        )}
+
+                                        {columnVisibility?.status_document_8 && (
+                                            // status ของเอกสารจะแสดงแค่ Accepted (id 3), Rejected (id 4), Acknowledge (id 5) เท่านั้น
+                                            <td
+                                                className={`px-2 py-1 text-[#464255] text-center min-w-[120px] `}
+                                                style={renderSectionBorder('status_document_8', 'section2', 'document_8')}
+                                            >
+                                                {
+                                                    // Accepted == 3, Rejected == 4, Acknowledge == 5, Generated == 6
+                                                    Array.isArray(row?.document8) && row.document8.length > 0 ? (
+                                                        // ถ้ามี status Generated อยู่ใน document8 จะแสดงเป็นคำว่า Generated
+                                                        row.document8.some((doc: any) => doc?.event_doc_status?.id === 6) ? (
+                                                            <div className="flex w-[120px] justify-center rounded-full px-1 py-2 text-[#464255]" style={{ backgroundColor: '#D3C9ED' }}>
+                                                                {`Generated`}
+                                                            </div>
+                                                        ) :
+                                                            // ถ้าไม่มี status Generated ให้นับจำนวนการกด accept ของ shipper
+                                                            // ถ้าเท่ากัน close 
+                                                            // ถ้าไม่เท่า open
+                                                            (() => {
+                                                                if (row?.document8?.length > 0) {
+                                                                    // count จำนวนที่ shipper accept หรือ reject หรือ Acknowledge
+                                                                    // const count_document_2_shipper_edited = row?.document8?.filter((item: any) => [5].includes(item.event_doc_status_id)) // 3 = Accepted / 4= Rejected  / 5=Acknowledge
+
+                                                                    const count_document_2_shipper_edited = row?.document8?.filter((it: any) => (it?.user_type_id !== 2 && it?.user_type_id !== 1) && it?.event_doc_status_id === 5) ?? [];
+                                                                    const count_only_shipper = row?.document8?.filter((x: any) => (x?.user_type_id !== 2 && x?.user_type_id !== 1))
+
+                                                                    // if (count_document_2_shipper_edited?.length == row?.document8?.length) {
+                                                                    if (count_document_2_shipper_edited?.length == count_only_shipper?.length) {
+                                                                        return (
+                                                                            <div className="flex w-[120px] justify-center rounded-full px-1 py-2 text-[#464255]" style={{ backgroundColor: '#FDD0D0' }}>
+                                                                                {`Close`}
+                                                                            </div>
+                                                                        )
+                                                                    } else {
+                                                                        return (
+                                                                            <div className="flex w-[120px] justify-center rounded-full px-1 py-2 text-[#464255]" style={{ backgroundColor: '#C9DAED' }}>
+                                                                                {`Open`}
+                                                                            </div>
+                                                                        )
+                                                                    }
+                                                                }
+                                                            })()
+                                                    ) : null
+                                                }
+                                            </td>
+                                        )}
+
+                                        {columnVisibility?.acknowledge_document_8 && (
+                                            <td
+                                                className={`px-2 py-1 text-[#464255] text-center min-w-[120px] `}
+                                                style={renderSectionBorder('acknowledge_document_8', 'section2', 'document_8')}
+                                            >
+                                                {row?.document8?.event_doc_status_id == 5 && <DoneOutlinedIcon sx={{ fontSize: 20, color: '#148750' }} />}
+                                            </td>
+                                        )}
+
+                                        {(userDT?.account_manage?.[0]?.user_type_id !== 3 && userDT?.account_manage?.[0]?.user_type_id !== 4) && columnVisibility.created_by && (
+                                            // status ของเอกสารจะแสดงแค่ Accepted (id 3), Rejected (id 4), Acknowledge (id 5) เท่านั้น
+                                            <td className="px-2 py-1 text-[#464255]">
+                                                <div>
+                                                    <span className="text-[#464255]">{row?.create_by_account?.first_name} {row?.create_by_account?.last_name}</span>
+                                                    <div className="text-gray-500 text-xs">{row?.create_date ? formatDate(row?.create_date) : ''}</div>
+                                                </div>
+                                            </td>
+                                        )}
+
+                                        {columnVisibility?.event_status && (
+                                            <td className={`px-2 py-1 text-[#464255] text-center min-w-[120px] `}>
+                                                <div className="flex w-[120px] justify-center rounded-full px-1 py-2 text-[#464255]" style={{ backgroundColor: row?.event_status?.color }}>
+                                                    {row?.event_status?.name ?? ''}
+                                                </div>
+                                            </td>
+                                        )}
+
+                                        {/* SHIPPER ไม่เห็น column action */}
+                                        {/* กันบอกให้จับจากสิทธิไม่ใช่ user_type */}
+                                        {/* {columnVisibility.action && userPermission?.f_approve && ( */}
+                                        {/* {columnVisibility.action && userDT?.account_manage?.[0]?.user_type_id !== 3 && ( */}
+                                        {columnVisibility.action && userPermission?.f_approved && (userDT?.account_manage?.[0]?.user_type_id !== 3 && userDT?.account_manage?.[0]?.user_type_id !== 4) && (
+
+                                            <td className="px-2 py-1">
+                                                <div className="relative inline-flex justify-center items-center w-full">
+                                                    <BtnActionTable
+                                                        togglePopover={togglePopover}
+                                                        row_id={row?.id}
+                                                        disable={row?.event_status_id == 2 ? true : false}
+                                                    />
+                                                    {openPopoverId === row?.id && (
+                                                        <div ref={popoverRef} className="absolute left-[-8rem] top-[-10px] mt-2 w-36 bg-white border border-gray-300 rounded-lg shadow-lg z-50" >
+                                                            <ul className="py-2">
+                                                                {
+                                                                    userPermission?.f_approved && <li className="px-4 py-2 font-bold text-sm text-[#58585A] hover:bg-gray-100 cursor-pointer" onClick={() => { toggleMenu("edit", row?.id) }}><CancelOutlinedIcon sx={{ fontSize: 20, marginRight: 2, color: '#58585A' }} /> {`Close`}</li>
+                                                                    // userPermission?.f_view && <li className="px-4 py-2 font-bold text-sm text-[#58585A] hover:bg-gray-100 cursor-pointer" onClick={() => { toggleMenu("edit", row?.id) }}><CancelOutlinedIcon sx={{ fontSize: 20, marginRight: 2, color: '#58585A' }} /> {`Close`}</li>
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </td>
+                                        )}
+                                    </tr>
+                                )
+                            }
+                            )}
+                        </tbody>
+                    </table>
+                    :
+                    <TableSkeleton />
+                }
+
+                {
+                    !isLoading && sortedData?.length == 0 && <NodataTable />
+                }
+
+            </div>
+
+            <ModalConfirmSave
+                open={modaConfirmSave}
+                handleClose={(e: any) => {
+                    setModaConfirmSave(false);
+                    if (e == "submit") {
+                        // setIsLoading(true);
+                        setTimeout(async () => {
+                            updateMainStat(dataSubmit);
+                        }, 100);
+
+                        // setTimeout(async () => {
+                        //     handleClose();
+                        // }, 1000);
+                    }
+                }}
+                title="Confirm Close Document"
+                description={
+                    <div>
+                        <div className="text-center">
+                            {`Do you want to close this document?`}
+                        </div>
+                    </div>
+                }
+                menuMode="confirm-save"
+                btnmode="split"
+                btnsplit1="Save"
+                btnsplit2="Cancel"
+                stat="none"
+            />
+        </>
+    )
+}
+
+export default TableOfIf;

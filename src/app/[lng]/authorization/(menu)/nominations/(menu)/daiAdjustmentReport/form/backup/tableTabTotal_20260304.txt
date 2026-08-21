@@ -1,0 +1,446 @@
+import React, { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import TableSkeleton from "@/components/material_custom/DefaultSkeleton";
+import { filterItemsAllNullMmscfd, formatNumberThreeDecimal, formatNumberThreeDecimalNom } from "@/utils/generalFormatter";
+import { table_col_arrow_sort_style, table_header_style, table_sort_header_style } from "@/utils/styles";
+import { handleSort } from "@/utils/sortTable";
+import NodataTable from "@/components/other/nodataTable";
+
+const TableTabTotal: React.FC<any> = ({
+  tableData,
+  isLoading,
+  columnVisibility,
+  userPermission,
+  tableType,
+  tableDataCurrent,
+  tableDataAll,
+  autoHeight = false
+}) => {
+  const [sortState, setSortState] = useState<{ column: string | null; direction: "asc" | "desc" | null }>({
+    column: null,
+    direction: null,
+  });
+
+  const [sortedData, setSortedData] = useState(tableData);
+
+  const [closestTimeGroup, setClosestTimeGroup] = useState<any>(tableData);
+  const [headerMap, setHeaderMap] = useState<Record<string, Set<string>>>({});
+  const [isNodata, setIsNodata] = useState<boolean>(true);
+
+  const [rows, setRows] = useState<any[]>([]);
+
+  // ====== หา closest time group หรือทั้งหมด ======
+  useEffect(() => {
+    if (tableType === "current") {
+      const now = dayjs();
+      if (tableDataCurrent?.length > 0) {
+        const closed_time = tableDataCurrent.reduce((prev: any, curr: any) => {
+          const prevTime = dayjs(`${dayjs().format("YYYY-MM-DD")}T${prev.time}`).valueOf();
+          const currTime = dayjs(`${dayjs().format("YYYY-MM-DD")}T${curr.time}`).valueOf();
+          const nowTime = now.valueOf();
+
+          const prevDiff = Math.abs(prevTime - nowTime);
+          const currDiff = Math.abs(currTime - nowTime);
+
+          return currDiff < prevDiff ? curr : prev;
+        });
+
+        const sortedClosedTime = {
+          ...closed_time,
+          groups: [...closed_time.groups].sort((a, b) =>
+            a.point.localeCompare(b.point, 'en', { sensitivity: 'base' })
+          )
+        };
+
+        setClosestTimeGroup(sortedClosedTime);
+      }
+      setIsNodata(!(tableDataCurrent?.length > 0 && tableDataCurrent[0]?.groups?.length > 0));
+    } else {
+      setClosestTimeGroup(tableDataAll);
+      setIsNodata(!(tableDataAll?.length > 0));
+    }
+
+    // const sortedRows = unique?.map((row:any) => ({
+    //     ...row,
+    //     groups: [...row.groups].sort((a, b) =>
+    //       a.point.localeCompare(b.point, "en", { sensitivity: "base" })
+    //     )
+    //   }));
+  }, [tableDataCurrent, tableDataAll, tableType]);
+
+  // ====== สร้าง headerMap ======
+  useEffect(() => {
+    const newHeaderMap: Record<string, Set<string>> = {};
+    if (tableDataAll?.length > 0) {
+      tableDataAll.forEach((entry: any) => {
+        entry.groups.forEach((group: any) => {
+          if (!newHeaderMap[group.point]) {
+            newHeaderMap[group.point] = new Set();
+          }
+          group.items.forEach((item: any) => {
+            newHeaderMap[group.point].add(item.shipper_name);
+          });
+        });
+      });
+    }
+
+    const sortedHeaderMap = Object.fromEntries(
+      Object.entries(newHeaderMap).sort(([keyA], [keyB]) =>
+        keyA.localeCompare(keyB, "en", { sensitivity: "base" })
+      )
+    );
+
+    // setHeaderMap(newHeaderMap);
+    setHeaderMap(sortedHeaderMap);
+  }, [tableDataAll]);
+
+  // ====== แปลง closestTimeGroup → rows ======
+  useEffect(() => {
+    if (tableType === "all" && tableDataAll?.length > 0) {
+      if (!closestTimeGroup) {
+        setRows([]);
+        return;
+      }
+      const allRows = closestTimeGroup?.flatMap((entry: any) =>
+        entry.groups?.flatMap((group: any) =>
+          group.items?.flatMap((item: any) =>
+            (item.timeShow || [])
+              .slice()
+              .sort((a: any, b: any) => a.time.localeCompare(b.time))
+              .map((ts: any) => ({ entry, group, item, ts }))
+          )
+        )
+      ).map((e: any) => e.entry);
+
+      const seen = new Set();
+      const unique = allRows.filter((item: any) => {
+        const key = JSON.stringify(item);
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+
+      const sortedRows = unique?.map((row: any) => ({
+        ...row,
+        groups: [...row.groups].sort((a, b) =>
+          a.point.localeCompare(b.point, "en", { sensitivity: "base" })
+        )
+      }));
+
+      // setRows(unique);
+
+      setRows(sortedRows);
+      setSortState({ column: null, direction: null });
+    }
+  }, [closestTimeGroup, tableDataAll, tableType]);
+
+  // ====== ฟังก์ชัน sort ======
+  const handleSortDailyAdjustment = (
+    column: string,
+    sortState: any,
+    setSortState: any,
+    setRows: any,
+    tableData: any[]
+  ) => {
+    let direction: "asc" | "desc" | null = "asc";
+    if (sortState.column === column) {
+      direction = sortState.direction === "asc" ? "desc" : sortState.direction === "desc" ? null : "asc";
+    }
+    setSortState({ column, direction });
+
+    if (!direction) {
+      setRows(tableData);
+      return;
+    }
+
+    const accessor = (row: any): number | string | null => {
+      if (column === "current_time") {
+        const ts = dayjs(row.time, "HH:mm", true);
+        return ts.isValid() ? ts.valueOf() : row.time ?? null;
+      }
+
+      const totalMatch = column.match(/^(.+)-total$/);
+      if (totalMatch) {
+        const point = totalMatch[1];
+        const group = row.groups.find((g: any) => g.point === point);
+        if (!group) return null;
+        return group.items.reduce((sum: number, it: any) => {
+          const f = it.timeShow?.find((x: any) => x.time === row.time);
+          return f && f.value != null ? sum + Number(f.value) : sum;
+        }, 0);
+      }
+
+      const psMatch = column.match(/^(.+)\|(.+)$/);
+      if (psMatch) {
+        const point = psMatch[1];
+        const shipper = psMatch[2];
+        const group = row.groups.find((g: any) => g.point === point);
+        const item = group?.items.find((it: any) => it.shipper_name === shipper);
+        const f = item?.timeShow?.find((x: any) => x.time === row.time);
+        return f ? Number(f.value) : null;
+      }
+
+      return null;
+    };
+
+    const cmp = (a: any, b: any) => {
+      const av = accessor(a);
+      const bv = accessor(b);
+      if (av == null && bv == null) return 0;
+      if (av == null) return direction === "asc" ? -1 : 1;
+      if (bv == null) return direction === "asc" ? 1 : -1;
+      const aNum = typeof av === "number" ? av : Number(av);
+      const bNum = typeof bv === "number" ? bv : Number(bv);
+      if (!Number.isNaN(aNum) && !Number.isNaN(bNum)) {
+        return direction === "asc" ? aNum - bNum : bNum - aNum;
+      }
+      return direction === "asc"
+        ? String(av).localeCompare(String(bv), undefined, { sensitivity: "base" })
+        : String(bv).localeCompare(String(av), undefined, { sensitivity: "base" });
+    };
+
+    setRows([...tableData].sort(cmp));
+  };
+
+  const getArrowIcon = (column: string) => {
+    return <div className={`${table_col_arrow_sort_style}`}>
+      <ArrowDropUpIcon sx={{ fontSize: 18, opacity: sortState.column === column && sortState.direction === "asc" ? 1 : 0.4, }} />
+      <ArrowDropDownIcon sx={{ fontSize: 18, opacity: sortState.column === column && sortState.direction === "desc" ? 1 : 0.4, }} />
+    </div>
+  };
+
+  return (
+    <div
+      className={`relative ${autoHeight == true ? 'h-auto' : tableType == "current" ? "h-[calc(100vh-490px)]" : "h-[calc(100vh-200px)]"} overflow-y-auto block rounded-t-md z-1`}
+    >
+      {isLoading ? (
+        !isNodata ?
+          <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+
+            {/* #################################### TABLE CURRENT #################################### */}
+            {
+              tableType == 'current' && !isNodata &&
+              <thead className="text-xs text-[#ffffff] bg-[#1473A1] sticky top-0 z-10">
+                <tr className="h-9">
+                  {/* 1st col: Current Time */}
+                  {columnVisibility.current_time && tableType === 'current' && (
+                    <th
+                      scope="col"
+                      rowSpan={2}
+                      className={`${table_sort_header_style} !min-w-[50px] !w-[150px] !max-w-[170px] border-r-[1px] border-r-[#308DBA]`}
+                      onClick={() =>
+                        handleSort(
+                          "current_time",
+                          sortState,
+                          setSortState,
+                          setSortedData,
+                          tableType === 'current' ? tableDataCurrent : tableDataAll
+                        )
+                      }
+                    >
+                      {`Current Time`}
+                      {getArrowIcon("current_time")}
+                    </th>
+                  )}
+
+                  {columnVisibility.current_time && tableType === 'all' && (
+                    <th
+                      scope="col"
+                      rowSpan={2}
+                      className={`${table_sort_header_style} !min-w-[50px] !w-[150px] !max-w-[170px]`}
+                      onClick={() => handleSort("current_time", sortState, setSortState, setSortedData, tableType === 'current' ? tableDataCurrent : tableDataAll)}
+                    >
+                      {`Time`}
+                      {getArrowIcon("current_time")}
+                    </th>
+                  )}
+
+                  {/* 2nd+ cols: point headers with colSpan */}
+                  {closestTimeGroup?.groups?.map((group: any) => (
+                    <th
+                      key={group.point}
+                      colSpan={group.items.length + 1} // shipper names + total
+                      className={`${table_header_style} border-r-[1px] border-r-[#308DBA] border-l-[1px] border-l-[#308DBA] text-center`}
+                    >
+                      {group.point}
+                    </th>
+                  ))}
+                </tr>
+
+                {/* 2nd header row: shipper names + Total under each point */}
+                <tr className="h-9">
+                  {closestTimeGroup?.groups?.map((group: any) =>
+                    group.items.map((item: any, idx: any) => (
+                      <th
+                        key={`${group.point}-${item.rowId}`}
+                        className={`${table_sort_header_style} text-center bg-[#00ADEF] `}
+                        onClick={() => handleSort(`${group.point}-${item.rowId}`, sortState, setSortState, setSortedData, tableType === 'current' ? tableDataCurrent : tableDataAll)}
+                      >
+                        {item.shipper_name}
+                        {getArrowIcon(`${group.point}-${item.rowId}`)}
+                      </th>
+                    )).concat(
+                      <th
+                        key={`${group.point}-total`}
+                        className={`${table_sort_header_style} w-[150px] max-w-[200px] min-w-[110px] bg-[#E3E9F0] text-[#58585A] text-center hover:bg-[#d7dfe8] select-none`}
+                        onClick={() => handleSort(`${group.point}-total`, sortState, setSortState, setSortedData, tableType === 'current' ? tableDataCurrent : tableDataAll)}
+                      >
+                        {`Total`}
+                        {getArrowIcon(`${group.point}-total`)}
+                      </th>
+                    )
+                  )}
+                </tr>
+              </thead>
+            }
+
+            {
+              tableType == 'current' && !isNodata && <tbody>
+                {closestTimeGroup && (
+                  <tr className="h-10 border-b border-gray-200 text-sm text-[#333]">
+                    {/* Current Time Column */}
+                    {columnVisibility.current_time && tableType === 'current' && (
+                      <td className="px-4 py-2 font-semibold">
+                        {/* {closestTimeGroup.time} */}
+                        {dayjs().format("HH:mm")}
+                      </td>
+                    )}
+
+                    {columnVisibility.current_time && tableType === 'all' && (
+                      <td className="px-4 py-2 font-semibold">
+                        {closestTimeGroup.time}
+                      </td>
+                    )}
+
+                    {/* Loop through groups to display shipper values and totals */}
+                    {closestTimeGroup.groups.map((group: any) => (
+                      <>
+                        {/* Each shipper's value */}
+                        {group.items.map((item: any) => (
+                          <td
+                            key={`val-${group.point}-${item.rowId}`}
+                            className="px-4 py-2 text-right"
+                          >
+                            {/* {item.timeShow[0]?.value?.toFixed(2) ?? "-"} */}
+                            {/* {formatNumberThreeDecimal(item.timeShow[0]?.value)} */}
+                            {/* {formatNumberThreeDecimal(item.timeShow?.value)} */}
+                            {item.timeShow?.valueMmscfd ? formatNumberThreeDecimal(item.timeShow?.valueMmscfd) : ''}
+                          </td>
+                        ))}
+
+                        {/* Total column for the group */}
+                        <td
+                          key={`total-${group.point}`}
+                          className="px-4 py-2 text-right font-semibold "
+                        >
+                          {/* {formatNumberThreeDecimal(group.total)} */}
+                          {formatNumberThreeDecimalNom(group.total)}
+                        </td>
+                      </>
+                    ))}
+                  </tr>
+                )}
+
+              </tbody>
+            }
+
+            {/* #################################### TABLE ALL #################################### */}
+            {tableType === "all" && !isNodata && (
+              <thead className="text-xs text-[#ffffff] bg-[#1473A1] sticky top-0 z-10">
+                <tr className="h-9">
+                  <th
+                    scope="col"
+                    rowSpan={2}
+                    className={`${table_sort_header_style} !min-w-[50px] !w-[150px] !max-w-[170px]`}
+                    onClick={() => handleSortDailyAdjustment("current_time", sortState, setSortState, setRows, rows)}
+                  >
+                    {`Time`}
+                    {getArrowIcon("current_time")}
+                  </th>
+                  {Object.entries(headerMap).map(([point, shippers]) => (
+                    <th key={point} colSpan={shippers.size + 1} className="text-center px-2 py-1 border-x border-[#308DBA]">
+                      {point}
+                    </th>
+                  ))}
+                </tr>
+                <tr className="h-9">
+                  {Object.entries(headerMap).flatMap(([point, shippers]) => [
+                    ...Array.from(shippers).map((shipper) => (
+                      <th
+                        key={`${point}-${shipper}`}
+                        className={`${table_sort_header_style} text-center bg-[#00ADEF] `}
+                        onClick={() => handleSortDailyAdjustment(`${point}|${shipper}`, sortState, setSortState, setRows, rows)}
+                      >
+                        {shipper}
+                        {getArrowIcon(`${point}|${shipper}`)}
+                      </th>
+                    )),
+                    <th
+                      key={`${point}-total`}
+                      className={`${table_sort_header_style} w-[150px] max-w-[200px] min-w-[110px] bg-[#E3E9F0] text-[#58585A] text-center hover:bg-[#d7dfe8] select-none`}
+                      onClick={() => handleSortDailyAdjustment(`${point}-total`, sortState, setSortState, setRows, rows)}
+                    >
+                      Total
+                      {getArrowIcon(`${point}-total`)}
+                    </th>,
+                  ])}
+                </tr>
+              </thead>
+            )}
+
+            {tableType === "all" && !isNodata && (
+              <tbody>
+                {rows.map((data: any, ix: number) => (
+                  <tr key={ix} className="h-10 border-b border-gray-200 text-sm text-[#333]">
+                    <td className="px-4 py-2 font-semibold">{data.time}</td>
+                    {Object.entries(headerMap).flatMap(([point, shippers]) => {
+                      const pointGroup = data.groups.find((g: any) => g.point === point);
+                      const shipperMap: Record<string, number> = {};
+                      if (pointGroup) {
+                        pointGroup.items.forEach((it: any) => {
+                          // const lookup = Object.fromEntries(it.timeShow.map((t: any) => [t.time, t.value]));
+                          const lookup = Object.fromEntries(it.timeShow.map((t: any) => [t.time, t.valueMmscfd]));
+                          shipperMap[it.shipper_name] = lookup[data.time]
+                        });
+                      }
+                      const cells = Array.from(shippers).map((sh) => (
+                        <td key={`${data.time}-${point}-${sh}`} className="px-2 py-1 text-right">
+                          {shipperMap[sh] ? formatNumberThreeDecimal(shipperMap[sh] ?? 0) : ''}
+                        </td>
+                      ));
+                      const total: number | undefined = Object.values(shipperMap).reduce((sum: number | undefined, val) => {
+                        if (val) {
+                          if (sum) {
+                            sum = sum + val;
+                          }
+                          else {
+                            sum = val;
+                          }
+                        }
+                        return sum;
+                      }, undefined);
+                      return [
+                        ...cells,
+                        <td key={`${data.time}-${point}-total`} className="px-2 py-1 text-right font-semibold">
+                          {total ? formatNumberThreeDecimal(total) : ''}
+                        </td>,
+                      ];
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            )}
+            
+          </table>
+          :
+          <div className="p-4 w-full border rounded-[6px] h-[calc(100%-20px)] flex justify-center items-center"> <NodataTable textRender={`No data available at the current time.`} /></div>
+      ) : (
+        <TableSkeleton />
+      )}
+    </div>
+  );
+};
+
+export default TableTabTotal;

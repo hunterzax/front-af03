@@ -1,0 +1,5 @@
+const Spinicon: React.FC<any> = () => {
+    return (<div className="lds-ring"><div></div><div></div><div></div><div></div></div>)
+}
+
+export default Spinicon;

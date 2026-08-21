@@ -1,0 +1,57 @@
+.capcha-layout {
+    width: 100%;
+    display: grid;
+    padding: 16px 0;
+    /* margin-top: -4rem; */
+    gap: 0.5rem;
+    grid-template-columns: 55% 45%;
+    transition: 0.3s;
+}
+
+.capcha-panel {
+    height: 50px;
+    width: auto;
+    border-radius: 8px;
+    border: 1px solid #00ADEF;
+    transition: 0.3s;
+    /* w-[200px] rounded-[8px] border border-[#00ADEF] */
+}
+
+.capcha-panel > .capcha-item {
+    width: 100%;
+    height: 48px;
+    transition: 0.3s;
+}
+
+.padding-input {
+    padding-right: 8px;
+    transition: 0.3s;
+}
+
+.responsive-margin-bottom-7 {
+    margin-bottom: 28px;
+    transition: 0.3s;
+}
+
+@media only screen and (max-width: 800px), (max-height: 800px) {
+    .capcha-layout {
+        grid-template-columns: 60% 40%;
+    }
+
+    .capcha-panel {
+        width: 100%;
+    }
+
+    .capcha-panel > .capcha-item {
+        width: 100%;
+        height: 48px;
+    }
+
+    .padding-input {
+        padding-right: 0px;
+    }
+    
+    .responsive-margin-bottom-7 {
+        margin-bottom: 15px;
+    }
+}
