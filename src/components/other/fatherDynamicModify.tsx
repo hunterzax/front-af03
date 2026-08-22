@@ -915,7 +915,7 @@ const FatherTableModify: React.FC<Props> = ({
                                             )
                                         })
                                     ) : header?.subHeaders && header?.subHeaders.length > 0 ? (
-                                        header?.subHeaders.map((subHeader: any, subIndex: any, arr: any) => (
+                                        header?.subHeaders?.map((subHeader: any, subIndex: any, arr: any) => (
                                             columnVisibility[subHeader?.key] && (
                                                 <th
                                                     key={`${index}-${subIndex}`}
@@ -1194,13 +1194,13 @@ const FatherTableModify: React.FC<Props> = ({
                                                         )
                                                 )
                                             }));
-                                        } else if (header?.subHeaders && header.subHeaders.length > 0) {
+                                        } else if ((header?.subHeaders?.length ?? 0) > 0) {
                                             // Render data for columns with subHeaders
                                             // ตรงนี้ render Min, Max
 
                                             const checkSubheader: any = functionControlcolSpan(header, 'sub_header'); //example here only data == sub_header
 
-                                            return header?.subHeaders.map((subHeader: any, subIndex: any, arr: any) => (
+                                            return header?.subHeaders?.map((subHeader: any, subIndex: any, arr: any) => (
 
                                                 columnVisibility[subHeader?.key] && (
                                                     <td
@@ -1420,7 +1420,7 @@ const FatherTableModify: React.FC<Props> = ({
                                             // Render data for columns with subHeaders
                                             // ตรงนี้ render Min, Max
                                             const checkSubheader: any = functionControlcolSpan(header, 'sub_header'); //example here only data == sub_header
-                                            return header?.subHeaders.map((subHeader: any, subIndex: any, arr: any) => (
+                                            return header?.subHeaders?.map((subHeader: any, subIndex: any, arr: any) => (
 
                                                 columnVisibility[subHeader?.key] && (
                                                     <td
@@ -1542,7 +1542,7 @@ const FatherTableModify: React.FC<Props> = ({
                                                 })
                                                 dataKeys.sort((a, b) => Number(a) - Number(b));
                                             }
-                                            // else if (header?.subHeaders && header.subHeaders.length > 0) {
+                                            // else if ((header?.subHeaders?.length ?? 0) > 0) {
                                             //     console.log('subHeaders ', header?.subHeaders)
                                             // }
                                         })
@@ -1717,7 +1717,7 @@ const FatherTableModify: React.FC<Props> = ({
                                                 })
                                                 dataKeys.sort((a, b) => Number(a) - Number(b));
                                             }
-                                            // else if (header?.subHeaders && header.subHeaders.length > 0) {
+                                            // else if ((header?.subHeaders?.length ?? 0) > 0) {
                                             //     console.log('subHeaders ', header?.subHeaders)
                                             // }
                                         })
@@ -1883,7 +1883,7 @@ const FatherTableModify: React.FC<Props> = ({
                                         })
                                         dataKeys.sort((a, b) => Number(a) - Number(b));
                                     }
-                                    // else if (header?.subHeaders && header.subHeaders.length > 0) {
+                                    // else if ((header?.subHeaders?.length ?? 0) > 0) {
                                     //     console.log('subHeaders ', header?.subHeaders)
                                     // }
                                 })
@@ -2104,7 +2104,7 @@ const FatherTableModify: React.FC<Props> = ({
                                         })
                                         dataKeys.sort((a, b) => Number(a) - Number(b));
                                     }
-                                    // else if (header?.subHeaders && header.subHeaders.length > 0) {
+                                    // else if ((header?.subHeaders?.length ?? 0) > 0) {
                                     //     console.log('subHeaders ', header?.subHeaders)
                                     // }
                                 })

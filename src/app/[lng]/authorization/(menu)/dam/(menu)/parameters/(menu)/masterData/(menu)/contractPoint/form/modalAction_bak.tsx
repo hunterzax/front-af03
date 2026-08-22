@@ -292,8 +292,8 @@ const ModalAction: React.FC<FormExampleProps> = ({
                                     if (newEndDayjs.isValid()) {
                                         //หา Point ที่ active อยู่ระหว่างกลางถ้ามีจะแทรกไม่ได้
                                         const activePoint = existingList.filter((item: any) => {
-                                            const startDate = dayjs(item.start_date);
-                                            const endDate = dayjs(item.end_date);
+                                            const startDate = dayjs(item?.start_date);
+                                            const endDate = dayjs(item?.end_date);
                                             if (
                                                 startDate.isValid()
                                                 && startDate.isSameOrAfter(newStartDayjs)
@@ -311,28 +311,28 @@ const ModalAction: React.FC<FormExampleProps> = ({
                                             //// ลบตัวใหม่ตัวใหม่ทุกตัวหาย
                                             //// เพิ่มตัวใหม่ไม่แทรกตัวใหม่
                                             const moveEndDatePoint = existingList.filter((item: any) => {
-                                                const startDate = dayjs(item.start_date);
-                                                const endDate = dayjs(item.end_date);
+                                                const startDate = dayjs(item?.start_date);
+                                                const endDate = dayjs(item?.end_date);
                                                 if (
                                                     startDate.isValid()
                                                     && startDate.isSameOrBefore(newStartDayjs)
-                                                    && (item.end_date === null || (endDate.isValid() && endDate.isAfter(newStartDayjs)))
+                                                    && (item?.end_date === null || (endDate.isValid() && endDate.isAfter(newStartDayjs)))
                                                 ) {
-                                                    item.end_date = newStartDate;
+                                                    item?.end_date = newStartDate;
                                                     return item
                                                 }
                                                 return false
                                             })
                                             const moveStartDatePoint = existingList.filter((item: any) => {
-                                                const startDate = dayjs(item.start_date);
-                                                const endDate = dayjs(item.end_date);
+                                                const startDate = dayjs(item?.start_date);
+                                                const endDate = dayjs(item?.end_date);
                                                 if (
                                                     startDate.isValid()
                                                     && startDate.isSameOrAfter(newStartDayjs)
                                                     && startDate.isSameOrBefore(newEndDayjs)
-                                                    && (item.end_date === null || (endDate.isValid() && endDate.isAfter(newStartDayjs)))
+                                                    && (item?.end_date === null || (endDate.isValid() && endDate.isAfter(newStartDayjs)))
                                                 ) {
-                                                    item.start_date = newEndDate;
+                                                    item?.start_date = newEndDate;
                                                     return item
                                                 }
                                                 return false
@@ -361,7 +361,7 @@ const ModalAction: React.FC<FormExampleProps> = ({
                                 else {
                                     //มี Point รอเริ่มอยู่แทรกไม่ได้
                                     const waitForStartPoint = existingList.filter((item: any) => {
-                                        const startDate = dayjs(item.start_date);
+                                        const startDate = dayjs(item?.start_date);
 
                                         if (startDate.isValid() && startDate.isSameOrAfter(newStartDayjs)) {
                                             return item
@@ -374,14 +374,14 @@ const ModalAction: React.FC<FormExampleProps> = ({
                                         });
                                     } else {
                                         const moveEndDatePoint = existingList.filter((item: any) => {
-                                            const startDate = dayjs(item.start_date);
-                                            const endDate = dayjs(item.end_date);
+                                            const startDate = dayjs(item?.start_date);
+                                            const endDate = dayjs(item?.end_date);
                                             if (
                                                 startDate.isValid()
                                                 && startDate.isSameOrBefore(newStartDayjs)
-                                                && (item.end_date === null || (endDate.isValid() && endDate.isAfter(newStartDayjs)))
+                                                && (item?.end_date === null || (endDate.isValid() && endDate.isAfter(newStartDayjs)))
                                             ) {
-                                                item.end_date = newStartDate;
+                                                item?.end_date = newStartDate;
                                                 return item
                                             }
                                             return false
@@ -490,8 +490,8 @@ const ModalAction: React.FC<FormExampleProps> = ({
                 const startDateAtThai = toDayjs(nominationPoint.start_date).toISOString()
                 const endDateAtThai = nominationPoint.end_date ? toDayjs(nominationPoint.end_date).toISOString() : null
                 const isSamePoint = res_period?.nominationPoint?.some((item: any) => {
-                    return (item.start_date == nominationPoint.start_date || item.start_date == startDateAtThai)
-                        && (item.end_date == nominationPoint.end_date || item.end_date == endDateAtThai || (!item.end_date && !nominationPoint.end_date))
+                    return (item?.start_date == nominationPoint.start_date || item?.start_date == startDateAtThai)
+                        && (item?.end_date == nominationPoint.end_date || item?.end_date == endDateAtThai || (!item?.end_date && !nominationPoint.end_date))
                 })
                 if (isSamePoint) {
                     return {

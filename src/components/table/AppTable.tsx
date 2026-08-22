@@ -403,20 +403,20 @@ export default function AppTable(
                                                 <tr key={headerGroup?.id} className="h-9 relative z-50">
                                                     {headerGroup?.headers?.map((header, index) => {
                                                         const getStyle: any = columns?.find((item: any) => item?.accessorKey == (header?.column?.columnDef as any)?.accessorKey);
-                                                        const canSort = header.column.getCanSort()
+                                                        const canSort = header?.column?.getCanSort?.()
                                                         const enableSorting = canSort || header?.column?.columnDef?.enableSorting == true;
-                                                        const size = header.getSize() == 150 ? undefined : header.getSize() // 150 is default size of column
-                                                        const meta = header.column.columnDef.meta as any
+                                                        const size = header?.getSize?.() == 150 ? undefined : header?.getSize?.() // 150 is default size of column
+                                                        const meta = header?.column?.columnDef?.meta as any
                                                         const width = getStyle?.width ? getStyle?.width : size ? size : meta?.width ? meta?.width : '100%'
                                                         const align = getStyle?.align ? getStyle?.align : meta?.align ? meta?.align : 'left'
 
-                                                        const isPinned = header.column.getIsPinned()
+                                                        const isPinned = header?.column?.getIsPinned?.()
                                                         const isLastLeftPinnedColumn =
-                                                            isPinned === 'left' && header.column.getIsLastColumn('left')
+                                                            isPinned === 'left' && header?.column?.getIsLastColumn?.('left')
                                                         const isFirstRightPinnedColumn =
-                                                            isPinned === 'right' && header.column.getIsFirstColumn('right')
+                                                            isPinned === 'right' && header?.column?.getIsFirstColumn?.('right')
 
-                                                        let leftPositionValue = header.column.getStart('left')
+                                                        let leftPositionValue = header?.column?.getStart?.('left') ?? 0
                                                         if(leftPositionValue > 0 ){
                                                             leftPositionValue = leftPositionValue + 22 // 22 is width of sort icon
                                                         }
@@ -424,11 +424,11 @@ export default function AppTable(
 
                                                         return (
                                                             <th
-                                                                key={header.id}
+                                                                key={header?.id}
                                                                 scope="col"
-                                                                colSpan={header.colSpan}
+                                                                colSpan={header?.colSpan}
                                                                 className={`${enableSorting ? table_sort_header_style : table_header_style} ${index == 0 ? 'rounded-tl-md' : (headerGroup?.headers?.length - 1 == index) && 'rounded-tr-md'} text-center`}
-                                                                onClick={enableSorting ? header.column.getToggleSortingHandler() : undefined}
+                                                                onClick={enableSorting ? header?.column?.getToggleSortingHandler?.() : undefined}
                                                                 style={{
                                                                     textAlign: align,
                                                                     backgroundColor: getStyle?.headerColor ? getStyle?.headerColor : meta?.headerColor ? meta?.headerColor : '#1473A1',
@@ -439,10 +439,10 @@ export default function AppTable(
                                                                         ? '4px 0 4px -4px gray inset'
                                                                         : undefined,
                                                                     left: isPinned === 'left' ? `${leftPositionValue}px` : undefined,
-                                                                    right: isPinned === 'right' ? `${header.column.getAfter('right') + 22}px` : undefined, // 22 is width of sort icon
+                                                                    right: isPinned === 'right' ? `${(header?.column?.getAfter?.('right') ?? 0) + 22}px` : undefined, // 22 is width of sort icon
                                                                     // opacity: isPinned ? 0.95 : 1,
                                                                     position: isPinned ? 'sticky' : 'relative',
-                                                                    // width: header.column.getSize() + 22, // 22 is width of sort icon
+                                                                    // width: header?.column?.getSize?.() + 22, // 22 is width of sort icon
                                                                     zIndex: isPinned ? 9 : 8,
                                                                 }}
                                                             >
@@ -453,8 +453,8 @@ export default function AppTable(
                                                                     )}
                                                                     {enableSorting && (
                                                                         <div className={`absolute right-0 top-1/2 transform -translate-y-1/2 flex flex-col items-center -space-y-3`}>
-                                                                            <ArrowDropUpIcon sx={{ fontSize: 18, opacity: header.column.getIsSorted() === "asc" ? 1 : 0.4, }} />
-                                                                            <ArrowDropDownIcon sx={{ fontSize: 18, opacity: header.column.getIsSorted() === "desc" ? 1 : 0.4, }} />
+                                                                            <ArrowDropUpIcon sx={{ fontSize: 18, opacity: header?.column?.getIsSorted?.() === "asc" ? 1 : 0.4, }} />
+                                                                            <ArrowDropDownIcon sx={{ fontSize: 18, opacity: header?.column?.getIsSorted?.() === "desc" ? 1 : 0.4, }} />
                                                                         </div>
                                                                     )}
                                                                 </div>
@@ -473,9 +473,9 @@ export default function AppTable(
                                                         const getStyle: any = columns?.find((item: any) => item?.accessorKey == cell?.column?.columnDef?.accessorKey);
                                                         const meta = cell?.column?.columnDef?.meta as any
 
-                                                        const isPinned = cell.column.getIsPinned()
+                                                        const isPinned = cell?.column?.getIsPinned?.()
 
-                                                        let leftPositionValue = cell.column.getStart('left')
+                                                        let leftPositionValue = cell?.column?.getStart?.('left') ?? 0
                                                         if(leftPositionValue > 0 ){
                                                             leftPositionValue = leftPositionValue + 22 // 22 is width of sort icon
                                                         }
@@ -488,7 +488,7 @@ export default function AppTable(
                                                                     backgroundColor: getStyle?.cellColor ? getStyle?.cellColor : meta?.cellColor ? meta?.cellColor : '#fff',
                                                                     fontWeight: getStyle?.textStyle ? getStyle?.textStyle : meta?.textStyle ? meta?.textStyle : 'normal',
                                                                     left: isPinned === 'left' ? `${leftPositionValue}px` : undefined,
-                                                                    right: isPinned === 'right' ? `${cell.column.getAfter('right') + 22}px` : undefined, // 22 is width of sort icon
+                                                                    right: isPinned === 'right' ? `${(cell?.column?.getAfter?.('right') ?? 0) + 22}px` : undefined, // 22 is width of sort icon
                                                                     position: isPinned ? 'sticky' : undefined,
                                                                     zIndex: isPinned ? 9 : undefined,
                                                                 }}

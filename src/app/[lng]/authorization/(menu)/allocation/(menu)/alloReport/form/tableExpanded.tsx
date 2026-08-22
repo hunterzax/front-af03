@@ -344,7 +344,7 @@ const TableExpanded: React.FC<TableProps> = ({
 
                                                 return (
                                                     <th
-                                                        key={header.id}
+                                                        key={header?.id}
                                                         scope="col"
                                                         colSpan={header.colSpan}
                                                         className={`${enableSorting ? table_sort_header_style : table_header_style} ${index == 0 ? 'rounded-tl-md' : (hg?.headers?.length - 1 == index) && 'rounded-tr-md'} text-center relative z-50`}

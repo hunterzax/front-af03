@@ -190,10 +190,10 @@ const MotherTable2: React.FC<any> = ({ columnVisibility, setcolumnVisibility, in
                         zone_text: filter_contract_point?.zone?.name,
                         area_text: filter_contract_point?.area?.name,
                         data_temp: item.data_temp,
-                        data_temp_mod: JSON.parse(item?.data_temp), // Uncomment if needed
-                        booking_version_id: item.booking_version_id,
-                        entry_exit_id: item.entry_exit_id,
-                        create_date: item.create_date,
+                        data_temp_mod: item?.data_temp ? JSON.parse(item.data_temp) : {}, // Uncomment if needed
+                        booking_version_id: item?.booking_version_id,
+                        entry_exit_id: item?.entry_exit_id,
+                        create_date: item?.create_date,
                         update_date: item.update_date,
                         create_date_num: item.create_date_num,
                         update_date_num: item.update_date_num,
@@ -1456,7 +1456,7 @@ const MotherTable2: React.FC<any> = ({ columnVisibility, setcolumnVisibility, in
 
                                         const checkSubheader: any = functionControlcolSpan(header, 'sub_header'); //example here only data == sub_header
 
-                                        return header?.subHeaders.map((subHeader: any, subIndex: any, arr: any) => (
+                                        return header?.subHeaders?.map((subHeader: any, subIndex: any, arr: any) => (
                                             columnVisibility[subHeader?.key] && (
                                                 <td
                                                     key={`${colIndex}-${subIndex}`}
@@ -2069,7 +2069,7 @@ const MotherTable2: React.FC<any> = ({ columnVisibility, setcolumnVisibility, in
                                     resultMaster = false;
                                 }
 
-                                if (count == masterUse?.length) {
+                                if (count == (masterUse?.length ?? 0)) {
                                     resultMaster = true;
                                 }
                             }
@@ -2162,7 +2162,7 @@ const MotherTable2: React.FC<any> = ({ columnVisibility, setcolumnVisibility, in
                                                     "Maximum Hour Booking (MMscfh)"
                                                 ];
 
-                                                const findHeader: any = updatedHeaders?.find((item: any) => item?.label == columnOrder[Math.floor(col_order_num)]);
+                                                const findHeader: any = updatedHeaders?.find((item: any) => item?.label == columnOrder?.[Math.floor(col_order_num)]);
                                                 const headerData: any = findHeader?.dates2;
                                                 const thisData: any = headerData?.find((item: any) => item?.key == index);
                                                 const thisLastItem: any = [];
@@ -2275,7 +2275,7 @@ const MotherTable2: React.FC<any> = ({ columnVisibility, setcolumnVisibility, in
                                                 "Maximum Hour Booking (MMBTU/h)",
                                             ];
 
-                                            const findHeader: any = updatedHeaders?.find((item: any) => item?.label == columnOrder[Math.floor(col_order_num)]);
+                                            const findHeader: any = updatedHeaders?.find((item: any) => item?.label == columnOrder?.[Math.floor(col_order_num)]);
                                             const headerData: any = findHeader?.dates2;
                                             const thisData: any = headerData?.find((item: any) => item?.key == index);
                                             const thisLastItem: any = [];
@@ -2410,7 +2410,7 @@ const MotherTable2: React.FC<any> = ({ columnVisibility, setcolumnVisibility, in
                                             "Maximum Hour Booking (MMscfh)"
                                         ];
 
-                                        const findHeader: any = updatedHeaders?.find((item: any) => item?.label == columnOrder[Math.floor(col_order_num)]);
+                                        const findHeader: any = updatedHeaders?.find((item: any) => item?.label == columnOrder?.[Math.floor(col_order_num)]);
                                         const headerData: any = findHeader?.dates2;
                                         const thisData: any = headerData?.find((item: any) => item?.key == key[0]);
                                         const thisLastItem: any = [];
@@ -2556,7 +2556,7 @@ const MotherTable2: React.FC<any> = ({ columnVisibility, setcolumnVisibility, in
                                         //     </td>
                                         // );
 
-                                        const findHeader: any = updatedHeaders?.find((item: any) => item?.label == columnOrder[Math.floor(col_order_num)]);
+                                        const findHeader: any = updatedHeaders?.find((item: any) => item?.label == columnOrder?.[Math.floor(col_order_num)]);
                                         const headerData: any = findHeader?.dates2;
                                         const thisData: any = headerData?.find((item: any) => item?.key == key[0]);
                                         const thisLastItem: any = [];

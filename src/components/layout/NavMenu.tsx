@@ -230,10 +230,10 @@ const NavMenu = ({ toggleNav, setToggleNav, menu, setMenu, goToUrl, permission }
                 const enc = encryptData(item);
                 localStorage.setItem(key, enc);
                 setCookie(key, enc, 1);
-                if (item.url) router.push("/en/authorization/" + item.url);
+                if (item?.url) router.push("/en/authorization/" + item.url);
               } else {
                 // node มีลูก: toggle expand/collapse
-                toggleMenuXX(item.url);
+                toggleMenuXX(item?.url);
               }
 
               // clear item หากย้ายไปหน้าอื่น (เฉพาะหน้า Capacity Contract Management)
@@ -253,7 +253,7 @@ const NavMenu = ({ toggleNav, setToggleNav, menu, setMenu, goToUrl, permission }
                   className={`break-words whitespace-normal text-[#757575] ${level === 0 ? "text-[14px]" : "text-[12px]"}`}
                 >
                   <div
-                    className={`flex justify-center items-center px-2 h-[26px] text-[#757575] ${(isHightLight(item.url) || expanded) && "!text-[#000000]"} ${level === 0 ? "text-[14px]" : "text-[12px]"}`}
+                    className={`flex justify-center items-center px-2 h-[26px] text-[#757575] ${(isHightLight(item?.url) || expanded) && "!text-[#000000]"} ${level === 0 ? "text-[14px]" : "text-[12px]"}`}
                   >
                     {item?.name || "-"}
                   </div>
@@ -375,12 +375,12 @@ const NavMenu = ({ toggleNav, setToggleNav, menu, setMenu, goToUrl, permission }
             className="absolute bg-white shadow-lg rounded-[20px] p-4 border w-[200px] !z-50"
             style={{ top: anchorPosition.top + 70, left: anchorPosition.left + 60 }}
           >
-            <h2 className="text-lg font-bold mb-2">{selectedMenu.name}</h2>
+            <h2 className="text-lg font-bold mb-2">{selectedMenu?.name}</h2>
             <ul>
               {selectedMenu?.map((subMenu: any) => (
-                <li key={subMenu.id} className="mb-2">
+                <li key={subMenu?.id} className="mb-2">
                   <Link href={`/en/authorization/${subMenu?.url}`} passHref>
-                    <MenuItem className="-mx-1 text-[14px]" onClick={closePopup}>{subMenu.name}</MenuItem>
+                    <MenuItem className="-mx-1 text-[14px]" onClick={closePopup}>{subMenu?.name}</MenuItem>
                   </Link>
                 </li>
               ))}

@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useState } from "react";
 import { Tune } from "@mui/icons-material"
 import { filterActiveToday, findRoleConfigByMenuName, formatDate, formatDateNoTime, formatTime, generateUserPermission, toDayjs } from '@/utils/generalFormatter';

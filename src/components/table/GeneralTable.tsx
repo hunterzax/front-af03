@@ -288,7 +288,7 @@ export function GeneralTable({
                         const meta = header.column.columnDef.meta as any
                         return (
                           <th
-                            key={header.id}
+                            key={header?.id}
                             scope="col" 
                             className={`${canSort ? table_sort_header_style : table_header_style} text-center relative z-50`}
                             colSpan={header.colSpan}

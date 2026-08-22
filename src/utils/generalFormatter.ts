@@ -7901,7 +7901,7 @@ export const darkenColor = (color: string, percent: number) => {
     b = parseInt(color.substring(5, 7), 16)
   } else if (color && typeof color === 'string' && color.startsWith('rgb')) {
     // Extract RGB values
-    const rgb = color ? (color.match(/\d+/g)?.map(Number) || [0, 0, 0]) : [0, 0, 0]
+    const rgb = color.match(/\d+/g)?.map(Number) || [0, 0, 0]
     ;[r, g, b] = rgb
   } else {
     return color // Return original color if not recognized

@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useState } from "react";
 import { exportToExcel, generateUserPermission } from '@/utils/generalFormatter';
 import getCookieValue from "@/utils/getCookieValue";

@@ -691,7 +691,7 @@ const FatherTable: React.FC<any> = ({
                                                 )
                                         ))
                                     ) : header?.subHeaders && header?.subHeaders.length > 0 ? (
-                                        header?.subHeaders.map((subHeader: any, subIndex: any, arr: any) => (
+                                        header?.subHeaders?.map((subHeader: any, subIndex: any, arr: any) => (
                                             columnVisibility[subHeader?.key] && (
                                                 <th
                                                     key={`${index}-${subIndex}`}
@@ -979,13 +979,13 @@ const FatherTable: React.FC<any> = ({
                                                     )
                                             )
                                         }));
-                                    } else if (header?.subHeaders && header.subHeaders.length > 0) {
+                                    } else if ((header?.subHeaders?.length ?? 0) > 0) {
                                         // Render data for columns with subHeaders
                                         // ตรงนี้ render Min, Max
 
                                         const checkSubheader: any = functionControlcolSpan(header, 'sub_header'); //example here only data == sub_header
 
-                                        return header?.subHeaders.map((subHeader: any, subIndex: any, arr: any) => (
+                                        return header?.subHeaders?.map((subHeader: any, subIndex: any, arr: any) => (
 
                                             columnVisibility[subHeader?.key] && (
                                                 <td

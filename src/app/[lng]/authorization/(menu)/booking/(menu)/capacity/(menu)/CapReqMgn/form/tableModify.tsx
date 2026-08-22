@@ -117,7 +117,7 @@ const TableModify: React.FC<Props> = ({
             const res_exit = { ...restExit, ...Exit };
             const { key: keyExit, Type, ["Sub Area"]: subArea, ["Block Valve"]: blockValve, ...rest_res_exit } = res_exit;  // เอา column key, Type, Block Valve, Sub Area ออก
 
-            const { entryValue, exitValue } = tableVal;
+            const { entryValue, exitValue } = tableVal || {};
 
             const fromDateEntry = mode == 'entry' && srchStartdate ? dayjs(srchStartdate)?.format('DD/MM/YYYY') : entryValue?.[0]?.[5]; // original 33 ---> new 5
             const toDateEntry = mode == 'entry' && srchEnddate ? dayjs(srchEnddate)?.format('DD/MM/YYYY') : entryValue?.[0]?.[6]; // original 34 ---> new 6
@@ -1329,10 +1329,10 @@ const TableModify: React.FC<Props> = ({
                                     {headerExit?.map((header: any, colIndex: any) => {
                                         const visibilityKey = visibilityMap[header?.label];
                                         // Check if the header has dates
-                                        if (header.dates && header.dates.length > 0) {
+                                        if ((header?.dates?.length ?? 0) > 0) {
                                             let findKey: any = initialColumnsDynamic?.find((item: any) => item?.label == header?.label);
                                             const checkDate: any = functionControlcolSpan(header, 'date'); //example here only data == date
-                                            return (header?.dates2.map((date: any, dateIndex: any, arr: any) => {
+                                            return (header?.dates2?.map((date: any, dateIndex: any, arr: any) => {
                                                 return (
                                                     date?.value == 'From' || date?.value == 'To' ?
                                                         (columnVisibility[formatDateToMonthYear(date?.value)] && (
