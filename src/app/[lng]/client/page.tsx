@@ -1,5 +1,3 @@
-"use client";
-
 import { DefaultSkeleton } from "@/components/material_custom/DefaultSkeleton";
 import {
   KBarProvider,

@@ -1,4 +1,3 @@
-"use client";
 import LayoutMenu from "@/components/layout/LayoutMenu";
 import useLogoutSync from "@/hook/useLogoutSync";
 

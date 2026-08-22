@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import {RemoveRedEye, VisibilityOff, Check, FiberManualRecord} from '@mui/icons-material';
 

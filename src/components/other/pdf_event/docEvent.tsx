@@ -1641,16 +1641,10 @@ const PdfDoc309Used = ({ shipper, data }: any) => {
 
       const groupName = shipperNameArr
 
-      const toFullname = "……………………………………………………"
-      
-      const userType_ = data?.dataOpenDocument?.group?.user_type_id // (userType_ === 3 ? ' Shipper' : "")
-      const toName = (shipper?.name && shipper?.name + (userType_ === 3 ? ' Shipper' : "")) || ''
-      const toDate = dayjs().locale('th')
-      const toSignature = '' //
-
-      // ----
-      const fromFullname = "……………………………………………………"
-      const fromSignature = '' //
+      const toSignature = (rdoc1Find?.toAction?.event_doc_status_id !== 1 && rdoc1Find?.toAction?.event_doc_status_id !== 2 && rdoc1Find?.toAction?.event_doc_status_id !== 6 && rdoc1Find?.toAction?.create_by_account?.signature_base_64) || shipper?.signature_base_64 || ''
+      const fromSignature = rdoc1Find?.create_by_account?.signature_base_64 || ''
+      const fromFullname = rdoc1Find?.create_by_account?.first_name ? `${rdoc1Find?.create_by_account?.first_name} ${rdoc1Find?.create_by_account?.last_name || ''}` : ''
+      const toFullname = rdoc1Find?.toAction?.create_by_account?.first_name ? `${rdoc1Find?.toAction?.create_by_account?.first_name} ${rdoc1Find?.toAction?.create_by_account?.last_name || ''}` : ''
 
       const fromDate = dayjs(rdoc1Find?.create_date).locale('th')
 

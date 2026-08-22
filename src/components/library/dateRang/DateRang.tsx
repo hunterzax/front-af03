@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState, useRef } from "react";
 // @ts-ignore
 import { DateRangePicker } from "react-date-range";

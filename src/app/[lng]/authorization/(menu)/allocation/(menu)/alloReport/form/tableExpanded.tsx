@@ -1,5 +1,3 @@
-"use client";
-
 import React, {
     useState,
     useEffect,
@@ -403,7 +401,7 @@ const TableExpanded: React.FC<TableProps> = ({
                                                                         </span>
                                                                     )}
 
-                                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                                                    {flexRender(cell?.column?.columnDef?.cell, cell.getContext())}
 
                                                                 </div>
 

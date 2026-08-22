@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import type { FieldArrayWithId } from "react-hook-form";
 import type { FieldErrors, UseFormGetValues, UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";

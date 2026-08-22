@@ -599,8 +599,8 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                                         className={`flex justify-center items-center`}
                                         style={{
                                             backgroundColor: item?.area?.color,
-                                            width: item?.revised_capacity_path_type_id === 1 ? '30px' : '30px',
-                                            height: item?.revised_capacity_path_type_id === 1 ? '30px' : '30px',
+                                            width: '30px',
+                                            height: '30px',
                                             borderRadius: item?.revised_capacity_path_type_id === 1 ? '4px' : '50%',
                                         }}
                                     >

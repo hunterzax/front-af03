@@ -1054,30 +1054,30 @@ const TableEachZone: React.FC<any> = ({tableData, userPermission, zoneText, temp
                           {/* ตาม excel ไม่รู้ถูกไหม */}
                           {selectedDay == 'Sunday'
                             ? row?.data_temp['14']
-                              ? ((row?.data_temp['9'] === "MMSCFD") ? formatNumberThreeDecimal(row?.data_temp['14']) : formatNumberThreeDecimal(row?.data_temp['14']))
+                              ? ((row?.data_temp['9'] === "MMSCFD") ? formatNumberSixDecimal(row?.data_temp['14']) : formatNumberThreeDecimal(row?.data_temp['14']))
                               : ''
                             : selectedDay == 'Monday'
                               ? row?.data_temp['15']
-                                ? ((row?.data_temp['9'] === "MMSCFD") ? formatNumberThreeDecimal(row?.data_temp['15']) : formatNumberThreeDecimal(row?.data_temp['15']))
+                                ? ((row?.data_temp['9'] === "MMSCFD") ? formatNumberSixDecimal(row?.data_temp['15']) : formatNumberThreeDecimal(row?.data_temp['15']))
                                 : ''
                               : selectedDay == 'Tuesday'
                                 ? row?.data_temp['16']
-                                  ? ((row?.data_temp['9'] === "MMSCFD") ? formatNumberThreeDecimal(row?.data_temp['16']) : formatNumberThreeDecimal(row?.data_temp['16']))
+                                  ? ((row?.data_temp['9'] === "MMSCFD") ? formatNumberSixDecimal(row?.data_temp['16']) : formatNumberThreeDecimal(row?.data_temp['16']))
                                   : ''
                                 : selectedDay == 'Wednesday'
                                   ? row?.data_temp['17']
-                                    ? ((row?.data_temp['9'] === "MMSCFD") ? formatNumberThreeDecimal(row?.data_temp['17']) : formatNumberThreeDecimal(row?.data_temp['17']))
+                                    ? ((row?.data_temp['9'] === "MMSCFD") ? formatNumberSixDecimal(row?.data_temp['17']) : formatNumberThreeDecimal(row?.data_temp['17']))
                                     : ''
                                   : selectedDay == 'Thursday'
                                     ? row?.data_temp['18']
-                                      ? ((row?.data_temp['9'] === "MMSCFD") ? formatNumberThreeDecimal(row?.data_temp['18']) : formatNumberThreeDecimal(row?.data_temp['18']))
+                                      ? ((row?.data_temp['9'] === "MMSCFD") ? formatNumberSixDecimal(row?.data_temp['18']) : formatNumberThreeDecimal(row?.data_temp['18']))
                                       : ''
                                     : selectedDay == 'Friday'
                                       ? row?.data_temp['19']
-                                        ? ((row?.data_temp['9'] === "MMSCFD") ? formatNumberThreeDecimal(row?.data_temp['19']) : formatNumberThreeDecimal(row?.data_temp['19']))
+                                        ? ((row?.data_temp['9'] === "MMSCFD") ? formatNumberSixDecimal(row?.data_temp['19']) : formatNumberThreeDecimal(row?.data_temp['19']))
                                         : ''
                                       : selectedDay == 'Saturday' && row?.data_temp['20']
-                                        ? ((row?.data_temp['9'] === "MMSCFD") ? formatNumberThreeDecimal(row?.data_temp['20']) : formatNumberThreeDecimal(row?.data_temp['20']))
+                                        ? ((row?.data_temp['9'] === "MMSCFD") ? formatNumberSixDecimal(row?.data_temp['20']) : formatNumberThreeDecimal(row?.data_temp['20']))
                                         : ''}
                         </td>
                       )}

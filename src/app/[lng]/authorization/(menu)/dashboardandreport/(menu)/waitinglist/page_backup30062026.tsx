@@ -1,4 +1,3 @@
-"use client";
 import { useTranslation } from "@/app/i18n/client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
@@ -274,7 +273,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
 
 const fetchAllWaitingLists = () => {
   // ไม่ await เพื่อไม่ให้ขวาง fetchData หรือ getInit
-  void Promise.allSettled(
+  Promise.allSettled(
     WAITING_LIST_MENUS.map((menuName) =>
       fetchWaitingListByMenu(menuName),
     ),

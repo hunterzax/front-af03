@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useEffect } from 'react';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -337,7 +335,7 @@ export function GeneralTable({
                               fontWeight: meta?.textStyle ? meta?.textStyle : 'normal'
                             }}
                           >
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            {flexRender(cell?.column?.columnDef?.cell, cell.getContext())}
                           </td>
                         )
                       })}

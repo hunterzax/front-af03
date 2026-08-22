@@ -364,8 +364,8 @@ const ModalPathMgnHistory: React.FC<FormExampleProps> = ({
                                                                                                 className="flex justify-center items-center"
                                                                                                 style={{
                                                                                                     backgroundColor: pathItem?.area?.color,
-                                                                                                    width: pathItem?.revised_capacity_path_type_id === 1 ? '30px' : '30px',
-                                                                                                    height: pathItem?.revised_capacity_path_type_id === 1 ? '30px' : '30px',
+                                                                                                    width: '30px',
+                                                                                                    height: '30px',
                                                                                                     borderRadius: pathItem?.revised_capacity_path_type_id === 1 ? '4px' : '50%',
                                                                                                 }}
                                                                                             >

@@ -160,12 +160,8 @@ const ModalImport: React.FC<FormExampleProps> = ({
     const [idShipper, setIdShipper] = useState<any>();
 
     const checkIsShipper = (mode?: any) => {
-        if (userDT?.account_manage?.[0]?.user_type?.id !== 3) {
-            setOpenSelShipper(true)
-        } else {
-            setOpenSelShipper(true)
-        }
-    }
+        setOpenSelShipper(true);
+    };
 
     const handleClose = () => {
         onClose();

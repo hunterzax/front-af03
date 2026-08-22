@@ -1,5 +1,3 @@
-"use client";
-
 // import Link from "next/link";
 // import { lazy, Suspense, useEffect, useState } from "react";
 // import { useTranslation } from "@/app/i18n/client";

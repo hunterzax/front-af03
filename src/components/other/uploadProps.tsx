@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useRef, useState } from "react";
 import UploadIcon from '@mui/icons-material/Upload';
 import { uploadFileService } from "@/utils/postService";

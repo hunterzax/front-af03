@@ -1,4 +1,3 @@
-"use client";
 import { cookieName } from "@/app/i18n/settings";
 import { usePathname, useRouter } from "next/navigation";
 import { useTransition, useState } from "react";

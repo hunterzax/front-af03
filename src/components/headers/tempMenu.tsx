@@ -1,4 +1,3 @@
-"use client"
 // import React from 'react'
 // import GroupIcon from "@mui/icons-material/Group";
 // import BusinessIcon from "@mui/icons-material/Business";

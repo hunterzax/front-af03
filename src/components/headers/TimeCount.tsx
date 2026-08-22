@@ -1,4 +1,3 @@
-"use client"
 import React, { useEffect, useState } from 'react'
 import dayjs from "dayjs";
 import "dayjs/locale/th";

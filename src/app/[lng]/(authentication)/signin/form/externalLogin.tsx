@@ -1,4 +1,3 @@
-"use client";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { useEffect, useMemo, useState } from "react";
 import { msalConfigAAD } from "../../../../../../authConfigAAD";

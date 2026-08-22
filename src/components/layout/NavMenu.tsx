@@ -1,4 +1,3 @@
-"use client";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";

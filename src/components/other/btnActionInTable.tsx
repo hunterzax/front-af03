@@ -1,4 +1,3 @@
-"use client";
 import * as React from 'react';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { iconButtonClassBtnGeneral } from '@/utils/generalFormatter';

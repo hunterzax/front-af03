@@ -1,4 +1,3 @@
-"use client";
 import { useTranslation } from "@/app/i18n/client";
 import { useEffect, useMemo, useState } from "react";
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';

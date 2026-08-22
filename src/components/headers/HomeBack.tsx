@@ -1,4 +1,3 @@
-"use client";
 import HomeIcon from "@mui/icons-material/Home";
 
 function HomeBack({ goToUrl }: any) {

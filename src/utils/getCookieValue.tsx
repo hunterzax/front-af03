@@ -1,4 +1,3 @@
-"use client";
 import Cookies from 'js-cookie';
 
 const getCookieValue = (cookieName:any) => {

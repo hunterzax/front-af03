@@ -6507,7 +6507,7 @@ export const mergeDataByGroupMedTerm = (data_med_term_each?: any) => {
     }
 
     entry?.data?.forEach((newData: any) => {
-      let existingData = groupedData[groupId].data.find((d: any) => d.area.id === newData.area.id)
+      let existingData = groupedData[groupId]?.data?.find((d: any) => d?.area?.id === newData?.area?.id)
 
       if (existingData) {
         existingData.value = existingData.value.map((val: any, idx: any) => val + newData.value[idx])
@@ -7894,12 +7894,12 @@ export const sumValuesByKey = (data: any[]) => {
 export const darkenColor = (color: string, percent: number) => {
   let r, g, b
 
-  if (color?.startsWith('#')) {
+  if (color && typeof color === 'string' && color.startsWith('#')) {
     // Convert hex to RGB
     r = parseInt(color.substring(1, 3), 16)
     g = parseInt(color.substring(3, 5), 16)
     b = parseInt(color.substring(5, 7), 16)
-  } else if (color?.startsWith('rgb')) {
+  } else if (color && typeof color === 'string' && color.startsWith('rgb')) {
     // Extract RGB values
     const rgb = color ? (color.match(/\d+/g)?.map(Number) || [0, 0, 0]) : [0, 0, 0]
     ;[r, g, b] = rgb
@@ -9863,7 +9863,7 @@ export const splitByGroup = (data_origin?: any) => {
 
     for (const [group, items] of Object.entries(groupMap)) {
       output.push({
-        zone: entry.zone,
+        zone: entry?.zone,
         gasWeek: items
       })
     }
@@ -9888,10 +9888,10 @@ export const splitByGroupCopyCat = (data_origin?: any) => {
 
     for (const [group, items] of Object.entries(groupMap)) {
       output.push({
-        groupedByAll: entry.groupedByAll,
-        groupedByDaily: entry.groupedByDaily,
-        zoneObj: entry.zoneObj,
-        zone: entry.zone,
+        groupedByAll: entry?.groupedByAll,
+        groupedByDaily: entry?.groupedByDaily,
+        zoneObj: entry?.zoneObj,
+        zone: entry?.zone,
         groupedByWeekly: items
       })
     }
@@ -12987,7 +12987,7 @@ export function isDisabledByContractEnd(dataNomCode: DataNomCode, tzOffsetHours 
 
   const endISO = endDateKey ? ((cc as any)[endDateKey] as string) : null
 
-  const gasStartLocal = toLocalStartOfDay(dataNomCode.gas_day, tzOffsetHours)
+  const gasStartLocal = toLocalStartOfDay(dataNomCode?.gas_day, tzOffsetHours)
 
   if (!endISO) {
     // ไม่มีวันจบสัญญาให้เทียบ => ไม่ disable (หรือจะบังคับให้ true ก็เปลี่ยนตรงนี้ได้)
@@ -13039,7 +13039,7 @@ export function filterSortedDataByDisable(sortedData: RowLike[], dataNomDeadline
 
     // 2) deadline (เฉพาะเมื่อยังไม่ถูกข้อ 1 ทำให้ disable)
     if (dl) {
-      const byDeadline = shouldDisableByDeadline(row.gas_day, dl, {tzOffsetHours})
+      const byDeadline = shouldDisableByDeadline(row?.gas_day, dl, {tzOffsetHours})
       if (byDeadline) return true
     }
 

@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { convertTimeStringToDate, cutUploadFileName, formatDateNoTime, formatFormDate, formatNumberSixDecimalNoComma, formatNumberThreeDecimalNoComma, generateUserPermission } from '@/utils/generalFormatter';
 import dayjs from 'dayjs';

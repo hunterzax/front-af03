@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useRef, useEffect, Dispatch, SetStateAction } from "react";
 import {
     ColumnDef,

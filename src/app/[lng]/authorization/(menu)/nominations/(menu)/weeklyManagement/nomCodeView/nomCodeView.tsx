@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useMemo, useState } from "react";
 import { findRoleConfigByMenuName, formatDateNoTime, generateUserPermission, isDisabledByContractEnd, shouldDisableByDeadline, toDayjs } from '@/utils/generalFormatter';
 import { getService, postService } from "@/utils/postService";

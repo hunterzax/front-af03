@@ -1,5 +1,3 @@
-"use client";
-
 import React, { createContext, useEffect, useMemo, useState } from "react";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";

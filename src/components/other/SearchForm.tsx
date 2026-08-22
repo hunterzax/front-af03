@@ -1,4 +1,3 @@
-"use client";
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { ArrowForwardIos, ArrowBackIos } from "@mui/icons-material"
 import Datepicker from "tailwind-datepicker-react";

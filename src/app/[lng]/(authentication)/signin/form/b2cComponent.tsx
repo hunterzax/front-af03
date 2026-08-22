@@ -1,5 +1,3 @@
-"use client";
-
 import { useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { EncryptStorage } from "encrypt-storage";
 import { useEffect, useRef, useState } from "react";

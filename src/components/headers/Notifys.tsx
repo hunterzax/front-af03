@@ -1,4 +1,3 @@
-"use client";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import {
   /* @ts-ignore */

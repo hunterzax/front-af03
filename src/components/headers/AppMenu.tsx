@@ -1,4 +1,3 @@
-"use client";
 import AppsIcon from "@mui/icons-material/Apps";
 import {
   /* @ts-ignore */

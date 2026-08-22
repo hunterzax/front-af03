@@ -1,4 +1,3 @@
-"use client";
 import * as React from 'react';
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 interface ModalComponentProps {
