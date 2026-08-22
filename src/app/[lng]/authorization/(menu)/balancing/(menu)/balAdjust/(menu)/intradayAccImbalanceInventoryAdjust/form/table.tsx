@@ -182,7 +182,7 @@ const TableBalIntradayAccImbalanceInventoryAdjust: React.FC<TableProps> = ({ ope
                                         {columnVisibility?.west && (
                                             <td className={`px-2 py-1 text-[#464255] text-right`}>
                                                 {/* {row?.west ? formatNumberFourDecimal(row?.west) : ''} */}
-                                                {row?.west !== null && row?.east !== undefined ? formatNumberFourDecimal(row?.west) : ''}
+                                                {row?.west !== null && row?.west !== undefined ? formatNumberFourDecimal(row?.west) : ''}
                                             </td>
                                         )}
 

@@ -161,7 +161,7 @@ const TablePlanDeadline: React.FC<TableProps> = ({ openEditForm, openViewForm, o
                                         key={row?.id}
                                         className={`${table_row_style}`}
                                     >
-                                        {/* <td className="px-2 py-1 text-[#464255]">{row?.term_type && row?.term_type?.name}</td> */}
+                                        {/* <td className="px-2 py-1 text-[#464255]">{row?.term_type?.name}</td> */}
                                         {columnVisibility.type && (
                                             <td className="px-2 py-1">
                                                 {row?.term_type && 
@@ -186,11 +186,11 @@ const TablePlanDeadline: React.FC<TableProps> = ({ openEditForm, openViewForm, o
                                         )}
 
                                         {columnVisibility.day && (
-                                            <td className="px-2 py-1 text-[#464255]">{row?.day && row?.day}</td>
+                                            <td className="px-2 py-1 text-[#464255]">{row?.day}</td>
                                         )}
 
                                         {columnVisibility.before_month && (
-                                            <td className="px-2 py-1 text-[#464255]">{row?.before_month && row?.before_month}</td>
+                                            <td className="px-2 py-1 text-[#464255]">{row?.before_month}</td>
                                         )}
 
                                         {/* <td className="px-2 py-1 text-right text-[#464255]">{formatNumber(row?.area_nominal_capacity)}</td> */}

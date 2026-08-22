@@ -965,7 +965,7 @@ let user_permission: any = localStorage?.getItem("k3a9r2b6m7t0x5w1s8j");
                 accessorFn: (row: any) => row?.group?.name || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.group && row?.group?.name}</div>)
+                    return (<div>{row?.group?.name}</div>)
                 }
             },
             {

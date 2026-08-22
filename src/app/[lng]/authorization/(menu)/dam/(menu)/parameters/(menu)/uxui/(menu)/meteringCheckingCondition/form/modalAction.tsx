@@ -285,8 +285,7 @@ const ModalAction: React.FC<FormExampleProps> = ({
                 setValue("start_date", formattedStartDate);
                 setValue("end_date", formattedEndDate);
 
-                // setValue("thershold", data?.thershold);
-                setValue("thershold_float", (data?.thershold_float || data?.thershold_float === 0) ? data?.thershold_float : data.thershold);
+                setValue("thershold_float", (data?.thershold_float || data?.thershold_float === 0) ? data?.thershold_float : data?.thershold);
 
                 setOrangeMode(data?.orange_mode?.toString());
                 setYellowMode(data?.yellow_mode?.toString());

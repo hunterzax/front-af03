@@ -98,8 +98,6 @@ export function filterNestedObjectByPaths(
       if (Object.keys(nested).length > 0) {
         result[key] = nested;
       }
-    } else if (isExactMatch && typeof obj[key] !== "object") {
-      result[key] = obj[key];
     }
   }
 
@@ -1386,12 +1384,11 @@ export function listToObject(keys: any, valueArr: any, groupMaster: any) {
 export function formatNumberFourDecimalNom(number: any) {
   if (isNaN(number)) return number; // Handle invalid numbers gracefully
 
-  if (number)
-    if (number == 0) {
-      return "0.0000"; // special case for zero
-    }
+  if (number === 0 || number === "0") {
+    return "0.0000"; // special case for zero
+  }
 
-  if (number == null || number == undefined) {
+  if (number == null || number === undefined || number === "") {
     return "";
   }
 

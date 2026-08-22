@@ -138,7 +138,7 @@ const TablePathMgn: React.FC<TableProps> = ({ openEditForm, openViewForm, openHi
                                     >
 
                                         {columnVisibility.version && (
-                                            <td className="px-2 py-1 text-[#464255] font-light uppercase">{row?.version && row?.version}</td>
+                                            <td className="px-2 py-1 text-[#464255] font-light uppercase">{row?.version}</td>
                                         )}
 
                                         {/* <td className="px-2 py-1 text-[#464255] font-light">{row?.edit_email_group_for_event_match && row?.edit_email_group_for_event_match?.length}</td> */}

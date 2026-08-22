@@ -164,7 +164,7 @@ const TableView: React.FC<any> = ({tableData, openViewForm, columnVisibility, is
 
                         {columnVisibility.nominated_value && <td className="px-4 py-1 text-[#464255] max-w-[60px] text-right">{row?.nominatedValueMMBTUD ? formatNumberThreeDecimal(row?.nominatedValueMMBTUD) : (row?.nominatedValueMMBTUD === null ? null : '0.000')}</td>}
 
-                        {columnVisibility.overusage && <td className="px-4 py-1 text-[#464255] max-w-[60px] text-right">{row?.overusageMMBTUD ? formatNumberThreeDecimal(row?.overusageMMBTUD) : (row?.nominatedValueMMBTUD === null ? null : '0.000')}</td>}
+                        {columnVisibility.overusage && <td className="px-4 py-1 text-[#464255] max-w-[60px] text-right">{row?.overusageMMBTUD ? formatNumberThreeDecimal(row?.overusageMMBTUD) : (row?.overusageMMBTUD === null ? null : '0.000')}</td>}
                       </>
                     )}
 

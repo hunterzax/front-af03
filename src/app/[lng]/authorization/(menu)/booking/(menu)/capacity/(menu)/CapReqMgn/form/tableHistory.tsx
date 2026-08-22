@@ -87,15 +87,15 @@ const TableCapReqMgnHistory: React.FC<TableProps> = ({ tableData, isLoading }) =
                                         <div className="flex w-[100px] bg-[#EEE4FF] justify-center !text-[14px] font-bold rounded-full p-1" style={{ backgroundColor: row?.user_type?.color, color: row?.user_type?.color_text }}>{row?.user_type?.name}</div>
                                     }
                                 </td>
-                                <td className="px-2 py-1 text-[#464255]">{row?.process_type && row?.process_type?.name}</td>
-                                <td className="px-2 py-1 text-[#464255]">{row?.nomination_type && row?.nomination_type?.name}</td>
+                                <td className="px-2 py-1 text-[#464255]">{row?.process_type?.name}</td>
+                                <td className="px-2 py-1 text-[#464255]">{row?.nomination_type?.name}</td>
                                 <td className="px-2 py-1 text-[#464255]">
                                     {row?.hour !== undefined && String(row?.hour).padStart(2, '0')}
                                     {`:`}
                                     {row?.minute !== undefined && String(row?.minute).padStart(2, '0')}
                                 </td>
 
-                                <td className="px-2 py-1 text-[#464255]">{row?.before_gas_day && row?.before_gas_day}</td>
+                                <td className="px-2 py-1 text-[#464255]">{row?.before_gas_day}</td>
 
                                 {/* <td className="px-2 py-1 text-right text-[#464255]">{formatNumber(row?.area_nominal_capacity)}</td> */}
                                 <td className="px-2 py-1 text-[#464255]">{row?.start_date ? formatDateNoTime(row?.start_date) : ''}</td>

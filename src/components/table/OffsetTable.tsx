@@ -215,14 +215,12 @@ export default function OffsetTable(
                                     }
 
 
-                                    {filterProps &&
-                                        filterProps
-                                    }
+                                    {filterProps}
                                 </div>
 
                                 <div className="flex flex-wrap gap-2 justify-end">
                                     <SearchInput2 value={globalFilter ?? ""} setGlobalFilter={setGlobalFilter} />
-                                    {exportBtn && exportBtn}
+                                    {exportBtn}
                                 </div>
                             </div>
                         )}
@@ -235,7 +233,7 @@ export default function OffsetTable(
                                 {table?.getAllLeafColumns()?.map((column) => {
 
                                     return (
-                                        <div key={column.id} className="text-sm mt-2">
+                                        <div key={column?.id} className="text-sm mt-2">
                                             <label className="flex items-center gap-2">
                                                 <input
                                                     type="checkbox"
@@ -312,11 +310,11 @@ export default function OffsetTable(
                                         <tbody>
                                             {table?.getRowModel()?.rows?.map((row: any) => (
                                                 <tr key={row?.id} className="border-b-[1px] ">
-                                                    {row?.getVisibleCells().map((cell: any, index: any) => {
+                                                    {row?.getVisibleCells()?.map((cell: any, index: any) => {
                                                         const getStyle: any = columns?.find((item: any) => item?.accessorKey == cell?.column?.columnDef?.accessorKey);
-                                                        const meta = cell.column.columnDef.meta as any
+                                                        const meta = cell?.column?.columnDef?.meta as any
                                                         return (
-                                                            <td key={cell.id} className="border px-4 py-2 text-[#464255] bg-white border-none h-[53px]"
+                                                            <td key={cell?.id} className="border px-4 py-2 text-[#464255] bg-white border-none h-[53px]"
                                                                 style={{
                                                                     color: getStyle?.textColor ? getStyle?.textColor : meta?.textColor ? meta?.textColor : '#464255',
                                                                     textAlign: getStyle?.align ? getStyle?.align : meta?.align ? meta?.align : 'left',

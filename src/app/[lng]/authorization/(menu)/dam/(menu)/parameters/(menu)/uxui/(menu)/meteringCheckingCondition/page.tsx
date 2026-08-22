@@ -389,7 +389,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.version || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.version && row?.version}</div>)
+                    return (<div>{row?.version}</div>)
                 }
             },
             {

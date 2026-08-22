@@ -100,7 +100,7 @@ const TableMeteringCheckingCondiHistory: React.FC<TableProps> = ({ tableData, is
                                 className={`${table_row_style}`}
                             >
                                 {columnVisibility.version && (
-                                    <td className="px-2 py-1 text-[#464255]">{row?.version && row?.version}</td>
+                                    <td className="px-2 py-1 text-[#464255]">{row?.version}</td>
                                 )}
 
                                 {columnVisibility.start_date && (

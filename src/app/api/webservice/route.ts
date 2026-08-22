@@ -16,8 +16,8 @@ export async function OPTIONS() {
 export async function GET(req: NextRequest) {
   try {
     // ดึง token จาก env (ห้ามฮาร์ดโค้ดใน client)
-    const ACCESS_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuYXRjaGFub25AcHJvbXB0LmNvLnRoIiwiZXhwIjoxNzYxMjIwMzYxfQ.Nxgd9L5LYeYaPFSwl_B6yk7wRiANvdXNj_T-idPlHqg";//process.env.TPA_ACCESS_TOKEN ?? "";
-    const JWT_COOKIE = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuYXRjaGFub25AcHJvbXB0LmNvLnRoIiwiZXhwIjoxNzYxMjIwMzYxfQ.Nxgd9L5LYeYaPFSwl_B6yk7wRiANvdXNj_T-idPlHqg";///process.env.TPA_JWT_COOKIE ?? "";
+    const ACCESS_TOKEN = process.env.TPA_ACCESS_TOKEN ?? "";
+    const JWT_COOKIE = process.env.TPA_JWT_COOKIE ?? "";
 
     const upstream = await fetch(
       "https://tpasystem-pre.pttplc.com/TPA_WEBCONFIG_UAT/Manage/AllMeter",

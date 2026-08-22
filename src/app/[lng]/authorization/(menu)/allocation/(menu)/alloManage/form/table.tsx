@@ -1365,7 +1365,7 @@ const genManoStatus = (data: any[]) => {
                       }}
                     >
                       {columnVisibility?.total && (
-                        // <td className="px-2 py-1 text-[#464255]">{row?.menus && row?.menus?.name}</td>
+                        // <td className="px-2 py-1 text-[#464255]">{row?.menus?.name}</td>
                         <td className="px-2 py-1 text-[#464255]">
                           <div className="flex gap-2">
                             <div className="cursor-pointer">{toggleData?.find((item: any) => item?.id == row?.id)?.toggle == true ? <KeyboardArrowUpIcon className="mr-[13px]" /> : <KeyboardArrowDownIcon className="mr-[13px]" />}</div>
@@ -1529,7 +1529,7 @@ const genManoStatus = (data: any[]) => {
                         <td className="px-2 py-1 text-[#464255]">
                           <div className="flex items-center justify-center gap-2">
                             {renderStatus(row?.data)}
-                            {/* <div className="w-[160px] p-1 text-center rounded-[50px]" style={{background: row?.status ? row?.status?.color : '#FFF1CE'}}>{row?.status && row?.status?.name}</div> */}
+                            {/* <div className="w-[160px] p-1 text-center rounded-[50px]" style={{background: row?.status ? row?.status?.color : '#FFF1CE'}}>{row?.status?.name}</div> */}
                           </div>
                         </td>
                       )}
@@ -1556,7 +1556,7 @@ const genManoStatus = (data: any[]) => {
                         <td className="px-2 py-1 text-[#464255]">
                           <div className="flex items-center justify-center">
                             <div className="w-[120px] p-1 text-center rounded-[50px]" style={{background: row?.entry_exit == 'Exit' ? '#FFF3C8' : '#C8FED7'}}>
-                              {row?.entry_exit && row?.entry_exit}
+                              {row?.entry_exit}
                             </div>
                           </div>
                         </td>

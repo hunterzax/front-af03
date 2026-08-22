@@ -98,7 +98,7 @@ const TableEmailGroupForEventHistory: React.FC<TableProps> = ({ tableData, isLoa
                                 )}
 
                                 {columnVisibility.name && (
-                                    <td className="px-2 py-1 text-[#464255] font-light">{row?.name && row?.name}</td>
+                                    <td className="px-2 py-1 text-[#464255] font-light">{row?.name}</td>
                                 )}
 
                                 {columnVisibility.person && (

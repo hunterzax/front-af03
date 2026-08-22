@@ -407,7 +407,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.name || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.name && row?.name}</div>)
+                    return (<div>{row?.name}</div>)
                 },
                 width: 400,
             },

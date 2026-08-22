@@ -192,11 +192,10 @@ const ChartLongTerm2: React.FC<TableProps> = ({ dataChart, userPermission, find_
                     // if (chartWidth > 800) {
                     if (chartWidth > 1000) {
                         return 0;
-                        // } else if (chartWidth > 400) {
-                    } else if (chartWidth <= 1000) {
-                        return -45;
                     } else if (chartWidth <= 500) {
                         return -90;
+                    } else {
+                        return -45;
                     }
                 },
             },

@@ -160,9 +160,9 @@ const TableUserGuide: React.FC<TableProps> = ({ openEditForm, openViewForm, open
                                         className={`${table_row_style}`}
                                     >
                                         {columnVisibility.name && (
-                                            <td className="px-2 py-1 text-[#464255]">{row?.document_name && row?.document_name}</td>
+                                            <td className="px-2 py-1 text-[#464255]">{row?.document_name}</td>
                                         )}
-                                        {/* <td className="px-2 py-1 text-[#464255]">{row?.file && row?.file}</td> */}
+                                        {/* <td className="px-2 py-1 text-[#464255]">{row?.file}</td> */}
                                         {columnVisibility.file && (
                                             <td className="px-2 py-1 text-[#464255] !min-w-[180px]">
                                                 <div className="flex items-center">
@@ -173,7 +173,7 @@ const TableUserGuide: React.FC<TableProps> = ({ openEditForm, openViewForm, open
                                         )}
 
                                         {columnVisibility.desc && (
-                                            <td className="px-2 py-1 text-[#464255]">{row?.description && row?.description}</td>
+                                            <td className="px-2 py-1 text-[#464255]">{row?.description}</td>
                                         )}
 
                                         {columnVisibility.download && (

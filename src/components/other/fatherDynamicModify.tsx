@@ -112,15 +112,15 @@ const FatherTableModify: React.FC<Props> = ({
             //     setters[index](sortedDateKeys);
             // });
 
-            const { Entry, ...rest } = tableVal?.headerEntry;
+            const { Entry, ...rest } = tableVal?.headerEntry || {};
             const res_entry = { ...rest, ...Entry };
             const { key, ["Sub Area"]: subAreaEntry, ...rest_res_entry } = res_entry; // เอา column key ออก
 
-            const { Exit, ...restExit } = tableVal?.headerExit;
+            const { Exit, ...restExit } = tableVal?.headerExit || {};
             const res_exit = { ...restExit, ...Exit };
             const { key: keyExit, Type, ["Sub Area"]: subArea, ["Block Valve"]: blockValve, ...rest_res_exit } = res_exit;  // เอา column key, Type, Block Valve, Sub Area ออก
 
-            const { entryValue, exitValue, sumEntries, sumExits } = tableVal;
+            const { entryValue, exitValue, sumEntries, sumExits } = tableVal || {};
 
             const fromDateEntry = mode == 'entry' && srchStartdate ? dayjs(srchStartdate)?.format('DD/MM/YYYY') : entryValue?.[0]?.[5]; // original 33 ---> new 5
             const toDateEntry = mode == 'entry' && srchEnddate ? dayjs(srchEnddate)?.format('DD/MM/YYYY') : entryValue?.[0]?.[6]; // original 34 ---> new 6

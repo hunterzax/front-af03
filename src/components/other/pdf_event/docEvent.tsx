@@ -546,7 +546,7 @@ export function PdfDoc2({ data }: any) {
 
   const shipperIdArr = data?.data?.[0]?.item?.shipper || []
 
-  return <UiRedderPDF pdfUrlArr={(shipperIdArr || [])?.map((e:any, ix:number) => {
+  return <UiRedderPDF pdfUrlArr={shipperIdArr.map((e:any, ix:number) => {
     return   {
       ix: ix,
       shipperId: (data?.shipperData || [])?.find((f:any) => f?.id === e)?.id || null,
@@ -1069,7 +1069,7 @@ export function PdfDoc3({ data }: any) {
 
   const shipperIdArr = data?.data?.[0]?.item?.shipper || []
 
-  return <UiRedderPDF pdfUrlArr={(shipperIdArr || [])?.map((e:any, ix:number) => {
+  return <UiRedderPDF pdfUrlArr={shipperIdArr.map((e:any, ix:number) => {
     return   {
       ix: ix,
       shipperId: (data?.shipperData || [])?.find((f:any) => f?.id === e)?.id || null,
@@ -1614,7 +1614,7 @@ export function PdfDoc309({ data }: any) {
 
   const shipperIdArr = data?.data?.[0]?.item?.shipper || []
 
-  return <UiRedderPDF pdfUrlArr={(shipperIdArr || [])?.map((e:any, ix:number) => {
+  return <UiRedderPDF pdfUrlArr={shipperIdArr.map((e:any, ix:number) => {
     return   {
       ix: ix,
       shipperId: (data?.shipperData || [])?.find((f:any) => f?.id === e)?.id || null,
@@ -2242,7 +2242,7 @@ export function PdfDoc5({ data }: any) {
 
   const shipperIdArr = data?.data?.[0]?.item?.shipper || []
 
-  return <UiRedderPDF pdfUrlArr={(shipperIdArr || [])?.map((e:any, ix:number) => {
+  return <UiRedderPDF pdfUrlArr={shipperIdArr.map((e:any, ix:number) => {
     return   {
       ix: ix,
       shipperId: (data?.shipperData || [])?.find((f:any) => f?.id === e)?.id || null,
@@ -2723,7 +2723,7 @@ export function PdfDoc6({ data }: any) {
 
   const shipperIdArr = Array.from(new Set((data?.data?.[0]?.item?.gas_shipper || [])?.flatMap((fm:any) => fm?.shipper) || []))
 
-  return <UiRedderPDF pdfUrlArr={(shipperIdArr || [])?.map((e:any, ix:number) => {
+  return <UiRedderPDF pdfUrlArr={shipperIdArr.map((e:any, ix:number) => {
     return   {
       ix: ix,
       shipperId: (data?.shipperData || [])?.find((f:any) => f?.id === e)?.id || null,
@@ -3213,7 +3213,7 @@ const PdfDoc6Used = ({ shipper, data }: any) => {
 // export function PdfDoc8({ data }: any) {
 //   const shipperIdArr = Array.from(new Set((data?.data?.[0]?.item?.shipperArr || [])?.flatMap((fm:any) => fm?.shipper) || []))
 
-//   return <UiRedderPDF pdfUrlArr={(shipperIdArr || [])?.map((e:any, ix:number) => {
+//   return <UiRedderPDF pdfUrlArr={shipperIdArr.map((e:any, ix:number) => {
 //     return   {
 //       ix: ix,
 //       shipperId: (data?.shipperData || [])?.find((f:any) => f?.id === e)?.id || null,
@@ -3736,7 +3736,7 @@ const PdfDoc8Used = ({ shipper, data }: any) => {
 export function PdfDoc4({ data }: any) {
   const shipperIdArr = Array.from(new Set((data?.data?.[0]?.item?.gas_shipper_41 || [])?.flatMap((fm:any) => fm?.shipper) || []))
 
-  return <UiRedderPDF pdfUrlArr={(shipperIdArr || [])?.map((e:any, ix:number) => {
+  return <UiRedderPDF pdfUrlArr={shipperIdArr.map((e:any, ix:number) => {
     return   {
       ix: ix,
       shipperId: (data?.shipperData || [])?.find((f:any) => f?.id === e)?.id || null,
@@ -4524,7 +4524,7 @@ export function PdfDoc7({ data }: any) {
   console.log('data : ', data);
   const shipperIdArr = Array.from(new Set((data?.data?.[0]?.item?.gas_shipper || [])?.flatMap((fm:any) => fm?.shipper) || []))
 
-  return <UiRedderPDF pdfUrlArr={(shipperIdArr || [])?.map((e:any, ix:number) => {
+  return <UiRedderPDF pdfUrlArr={shipperIdArr.map((e:any, ix:number) => {
     return   {
       ix: ix,
       shipperId: (data?.shipperData || [])?.find((f:any) => f?.id === e)?.id || null,

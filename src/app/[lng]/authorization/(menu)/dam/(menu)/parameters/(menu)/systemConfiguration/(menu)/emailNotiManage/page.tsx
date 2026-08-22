@@ -361,7 +361,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.menus?.name || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.menus && row?.menus?.name}</div>)
+                    return (<div>{row?.menus?.name}</div>)
                 }
             },
             {
@@ -371,7 +371,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.activity?.name || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.activity && row?.activity?.name}</div>)
+                    return (<div>{row?.activity?.name}</div>)
                 }
             },
             {
@@ -381,7 +381,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.subject || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.subject && row?.subject}</div>)
+                    return (<div>{row?.subject}</div>)
                 }
             },
             // {

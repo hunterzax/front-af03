@@ -59,7 +59,7 @@ const TableTablePathMgnHistory: React.FC<TableProps> = ({ tableData, isLoading }
                                 key={row?.id}
                                 className={`${table_row_style}`}
                             >
-                                <td className="px-2 py-1 text-[#464255] font-light">{row?.name && row?.name}</td>
+                                <td className="px-2 py-1 text-[#464255] font-light">{row?.name}</td>
 
                                 <td className="px-2 py-1 text-center">
                                     <div className="inline-flex items-center justify-center relative">

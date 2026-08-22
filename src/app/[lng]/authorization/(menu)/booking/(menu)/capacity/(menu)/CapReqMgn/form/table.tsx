@@ -265,7 +265,7 @@ const TableCapReqMgn: React.FC<TableProps> = ({ openEditForm, openViewForm, open
                                         )}
 
                                         {columnVisibility.name && (
-                                            <td className="px-2 py-1 text-[#464255]">{row?.group && row?.group?.name}</td>
+                                            <td className="px-2 py-1 text-[#464255]">{row?.group?.name}</td>
                                         )}
 
                                         {columnVisibility.type && (

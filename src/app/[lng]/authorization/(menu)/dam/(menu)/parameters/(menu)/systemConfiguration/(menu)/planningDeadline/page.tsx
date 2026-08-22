@@ -454,7 +454,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.day || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.day && row?.day}</div>)
+                    return (<div>{row?.day}</div>)
                 }
             },
             {
@@ -464,7 +464,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.before_month || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.before_month && row?.before_month}</div>)
+                    return (<div>{row?.before_month}</div>)
                 }
             },
             {

@@ -14,7 +14,7 @@ const BtnSelectTable: React.FC<ModalComponentProps> = ({ togglePopover, row_id, 
             onClick={(e?:any) => { 
                 e.stopPropagation();
                 if(isDisable){
-                    undefined
+                    return;
                 }else if (e && 'currentTarget' in e) {
                     togglePopover(row_id, e.currentTarget)
                 } else {

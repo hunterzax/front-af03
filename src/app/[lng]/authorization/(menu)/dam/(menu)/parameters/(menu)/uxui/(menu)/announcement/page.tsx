@@ -439,7 +439,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.topic || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div className="font-bold">{row?.topic && row?.topic}</div>)
+                    return (<div className="font-bold">{row?.topic}</div>)
                 }
             },
             {
@@ -450,7 +450,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.detail || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.detail && row?.detail}</div>)
+                    return (<div>{row?.detail}</div>)
                 }
             },
             {

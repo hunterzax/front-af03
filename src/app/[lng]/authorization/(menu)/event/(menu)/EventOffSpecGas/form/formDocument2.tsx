@@ -981,7 +981,7 @@ const FormDocument2: React.FC<FormExampleProps> = ({ mode, data, onSubmit, setIs
 
                             {shipperData
                                 ?.filter((item: any) => !defaultShippersId?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
-                                ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                ?.sort((a: any, b: any) => (a?.name || "").localeCompare(b?.name || "")) // แล้วค่อย sort
                                 ?.map((item: any) => (
                                     <MenuItem
                                         key={item.id}
@@ -1083,7 +1083,7 @@ const FormDocument2: React.FC<FormExampleProps> = ({ mode, data, onSubmit, setIs
 
                             {emailGroupForEventData
                                 ?.filter((item: any) => !defaultEmailGrouId?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
-                                .sort((a: any, b: any) => a.name.localeCompare(b.name))?.map((item: any) => (
+                                .sort((a: any, b: any) => (a?.name || "").localeCompare(b?.name || ""))?.map((item: any) => (
                                     <MenuItem
                                         key={item.id}
                                         value={item.id}

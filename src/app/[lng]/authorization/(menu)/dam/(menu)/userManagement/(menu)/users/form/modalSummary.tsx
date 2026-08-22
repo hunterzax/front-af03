@@ -38,7 +38,7 @@ const ModalSummary: React.FC<FormExampleProps> = ({
     // const selectboxClass = "flex w-full h-[35px] p-1 ps-1 pe-2 !rounded-lg text-gray-900 text-sm block outline-none"
     // const textErrorClass = "text-red-500 text-sm"
     const inputClass = "text-sm block md:w-full py-2 p-2 ps-5 pe-10 h-[40px] rounded-lg border-[1px] bg-white border-[#DFE4EA] outline-none bg-opacity-100 focus:border-[#00ADEF]"
-    const [passwordValue, setPasswordValue] = useState(dataUser[0]?.passwordGen && dataUser[0]?.passwordGen);
+    const [passwordValue, setPasswordValue] = useState(dataUser[0]?.passwordGen);
     const [companyData, setCompanyData] = useState<any>([]);
     const [divisionData, setDivisionData] = useState<any>([]);
     const [roleData, setRoleData] = useState<any>([]);
@@ -47,7 +47,7 @@ const ModalSummary: React.FC<FormExampleProps> = ({
 
     useEffect(() => {
         // setResetForm(() => reset);
-        setPasswordValue(dataUser[0]?.passwordGen && dataUser[0]?.passwordGen);
+        setPasswordValue(dataUser[0]?.passwordGen);
     }, []);
 
     const copyToClipboard = () => {

@@ -211,20 +211,20 @@ const FormDocument41: React.FC<FormExampleProps> = ({ mode, data, onSubmit, setI
                         defaultShippersId: modeDraft ? [] : defaultIds,
                         selectedShippers: modeDraft ? defaultIds : [],
                         selectedShippersRender: modeDraft ? filteredShippers : [],
-                        ir: eventDocGasShipper41.ir ? eventDocGasShipper41.ir : 3,
-                        io: eventDocGasShipper41.io,
-                        value: eventDocGasShipper41.value,
-                        more: eventDocGasShipper41.more,
-                        fileNameEditText: eventDocGasShipper41.event_doc_gas_shipper_file_41?.length > 0 ? cutUploadFileName(eventDocGasShipper41.event_doc_gas_shipper_file_41[0]?.url) : '',
-                        fileNameEditTextUrl: eventDocGasShipper41.event_doc_gas_shipper_file_41?.length > 0 ? eventDocGasShipper41.event_doc_gas_shipper_file_41[0]?.url : '',
+                        ir: eventDocGasShipper41?.ir ? eventDocGasShipper41.ir : 3,
+                        io: eventDocGasShipper41?.io,
+                        value: eventDocGasShipper41?.value,
+                        more: eventDocGasShipper41?.more,
+                        fileNameEditText: (eventDocGasShipper41?.event_doc_gas_shipper_file_41?.length ?? 0) > 0 ? cutUploadFileName(eventDocGasShipper41?.event_doc_gas_shipper_file_41?.[0]?.url) : '',
+                        fileNameEditTextUrl: (eventDocGasShipper41?.event_doc_gas_shipper_file_41?.length ?? 0) > 0 ? eventDocGasShipper41?.event_doc_gas_shipper_file_41?.[0]?.url : '',
                         fileName: 'Maximum File 10 MB',
                         fileUrl: ''
                     }])
                 }
-                setValue(`doc_41_perm_lod_${commandIndex}`, eventDocGasShipper41.ir ? eventDocGasShipper41.ir : 3) // ถ้่า ir เป็น null ให้ใส่ doc_41_perm_lod_1 == 3 (อื่น ๆ)
-                setValue(`doc_41_jud_soong_kaw_ook_${commandIndex}`, eventDocGasShipper41.io)
-                setValue(`doc_41_value_${commandIndex}`, eventDocGasShipper41.value)
-                setValue(`doc_41_more_${commandIndex}`, eventDocGasShipper41.more)
+                setValue(`doc_41_perm_lod_${commandIndex}`, eventDocGasShipper41?.ir ? eventDocGasShipper41.ir : 3) // ถ้่า ir เป็น null ให้ใส่ doc_41_perm_lod_1 == 3 (อื่น ๆ)
+                setValue(`doc_41_jud_soong_kaw_ook_${commandIndex}`, eventDocGasShipper41?.io)
+                setValue(`doc_41_value_${commandIndex}`, eventDocGasShipper41?.value)
+                setValue(`doc_41_more_${commandIndex}`, eventDocGasShipper41?.more)
                 // doc_41_perm_lod_1
                 // doc_41_jud_soong_kaw_ook_1
                 // doc_41_value_1
@@ -270,20 +270,20 @@ const FormDocument41: React.FC<FormExampleProps> = ({ mode, data, onSubmit, setI
                         defaultShippersId: defaultIds,
                         selectedShippers: [],
                         selectedShippersRender: [],
-                        ir: eventDocGasShipper41.ir ? eventDocGasShipper41.ir : 3,
-                        io: eventDocGasShipper41.io,
-                        value: eventDocGasShipper41.value,
-                        more: eventDocGasShipper41.more,
-                        fileNameEditText: eventDocGasShipper41.event_doc_gas_shipper_file_41?.length > 0 ? cutUploadFileName(eventDocGasShipper41.event_doc_gas_shipper_file_41[0]?.url) : '',
-                        fileNameEditTextUrl: eventDocGasShipper41.event_doc_gas_shipper_file_41?.length > 0 ? eventDocGasShipper41.event_doc_gas_shipper_file_41[0]?.url : '',
+                        ir: eventDocGasShipper41?.ir ? eventDocGasShipper41.ir : 3,
+                        io: eventDocGasShipper41?.io,
+                        value: eventDocGasShipper41?.value,
+                        more: eventDocGasShipper41?.more,
+                        fileNameEditText: (eventDocGasShipper41?.event_doc_gas_shipper_file_41?.length ?? 0) > 0 ? cutUploadFileName(eventDocGasShipper41?.event_doc_gas_shipper_file_41?.[0]?.url) : '',
+                        fileNameEditTextUrl: (eventDocGasShipper41?.event_doc_gas_shipper_file_41?.length ?? 0) > 0 ? eventDocGasShipper41?.event_doc_gas_shipper_file_41?.[0]?.url : '',
                         fileName: 'Maximum File 10 MB',
                         fileUrl: ''
                     }])
                 }
-                setValue(`doc_41_perm_lod_${commandIndex}`, eventDocGasShipper41.ir ? eventDocGasShipper41.ir : 3) // ถ้่า ir เป็น null ให้ใส่ doc_41_perm_lod_1 == 3 (อื่น ๆ)
-                setValue(`doc_41_jud_soong_kaw_ook_${commandIndex}`, eventDocGasShipper41.io)
-                setValue(`doc_41_value_${commandIndex}`, eventDocGasShipper41.value)
-                setValue(`doc_41_more_${commandIndex}`, eventDocGasShipper41.more)
+                setValue(`doc_41_perm_lod_${commandIndex}`, eventDocGasShipper41?.ir ? eventDocGasShipper41.ir : 3) // ถ้่า ir เป็น null ให้ใส่ doc_41_perm_lod_1 == 3 (อื่น ๆ)
+                setValue(`doc_41_jud_soong_kaw_ook_${commandIndex}`, eventDocGasShipper41?.io)
+                setValue(`doc_41_value_${commandIndex}`, eventDocGasShipper41?.value)
+                setValue(`doc_41_more_${commandIndex}`, eventDocGasShipper41?.more)
             }
         })
     }
@@ -516,8 +516,8 @@ const FormDocument41: React.FC<FormExampleProps> = ({ mode, data, onSubmit, setI
                         "value": watch(`doc_41_value_${commandIndex}`), // ปริมาณ
                         "more": watch(`doc_41_more_${commandIndex}`), // เพิ่มเติม
                         "shipper": Array.from(new Set([
-                            ...commandItem.selectedShippers,
-                            ...commandItem.defaultShippersId,
+                            ...(commandItem?.selectedShippers || []),
+                            ...(commandItem?.defaultShippersId || []),
                         ])),
                         "file": commandItem?.fileUrl !== '' ? [commandItem?.fileUrl] : [],
                     }
@@ -1660,7 +1660,7 @@ const FormDocument41: React.FC<FormExampleProps> = ({ mode, data, onSubmit, setI
                                                 >
                                                     {(!isShipper) && (
                                                         <MenuItem value="all">
-                                                            <Checkbox checked={commandItem?.selectedShippers.length === dataShipperMaster?.length && dataShipperMaster?.length > 0} />
+                                                            <Checkbox checked={commandItem?.selectedShippers?.length === dataShipperMaster?.length && (dataShipperMaster?.length ?? 0) > 0} />
                                                             <ListItemText
                                                                 primary="Select All"
                                                                 // sx={{ fontWeight: 'bold' }}
@@ -1698,7 +1698,7 @@ const FormDocument41: React.FC<FormExampleProps> = ({ mode, data, onSubmit, setI
                                                                 })
                                                             )
                                                         )
-                                                        ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                                        ?.sort((a: any, b: any) => (a?.name || "").localeCompare(b?.name || "")) // แล้วค่อย sort
                                                         ?.map((item: any) => (
                                                             <MenuItem
                                                                 key={item.id}
@@ -1928,15 +1928,15 @@ const FormDocument41: React.FC<FormExampleProps> = ({ mode, data, onSubmit, setI
                             </MenuItem>
 
                             {emailGroupForEventData
-                                ?.filter((item: any) => !defaultEmailGrouId?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
-                                .sort((a: any, b: any) => a.name.localeCompare(b.name))?.map((item: any) => (
+                                ?.filter((item: any) => !defaultEmailGrouId?.includes(item?.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
+                                .sort((a: any, b: any) => (a?.name || "").localeCompare(b?.name || ""))?.map((item: any) => (
                                     <MenuItem
-                                        key={item.id}
-                                        value={item.id}
+                                        key={item?.id}
+                                        value={item?.id}
                                         disabled={false}
                                     >
-                                        <Checkbox checked={selectedEmailGroup?.includes(item.id)} />
-                                        <ListItemText primary={item.name} />
+                                        <Checkbox checked={selectedEmailGroup?.includes(item?.id)} />
+                                        <ListItemText primary={item?.name} />
                                     </MenuItem>
                                 ))}
                         </Select>

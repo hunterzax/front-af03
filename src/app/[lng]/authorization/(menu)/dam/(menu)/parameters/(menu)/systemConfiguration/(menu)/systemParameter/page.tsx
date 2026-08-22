@@ -398,7 +398,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.menus?.name || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.menus && row?.menus?.name}</div>)
+                    return (<div>{row?.menus?.name}</div>)
                 }
             },
             {
@@ -408,7 +408,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.system_parameter?.name || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.system_parameter && row?.system_parameter?.name}</div>)
+                    return (<div>{row?.system_parameter?.name}</div>)
                 }
             },
             {
@@ -582,7 +582,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
             const validUrl = url.startsWith('http://') || url.startsWith('https://')
                 ? url : `https://${url}`;
 
-            window.open(validUrl, '_blank');
+            window.open(validUrl, '_blank', 'noopener,noreferrer');
         } else {
             // The file URL is not valid or unavailable.
         }

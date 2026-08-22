@@ -164,7 +164,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                         setModalWarningOpen(true)
                     }else if(tabIndex == 1 && (response?.warningLogDayWeek?.length > 0 || response?.warningLogDay?.length > 0 || response?.sheet2Quality?.length > 0 || response?.sheet1Quality?.length > 0)){
                         // const msg1 = tabIndex == 1 && (response?.warningLogDayWeek?.length > 0 || response?.warningLogDay?.length > 0) && `Capacity Exceeds Capacity Right Amount.` || ""
-                        const msg1 = tabIndex == 1 && (response?.warningLogDayWeek?.length > 0 || response?.warningLogDay?.length > 0 || response?.sheet2Quality?.length > 0 || response?.sheet1Quality?.length > 0) && [...(response?.warningLogDayWeek || []), ...(response?.warningLogDay || []), ...(response?.sheet1Quality || []), ...(response?.sheet2Quality || [])].join('<br/>') || "" || ""
+                        const msg1 = tabIndex == 1 && (response?.warningLogDayWeek?.length > 0 || response?.warningLogDay?.length > 0 || response?.sheet2Quality?.length > 0 || response?.sheet1Quality?.length > 0) && [...(response?.warningLogDayWeek || []), ...(response?.warningLogDay || []), ...(response?.sheet1Quality || []), ...(response?.sheet2Quality || [])].join('<br/>') || ""
                         
                         // const msg2 = response?.sheet2Quality?.length > 0 && "Quality Exceed Value Out of Range." || ""
                         // const msg3 = response?.sheet1Quality?.length > 0 && "Nomination Exceed Value" || ""

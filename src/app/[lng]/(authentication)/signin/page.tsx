@@ -258,16 +258,15 @@ const SignInPage: React.FC<HomeProps> = (props) => {
     const statusCode = result?.response?.data?.statusCode ?? result?.response?.data?.status ?? result?.status ?? result?.statusCode ?? result?.code ?? result?.response?.status;
     const errorMsg = result?.response?.data?.error ?? result?.data?.error ?? result?.response?.error ?? result?.error;
 
-    if (!statusCode) {
-      if (statusCode == "ERR_NETWORK") {
-        seterrorNetworkTricker(true);
-      } else {
-        setCookie("v4r2d9z5m3h0c1p0x7l", result?.token, 1);
-        // localStorage.setItem("dev_mode_token", result?.token)
-        localStorage.setItem("v4r2d9z5m3h0c1p0x7l", encryptData(result?.token))
-        localStorage.setItem("x9f3w1m8q2y0u5d7v1z", encryptData(result?.account))
-        localStorage.setItem("p5n3b7j2k9s1a6wq8t0", encryptData(result?.tac))
-        activeAccount(data?.email);
+    if (statusCode === "ERR_NETWORK") {
+      seterrorNetworkTricker(true);
+    } else if (!statusCode) {
+      setCookie("v4r2d9z5m3h0c1p0x7l", result?.token, 1);
+      // localStorage.setItem("dev_mode_token", result?.token)
+      localStorage.setItem("v4r2d9z5m3h0c1p0x7l", encryptData(result?.token))
+      localStorage.setItem("x9f3w1m8q2y0u5d7v1z", encryptData(result?.account))
+      localStorage.setItem("p5n3b7j2k9s1a6wq8t0", encryptData(result?.tac))
+      activeAccount(data?.email);
 
         // Broadcast login event to other tabs
         window.dispatchEvent(new Event('storage'));
@@ -501,17 +500,16 @@ const SignInPage: React.FC<HomeProps> = (props) => {
     const statusCode = result?.response?.data?.statusCode ?? result?.response?.data?.status ?? result?.status ?? result?.statusCode ?? result?.code ?? result?.response?.status;
     const errorMsg = result?.response?.data?.error ?? result?.data?.error ?? result?.response?.error ?? result?.error;
 
-    if (!statusCode) {
-      if (statusCode == "ERR_NETWORK") {
-        seterrorNetworkTricker(true);
-        setIsLoading(false)
-      } else {
-        setCookie("v4r2d9z5m3h0c1p0x7l", result?.token, 1);
-        // localStorage.setItem("dev_mode_token", result?.token)
-        localStorage.setItem("v4r2d9z5m3h0c1p0x7l", encryptData(result?.token))
-        localStorage.setItem("x9f3w1m8q2y0u5d7v1z", encryptData(result?.account))
-        localStorage.setItem("p5n3b7j2k9s1a6wq8t0", encryptData(result?.tac))
-        activeAccount(data?.email);
+    if (statusCode === "ERR_NETWORK") {
+      seterrorNetworkTricker(true);
+      setIsLoading(false);
+    } else if (!statusCode) {
+      setCookie("v4r2d9z5m3h0c1p0x7l", result?.token, 1);
+      // localStorage.setItem("dev_mode_token", result?.token)
+      localStorage.setItem("v4r2d9z5m3h0c1p0x7l", encryptData(result?.token))
+      localStorage.setItem("x9f3w1m8q2y0u5d7v1z", encryptData(result?.account))
+      localStorage.setItem("p5n3b7j2k9s1a6wq8t0", encryptData(result?.tac))
+      activeAccount(data?.email);
 
         // Broadcast login event to other tabs
         window.dispatchEvent(new Event('storage'));

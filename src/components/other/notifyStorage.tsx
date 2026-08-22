@@ -1,55 +1,5 @@
-// // utils/notifyStorage.ts
-// "use client";
-
-// const STORAGE_KEY = "notifications";
-
-// export const getStoredNotifications = () => {
-//     const raw = localStorage.getItem(STORAGE_KEY);
-//     return raw ? JSON.parse(raw) : [];
-// };
-
-// export const storeNotification = (notification: any) => {
-//     const notis = getStoredNotifications();
-//     const alreadyExist = notis.find((n: any) => n.id === notification.id);
-//     if (!alreadyExist) {
-//         notis.unshift({ ...notification, isRead: false });
-//         console.log('notis : ', notis);
-//         localStorage.setItem(STORAGE_KEY, JSON.stringify(notis));
-//     }
-// };
-
-// export const storeNotificationList = (notification: any[]) => {
-//     const notis = getStoredNotifications();
-//     const newNotis = notification.filter((n: any) => !notis.some((m: any) => m.id === n.id));
-//     if (newNotis.length > 0) {
-//         const newNotisWithRead = newNotis.map((n: any) => ({ ...n, isRead: false }));
-//         notis.unshift(...newNotisWithRead);
-//         localStorage.setItem(STORAGE_KEY, JSON.stringify(notis));
-//     }
-// };
-
-// export const markAsRead = (notification: any[]) => {
-//     const notis = getStoredNotifications().map((n: any) => ({
-//         ...n,
-//         isRead: notification.some((noti: any) => noti === n.id) ? true : n.isRead,
-//     }));
-//     localStorage.setItem(STORAGE_KEY, JSON.stringify(notis));
-// };
-
-// export const markAllAsRead = () => {
-//     const notis = getStoredNotifications().map((n: any) => ({
-//         ...n,
-//         isRead: true,
-//     }));
-//     localStorage.setItem(STORAGE_KEY, JSON.stringify(notis));
-// };
-
-// export const clearNotifications = () => {
-//     localStorage.removeItem(STORAGE_KEY);
-// };
-
-// utils/notifyStorage.ts
 "use client";
+
 
 import { openDB } from "idb";
 

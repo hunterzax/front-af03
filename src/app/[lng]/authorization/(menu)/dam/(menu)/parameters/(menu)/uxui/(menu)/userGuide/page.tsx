@@ -415,7 +415,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.document_name || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.document_name && row?.document_name}</div>)
+                    return (<div>{row?.document_name}</div>)
                 }
             },
             {
@@ -443,7 +443,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.description || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.description && row?.description}</div>)
+                    return (<div>{row?.description}</div>)
                 }
             },
             {

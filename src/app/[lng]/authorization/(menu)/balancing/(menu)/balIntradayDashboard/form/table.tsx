@@ -1524,8 +1524,8 @@ const TableMain: React.FC<any> = ({ uiFilter_, tableData, columnVisibility, init
                                             {columnVisibility?.order_west && columnVisibility?.order_west_mmbtu && (
                                                 <td
                                                     className={`px-2 py-1 text-[#464255] text-right ${isLastVisible(
-                                                        columnVisibility?.level_system_level_west,
-                                                        [columnVisibility?.percent_system_level_west]
+                                                        columnVisibility?.order_west_mmbtu,
+                                                        [columnVisibility?.order_west_mmscf]
                                                     ) ? 'border-r border-gray-300' : ''}`}
                                                 >
                                                     {/* {row?.plan_?.energyAdjustIFOFO_west ? formatNumberFourDecimal(row?.plan_?.energyAdjustIFOFO_west?.value) : ''} */}
@@ -1536,7 +1536,7 @@ const TableMain: React.FC<any> = ({ uiFilter_, tableData, columnVisibility, init
                                             {columnVisibility?.order_west && columnVisibility?.order_west_mmscf && (
                                                 <td
                                                     className={`px-2 py-1 text-[#464255] text-right ${isLastVisible(
-                                                        columnVisibility?.percent_system_level_west,
+                                                        columnVisibility?.order_west_mmscf,
                                                         []
                                                     ) ? 'border-r border-gray-300' : ''}`}
                                                 >

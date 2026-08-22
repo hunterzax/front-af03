@@ -51,7 +51,7 @@ const TableSystemParamHistory: React.FC<TableProps> = ({ tableData, isLoading, c
             const validUrl = url.startsWith('http://') || url.startsWith('https://')
                 ? url : `https://${url}`;
 
-            window.open(validUrl, '_blank');
+            window.open(validUrl, '_blank', 'noopener,noreferrer');
         } else {
             // The file URL is not valid or unavailable.
         }
@@ -122,11 +122,11 @@ const TableSystemParamHistory: React.FC<TableProps> = ({ tableData, isLoading, c
                                 className={`${table_row_style}`}
                             >
                                 {columnVisibility.module && (
-                                    <td className="px-2 py-1 text-[#464255]">{row?.menus && row?.menus?.name}</td>
+                                    <td className="px-2 py-1 text-[#464255]">{row?.menus?.name}</td>
                                 )}
 
                                 {columnVisibility.system_parameter && (
-                                    <td className="px-2 py-1 text-[#464255]">{row?.system_parameter && row?.system_parameter?.name}</td>
+                                    <td className="px-2 py-1 text-[#464255]">{row?.system_parameter?.name}</td>
                                 )}
 
                                 {columnVisibility.value && (

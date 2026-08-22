@@ -1643,7 +1643,7 @@ const FormDocument6: React.FC<FormExampleProps> = ({ mode, data, onSubmit, setIs
 
                                 {dataShipper1?.length > 0 && dataShipper1
                                     ?.filter((item: any) => !defaultShippersId1?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
-                                    ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                    ?.sort((a: any, b: any) => (a?.name || "").localeCompare(b?.name || "")) // แล้วค่อย sort
                                     ?.map((item: any) => (
                                         <MenuItem
                                             key={item.id}
@@ -1971,7 +1971,7 @@ const FormDocument6: React.FC<FormExampleProps> = ({ mode, data, onSubmit, setIs
 
                                 {dataShipper2?.length > 0 && dataShipper2
                                     ?.filter((item: any) => !defaultShippersId2?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
-                                    ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                    ?.sort((a: any, b: any) => (a?.name || "").localeCompare(b?.name || "")) // แล้วค่อย sort
                                     ?.map((item: any) => (
                                         <MenuItem
                                             key={item.id}
@@ -2300,7 +2300,7 @@ const FormDocument6: React.FC<FormExampleProps> = ({ mode, data, onSubmit, setIs
 
                                 {dataShipper3?.length > 0 && dataShipper3
                                     ?.filter((item: any) => !defaultShippersId3?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
-                                    ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                    ?.sort((a: any, b: any) => (a?.name || "").localeCompare(b?.name || "")) // แล้วค่อย sort
                                     ?.map((item: any) => (
                                         <MenuItem
                                             key={item.id}
@@ -2629,7 +2629,7 @@ const FormDocument6: React.FC<FormExampleProps> = ({ mode, data, onSubmit, setIs
 
                                 {dataShipper4?.length > 0 && dataShipper4
                                     ?.filter((item: any) => !defaultShippersId4?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
-                                    ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                    ?.sort((a: any, b: any) => (a?.name || "").localeCompare(b?.name || "")) // แล้วค่อย sort
                                     ?.map((item: any) => (
                                         <MenuItem
                                             key={item.id}
@@ -2960,7 +2960,7 @@ const FormDocument6: React.FC<FormExampleProps> = ({ mode, data, onSubmit, setIs
 
                                 {dataShipper5?.length > 0 && dataShipper5
                                     ?.filter((item: any) => !defaultShippersId5?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
-                                    ?.sort((a: any, b: any) => a.name.localeCompare(b.name)) // แล้วค่อย sort
+                                    ?.sort((a: any, b: any) => (a?.name || "").localeCompare(b?.name || "")) // แล้วค่อย sort
                                     ?.map((item: any) => (
                                         <MenuItem
                                             key={item.id}
@@ -3244,7 +3244,7 @@ const FormDocument6: React.FC<FormExampleProps> = ({ mode, data, onSubmit, setIs
 
                             {emailGroupForEventData
                                 ?.filter((item: any) => !defaultEmailGrouId?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
-                                .sort((a: any, b: any) => a.name.localeCompare(b.name))?.map((item: any) => (
+                                .sort((a: any, b: any) => (a?.name || "").localeCompare(b?.name || ""))?.map((item: any) => (
                                     <MenuItem
                                         key={item.id}
                                         value={item.id}

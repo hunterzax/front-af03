@@ -164,7 +164,7 @@ const TableNomiDeadline: React.FC<TableProps> = ({ openEditForm, openViewForm, o
                                         )}
 
                                         {columnVisibility.process_type && (
-                                            <td className="px-2 py-1 text-[#464255]">{row?.process_type && row?.process_type?.name}</td>
+                                            <td className="px-2 py-1 text-[#464255]">{row?.process_type?.name}</td>
                                         )}
 
                                         {columnVisibility.nom_type && (
@@ -186,7 +186,7 @@ const TableNomiDeadline: React.FC<TableProps> = ({ openEditForm, openViewForm, o
                                         )}
 
                                         {columnVisibility.before_gas && (
-                                            <td className="px-2 py-1 text-[#464255]">{row?.before_gas_day && row?.before_gas_day}</td>
+                                            <td className="px-2 py-1 text-[#464255]">{row?.before_gas_day}</td>
                                         )}
 
                                         {/* <td className="px-2 py-1 text-right text-[#464255]">{formatNumber(row?.area_nominal_capacity)}</td> */}

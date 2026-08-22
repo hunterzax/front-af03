@@ -74,7 +74,7 @@ const ModalAction: React.FC<FormExampleProps> = ({
 
     const handleClose = () => {
         onClose();
-        clearErrors
+        clearErrors();
         setValue("shipper_review_allocation", null);
         setValue("comment", null);
         reset();

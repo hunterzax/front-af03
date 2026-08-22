@@ -78,3 +78,5 @@ GEMINI.md
 
 /cov-int/
 /docs/
+*.tgz
+*.csv

@@ -276,9 +276,7 @@ const TableExpanded: React.FC<TableProps> = ({
                                     }
 
 
-                                    {filterProps &&
-                                        filterProps
-                                    }
+                                    {filterProps}
                                 </div>
 
                                 <div className="flex flex-wrap gap-2 justify-end">
@@ -288,7 +286,7 @@ const TableExpanded: React.FC<TableProps> = ({
                                         onKeyDown={handleQueryKeyPress}
                                         onBlur={handleQueryBlur}
                                     />
-                                    {exportBtn && exportBtn}
+                                    {exportBtn}
                                 </div>
                             </div>
                         )}
@@ -301,7 +299,7 @@ const TableExpanded: React.FC<TableProps> = ({
                                 {table?.getAllLeafColumns()?.map((column) => {
 
                                     return (
-                                        <div key={column.id} className="text-sm mt-2">
+                                        <div key={column?.id} className="text-sm mt-2">
                                             <label className="flex items-center gap-2">
                                                 <input
                                                     type="checkbox"
@@ -392,7 +390,7 @@ const TableExpanded: React.FC<TableProps> = ({
                                                         const isFirst = index === 0;
 
                                                         return (
-                                                            <td key={cell.id} className="px-3 py-2">
+                                                            <td key={cell?.id} className="px-3 py-2">
 
                                                                 <div className="flex gap-2 items-center">
 
@@ -440,7 +438,7 @@ const TableExpanded: React.FC<TableProps> = ({
                                                                     const accessorKey = column.columnDef.accessorKey;
 
                                                                     return (
-                                                                        <td key={column.id} className="px-3 py-2">
+                                                                        <td key={column?.id} className="px-3 py-2">
 
                                                                             <div className="flex gap-2 items-center">
 

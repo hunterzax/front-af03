@@ -106,6 +106,7 @@ export default function WSClient({refreshNotifications}:any) {
               break;
             case "nomination":
               menuName = 'Nominations';
+              break;
             case "event":
               menuName = 'Event';
               break;

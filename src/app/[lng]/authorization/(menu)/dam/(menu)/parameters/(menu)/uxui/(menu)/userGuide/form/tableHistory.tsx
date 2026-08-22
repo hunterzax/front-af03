@@ -119,7 +119,7 @@ const TableUserGuideHistory: React.FC<TableProps> = ({ tableData, isLoading, col
                                 className={`${table_row_style}`}
                             >
                                 {columnVisibility.document_name && (
-                                    <td className="px-2 py-1 text-[#464255]">{row?.document_name && row?.document_name}</td>
+                                    <td className="px-2 py-1 text-[#464255]">{row?.document_name}</td>
                                 )}
 
                                 {columnVisibility.file && (
@@ -133,7 +133,7 @@ const TableUserGuideHistory: React.FC<TableProps> = ({ tableData, isLoading, col
                                 )}
 
                                 {columnVisibility.desc && (
-                                    <td className="px-2 py-1 text-[#464255]">{row?.description && row?.description}</td>
+                                    <td className="px-2 py-1 text-[#464255]">{row?.description}</td>
                                 )}
 
                                 {columnVisibility.download && (

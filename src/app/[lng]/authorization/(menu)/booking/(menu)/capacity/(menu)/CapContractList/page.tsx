@@ -1060,7 +1060,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.group?.name || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.group && row?.group?.name}</div>)
+                    return (<div>{row?.group?.name}</div>)
                 }
             },
             {

@@ -34,7 +34,7 @@ export const transformGroupTSO = (dataMain: any, column?: any) => {
                         filteredItem[key] = item?.end_date ? formatDateNoTime(item.end_date) : null;
                         break;
                     case 'updated_by':
-                        filteredItem[key] = item.update_by_account
+                        filteredItem[key] = item?.update_by_account
                             ? `${item.update_by_account.first_name} ${item.update_by_account.last_name} ${formatDateTimeSec(item?.update_date) || ''}`
                             : null;
                         break;
@@ -87,7 +87,7 @@ export const transformGroupShippers = (dataMain: any, column?: any) => {
                         filteredItem[key] = item?.end_date ? formatDateNoTime(item.end_date) : null;
                         break;
                     case 'updated_by':
-                        filteredItem[key] = item.update_by_account
+                        filteredItem[key] = item?.update_by_account
                             ? `${item.update_by_account.first_name} ${item.update_by_account.last_name} ${formatDateTimeSec(item?.update_date) || ''}`
                             : null;
                         break;
@@ -129,7 +129,7 @@ export const transformGroupOthers = (dataMain: any, column?: any) => {
                         filteredItem[key] = item?.end_date ? formatDateNoTime(item.end_date) : null;
                         break;
                     case 'updated_by':
-                        filteredItem[key] = item.update_by_account
+                        filteredItem[key] = item?.update_by_account
                             ? `${item.update_by_account.first_name} ${item.update_by_account.last_name} ${formatDateTimeSec(item?.update_date) || ''}`
                             : null;
                         break;
@@ -235,7 +235,7 @@ export const transformArea = (dataMain: any, column?: any) => {
                         filteredItem[key] = item?.end_date ? formatDateNoTime(item?.end_date) : '';
                         break;
                     case 'updated_by':
-                        filteredItem[key] = item.update_by_account
+                        filteredItem[key] = item?.update_by_account
                             ? `${item.update_by_account.first_name} ${item.update_by_account.last_name} ${formatDateTimeSec(item?.update_date) || ''}`
                             : null;
                         break;
@@ -2636,6 +2636,7 @@ export const transformRoleMgn = (dataMain: any, column?: any) => {
                         break;
                     case 'updated_by':
                         filteredItem[key] = `${item?.update_by_account?.first_name || ''} ${item?.update_by_account?.last_name || ''} ${item?.update_date ? formatDate(item?.update_date) : ''}` || null;
+                        break;
                     case 'update_permission_by_account':
                         filteredItem[key] = `${item?.update_permission_by_account?.first_name || ''} ${item?.update_permission_by_account?.last_name || ''} ${item?.update_permission_date ? formatDate(item?.update_permission_date) : ''}` || null;
                         break;

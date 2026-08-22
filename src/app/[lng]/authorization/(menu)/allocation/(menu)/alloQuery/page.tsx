@@ -531,7 +531,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                                     <div
                                         className="w-[120px] p-1 text-center rounded-[50px]"
                                         style={{ background: row?.entry_exit_obj ? row?.entry_exit_obj?.color : '#FFF1CE' }}>
-                                        {row?.entry_exit_obj && row?.entry_exit_obj?.name}
+                                        {row?.entry_exit_obj?.name}
                                     </div>
                                     : null
                             }
@@ -554,7 +554,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                                         className="w-[120px] p-1 text-left rounded-[50px]"
                                         // style={{ background: row?.zone_obj ? row?.zone_obj?.color : '#FFF1CE' }}
                                         >
-                                        {row?.zone_obj && row?.zone_obj?.name}
+                                        {row?.zone_obj?.name}
                                     </div>
                                     : null
                             }
@@ -806,7 +806,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                                     <div
                                         className="w-[120px] p-1 text-center rounded-[50px]"
                                         style={{ background: row?.entry_exit_obj ? row?.entry_exit_obj?.color : '#FFF1CE' }}>
-                                        {row?.entry_exit_obj && row?.entry_exit_obj?.name}
+                                        {row?.entry_exit_obj?.name}
                                     </div>
                                     : null
                             }
@@ -829,7 +829,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                                         className="w-[120px] p-1 text-left rounded-[50px]"
                                         // style={{ background: row?.zone_obj ? row?.zone_obj?.color : '#FFF1CE' }}
                                         >
-                                        {row?.zone_obj && row?.zone_obj?.name}
+                                        {row?.zone_obj?.name}
                                     </div>
                                     : null
                             }

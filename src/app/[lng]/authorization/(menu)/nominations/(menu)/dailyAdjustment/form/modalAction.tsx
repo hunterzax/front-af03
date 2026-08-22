@@ -326,7 +326,7 @@ const ModalAction: React.FC<FormExampleProps> = ({
     };
 
     useEffect(() => {
-        clearErrors
+        clearErrors();
         clearErrors(`rows.${fields.length}`);
     }, [fields])
 

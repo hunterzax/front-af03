@@ -633,7 +633,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
 
         hasFetchedRef.current = true;
 
-        void fetchData();
+        fetchData();
     }, []);
 
     // ############# RE-GENERATE  #############

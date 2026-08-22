@@ -97,7 +97,7 @@ const TableParameter: React.FC<TableProps> = ({ openEditForm, openViewForm, open
             const validUrl = url.startsWith('http://') || url.startsWith('https://')
                 ? url : `https://${url}`;
 
-            window.open(validUrl, '_blank');
+            window.open(validUrl, '_blank', 'noopener,noreferrer');
         } else {
             // The file URL is not valid or unavailable
         }
@@ -170,16 +170,16 @@ const TableParameter: React.FC<TableProps> = ({ openEditForm, openViewForm, open
                                         className={`${table_row_style}`}
                                     >
                                         {columnVisibility.module && (
-                                            <td className="px-2 py-1 text-[#464255]">{row?.menus && row?.menus?.name}</td>
+                                            <td className="px-2 py-1 text-[#464255]">{row?.menus?.name}</td>
                                         )}
                                         {columnVisibility.system_parameter && (
-                                            <td className="px-2 py-1 text-[#464255]">{row?.system_parameter && row?.system_parameter?.name}</td>
+                                            <td className="px-2 py-1 text-[#464255]">{row?.system_parameter?.name}</td>
                                         )}
                                         {columnVisibility.value && (
                                             <td className="px-2 py-1 text-[#464255]">{row?.value && formatNumberThreeDecimal(row?.value)}</td>
                                         )}
                                         {/* <td className="px-2 py-1">
-                                            <OpenInNewOutlinedIcon /> {row?.link && row?.link}
+                                            <OpenInNewOutlinedIcon /> {row?.link}
                                         </td> */}
 
                                         {/* <td className="px-2 py-1 text-center justify-center">

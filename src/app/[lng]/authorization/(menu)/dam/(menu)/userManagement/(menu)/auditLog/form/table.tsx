@@ -147,11 +147,11 @@ const TableAuditLog: React.FC<TableProps> = ({ tableData, isLoading, columnVisib
                                         className={`${table_row_style}`}
                                     >
                                         {columnVisibility.id && (
-                                            <td className="px-2 py-1 text-[#464255]">{row?.id && row?.id}</td>
+                                            <td className="px-2 py-1 text-[#464255]">{row?.id}</td>
                                         )}
 
                                         {columnVisibility.module && (
-                                            <td className="px-2 py-1 text-[#464255]">{row?.module && row?.module}</td>
+                                            <td className="px-2 py-1 text-[#464255]">{row?.module}</td>
                                         )}
 
                                         {columnVisibility.create_date && (

@@ -133,7 +133,7 @@ const TableDailyNomination: React.FC<any> = ({ openWarning, tableData, isLoading
             // ];
 
             // const alwaysVisibleKeys = tabIndex2ndTab == 0 ? ["gas_day", "total_cap", "nomination_point", "utilization"] : ["gas_day", "total_cap", "nomination_point"]
-            const alwaysVisibleKeys = tabIndex2ndTab == 0 ? ["gas_day", "total_cap", "nomination_point"] : ["gas_day", "total_cap", "nomination_point"]
+            const alwaysVisibleKeys = ["gas_day", "total_cap", "nomination_point"];
 
             if (alwaysVisibleKeys.includes(col.key)) {
                 return true;

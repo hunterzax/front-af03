@@ -2101,7 +2101,7 @@ const FormDocument7: React.FC<FormExampleProps> = ({ mode, data, onSubmit, setIs
 
                             {emailGroupForEventData
                                 ?.filter((item: any) => !defaultEmailGrouId?.includes(item.id)) // เอาอันที่มีอยู่แล้วออกจาก option 
-                                .sort((a: any, b: any) => a.name.localeCompare(b.name))?.map((item: any) => (
+                                .sort((a: any, b: any) => (a?.name || "").localeCompare(b?.name || ""))?.map((item: any) => (
                                     <MenuItem
                                         key={item.id}
                                         value={item.id}

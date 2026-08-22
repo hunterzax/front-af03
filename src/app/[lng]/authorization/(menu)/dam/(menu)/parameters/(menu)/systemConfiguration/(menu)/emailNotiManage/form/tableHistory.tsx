@@ -93,15 +93,15 @@ const TableEmailNotiMgnHistory: React.FC<TableProps> = ({ tableData, isLoading, 
                                 className={`${table_row_style}`}
                             >
                                 {columnVisibility.module && (
-                                    <td className="px-2 py-1 text-[#464255]">{row?.menus && row?.menus?.name}</td>
+                                    <td className="px-2 py-1 text-[#464255]">{row?.menus?.name}</td>
                                 )}
 
                                 {columnVisibility.activity && (
-                                    <td className="px-2 py-1 text-[#464255]">{row?.activity && row?.activity?.name}</td>
+                                    <td className="px-2 py-1 text-[#464255]">{row?.activity?.name}</td>
                                 )}
 
                                 {columnVisibility.subject && (
-                                    <td className="px-2 py-1 text-[#464255]">{row?.subject && row?.subject}</td>
+                                    <td className="px-2 py-1 text-[#464255]">{row?.subject}</td>
                                 )}
 
                                 {/* {columnVisibility.active && (

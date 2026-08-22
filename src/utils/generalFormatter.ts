@@ -2700,11 +2700,13 @@ export const exportCyberpunk = (data_to_export?: any) => {
   const allPoints: any = {}
   data_to_export?.forEach((entry: any) => {
     entry?.nomPoint?.forEach((point: any) => {
-      const pointName = point.point
-      if (!allPoints[pointName]) allPoints[pointName] = new Set()
-      point?.data?.forEach((shipper: any) => {
-        allPoints[pointName].add(shipper.shipper_name)
-      })
+      const pointName = point?.point
+      if (pointName) {
+        if (!allPoints[pointName]) allPoints[pointName] = new Set()
+        point?.data?.forEach((shipper: any) => {
+          allPoints[pointName].add(shipper?.shipper_name)
+        })
+      }
     })
   })
 
@@ -2724,8 +2726,8 @@ export const exportCyberpunk = (data_to_export?: any) => {
 
   // Fill data rows
   const rows: any = []
-  data_to_export.forEach((entry: any) => {
-    const row = [entry.gas_day]
+  data_to_export?.forEach((entry: any) => {
+    const row = [entry?.gas_day]
     pointHeaders.forEach(({point, shipper, type}: any) => {
       const foundPoint = entry.nomPoint.find((p: any) => p.point === point)
       if (!foundPoint) {
@@ -2844,9 +2846,12 @@ export const exportCyberpunk2 = (data?: any) => {
 export const exportCyberpunk3 = (data?: any) => {
   const points: any = {}
   data?.forEach((entry: any) => {
-    entry.nomPoint.forEach((point: any) => {
-      if (!points[point.point]) points[point.point] = new Set()
-      point?.data?.forEach((d: any) => points[point.point].add(d.shipper_name))
+    entry?.nomPoint?.forEach((point: any) => {
+      const pt = point?.point
+      if (pt) {
+        if (!points[pt]) points[pt] = new Set()
+        point?.data?.forEach((d: any) => points[pt].add(d?.shipper_name))
+      }
     })
   })
 
@@ -4660,7 +4665,7 @@ export const formatDateMonthNameWithTime = (isoString: any) => {
 
 export const cutUploadFileName = (url: any) => {
   // return dayjs(isoString).tz('Asia/Bangkok').format('DD/MM/YYYY HH:mm');
-  const cutString = url?.substring(url.indexOf('_') + 1)
+  const cutString = url ? url.substring(url.indexOf('_') + 1) : ''
   console.log('cutString : ', cutString)
   return cutString
 }
@@ -5572,12 +5577,11 @@ export const formatNumberThreeDecimalNomRound = (number: any) => {
 export const formatNumberFourDecimalNom = (number: any) => {
   if (isNaN(number)) return number // Handle invalid numbers gracefully
 
-  if (number)
-    if (number == 0) {
-      return '0.0000' // special case for zero
-    }
+  if (number === 0 || number === '0') {
+    return '0.0000' // special case for zero
+  }
 
-  if (number == null || number == undefined) {
+  if (number == null || number === undefined || number === '') {
     return ''
   }
 
@@ -5904,9 +5908,9 @@ export const generateData = (data: any) => {
 
     while (currentDate.isBefore(endDate)) {
       const formattedDate = currentDate.format('YYYY-MM-DD') // dd/MM/yyyy
-      let valueAd = item.area_nominal_capacity
-      if (item?.capacity_publication.length > 0) {
-        const finds = item?.capacity_publication[0]?.capacity_publication_date.find((f: any) => {
+      let valueAd = item?.area_nominal_capacity
+      if (item?.capacity_publication && item?.capacity_publication?.length > 0) {
+        const finds = item?.capacity_publication?.[0]?.capacity_publication_date?.find((f: any) => {
           return toDayjs(f.date_day).format('YYYY-MM-DD') === formattedDate
         })
         if (!!finds) {
@@ -6037,7 +6041,7 @@ export const createNodeEdges = (revised_capacity_path: any, revised_capacity_pat
   let currentNodeId = startNode?.area?.id
   while (currentNodeId) {
     // ดึงข้อมูล node ปัจจุบัน
-    const currentNode = revised_capacity_path.find((area: any) => area.area.id === currentNodeId)
+    const currentNode = revised_capacity_path?.find((area: any) => area?.area?.id === currentNodeId)
 
     if (currentNode) {
       // เพิ่ม node เข้า result
@@ -6191,10 +6195,6 @@ export const sortNodesByEdges = (nodes: any, edges: any) => {
   const sortAndAdustPos = adjustNodePositions(sortedNodes)
 
   return sortAndAdustPos
-
-  // Include any nodes that are not connected (not part of edges)
-  const unconnectedNodes = nodes.filter((node: any) => !result.includes(node.id))
-  return [...sortedNodes, ...unconnectedNodes]
 }
 
 const adjustNodePositions = (nodes: any) => {
@@ -6483,7 +6483,7 @@ export const sumDataByAreaAndGroup = (dataLong: any[]) => {
           if (entry.sumValues[index] == null) {
             entry.sumValues[index] = val
           } else {
-            entry.sumValues[index] += val ?? 0 // Sum up values, handle nulls
+            entry.sumValues[index] += val
           }
         }
       })
@@ -7901,7 +7901,7 @@ export const darkenColor = (color: string, percent: number) => {
     b = parseInt(color.substring(5, 7), 16)
   } else if (color?.startsWith('rgb')) {
     // Extract RGB values
-    const rgb = color?.match(/\d+/g)?.map(Number) || [0, 0, 0]
+    const rgb = color ? (color.match(/\d+/g)?.map(Number) || [0, 0, 0]) : [0, 0, 0]
     ;[r, g, b] = rgb
   } else {
     return color // Return original color if not recognized
@@ -8725,7 +8725,9 @@ export const sumDataNomShipperReportOLD = (data_for_sum: any[]) => {
   grouped.forEach((existing, groupKey) => {
     const totalValue = sumKey14To37(existing?.data_temp)
 
-    existing.data_temp[totalKey] = fmt3(totalValue)
+    if (existing?.data_temp) {
+      existing.data_temp[totalKey] = fmt3(totalValue)
+    }
 
     grouped.set(groupKey, existing)
   })
@@ -8944,11 +8946,13 @@ export const sumDataNomShipperReport = (data_for_sum: any[]) => {
     /*
      * รวม key 14 - 37
      */
-    for (const key of keysToSum) {
-      const existingValue = toNumber(existing?.data_temp?.[key])
-      const currentValue = toNumber(dt?.[key])
+    if (existing?.data_temp) {
+      for (const key of keysToSum) {
+        const existingValue = toNumber(existing?.data_temp?.[key])
+        const currentValue = toNumber(dt?.[key])
 
-      existing.data_temp[key] = fmt3(existingValue + currentValue)
+        existing.data_temp[key] = fmt3(existingValue + currentValue)
+      }
     }
 
     /*
@@ -8992,7 +8996,9 @@ export const sumDataNomShipperReport = (data_for_sum: any[]) => {
   grouped.forEach((existing, groupKey) => {
     const totalValue = sumKey14To37(existing?.data_temp)
 
-    existing.data_temp[totalKey] = fmt3(totalValue)
+    if (existing?.data_temp) {
+      existing.data_temp[totalKey] = fmt3(totalValue)
+    }
 
     grouped.set(groupKey, existing)
   })
@@ -9369,8 +9375,9 @@ export const sumDataNomShipperReportNo = (data_for_sum: any[]) => {
         )
     }
 
-    existing.data_temp[key] =
-        resultValue
+    if (existing?.data_temp) {
+        existing.data_temp[key] = resultValue
+      }
     }
 
     /*
@@ -9425,8 +9432,10 @@ export const sumDataNomShipperReportNo = (data_for_sum: any[]) => {
      *
      * ค่อย round ตอนสุดท้าย
      */
-    for (const key of keysToSum) {
-      existing.data_temp[key] = fmt3(toNumber(existing?.data_temp?.[key]))
+    if (existing?.data_temp) {
+      for (const key of keysToSum) {
+        existing.data_temp[key] = fmt3(toNumber(existing?.data_temp?.[key]))
+      }
     }
 
     /*

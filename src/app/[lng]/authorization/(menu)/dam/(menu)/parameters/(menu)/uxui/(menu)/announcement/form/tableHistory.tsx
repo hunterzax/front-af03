@@ -106,11 +106,11 @@ const TableAnnouncementHistory: React.FC<TableProps> = ({ tableData, isLoading, 
                                 )}
 
                                 {columnVisibility.topic && (
-                                    <td className="px-2 py-1 text-[#464255] font-bold">{row?.topic && row?.topic}</td>
+                                    <td className="px-2 py-1 text-[#464255] font-bold">{row?.topic}</td>
                                 )}
 
                                 {columnVisibility.detail && (
-                                    <td className="px-2 py-1 text-[#464255]">{row?.detail && row?.detail}</td>
+                                    <td className="px-2 py-1 text-[#464255]">{row?.detail}</td>
                                 )}
 
                                 {columnVisibility.start_date && (

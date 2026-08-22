@@ -423,7 +423,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 },
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.mode && row?.mode}</div>)
+                    return (<div>{row?.mode}</div>)
                 }
             },
             {

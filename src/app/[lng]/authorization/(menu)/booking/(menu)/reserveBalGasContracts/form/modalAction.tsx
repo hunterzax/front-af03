@@ -54,7 +54,7 @@ const ModalAction: React.FC<FormExampleProps> = ({mode = 'create', data = {}, la
     formState: {errors},
     watch,
     setError,
-    clearErrors
+        clearErrors();
   } = useForm<any>({
     defaultValues: data
   })

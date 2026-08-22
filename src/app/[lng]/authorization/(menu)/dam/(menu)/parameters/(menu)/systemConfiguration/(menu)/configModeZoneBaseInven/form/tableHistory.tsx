@@ -92,7 +92,7 @@ const TableConfigModeZoneBaseInvenHistory: React.FC<TableProps> = ({ tableData, 
                                 )}
 
                                 {columnVisibility.mode && (
-                                    <td className="px-2 py-1 text-[#464255]">{row?.mode && row?.mode}</td>
+                                    <td className="px-2 py-1 text-[#464255]">{row?.mode}</td>
                                 )}
 
                                 {columnVisibility.start_date && (

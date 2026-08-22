@@ -1161,7 +1161,7 @@ const NavMenuCustom = ({toggleNav, setToggleNav, subMenu, isLoading, handleClick
                     <div
                       onClick={() => {
                         if (!isLoading) {
-                          void handleClick(id)
+                          handleClick(id)
                         }
                       }}
                       className={`text-sm flex justify-start items-center w-full px-4 rounded-[8px]

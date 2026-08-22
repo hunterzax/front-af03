@@ -26,7 +26,7 @@ export async function useTranslation<
 >(lng: string, ns?: Ns | string[], options: { keyPrefix?: KPrefix } = {}) {
   const i18nextInstance = await initI18next(
     lng,
-    Array.isArray(ns) ? (ns as string[]) : (ns as string)
+    ns as string | string[]
   );
 
   return {

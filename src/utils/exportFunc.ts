@@ -4075,7 +4075,7 @@ export function epBalancingBalanceReport(payload: any) {
 
     return filteredData;
   });
-  const filterHeader = filterx || [];
+  const filterHeader = filterx;
   console.log('filterHeader : ', filterHeader);
 
   const headerColorMap = {
@@ -4965,7 +4965,7 @@ export function epBalancingIntradayBalancingReport(payload: any) {
   // console.log('formateData : ', formateData);
 
   // const filterHeader = filter || [];
-  const filterHeader = filterx || [];
+  const filterHeader = filterx;
 
   // header color
   const headerColorMap = {

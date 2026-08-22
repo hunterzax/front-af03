@@ -145,7 +145,7 @@ const DatePickaForm = forwardRef<HTMLInputElement, DatePickerSectionProps>(({
                 {
                     mode == 'edit-bulletin' || mode == 'edit-table' ?
                         <div className={`${valueShow ? 'text-current' : 'text-[#9CA3AF]'} !text-[${splaceHolder}] placeholder-txt`}>
-                            {valueShow ? valueShow : placeHolder || placeHolder}
+                            {valueShow ? valueShow : placeHolder}
                         </div>
 
                         : mode == 'edit' || (readOnly && mode == 'edit') ?

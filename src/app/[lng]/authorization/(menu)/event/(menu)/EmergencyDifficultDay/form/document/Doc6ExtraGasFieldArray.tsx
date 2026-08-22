@@ -359,7 +359,7 @@ const Doc6ExtraGasFieldArray: React.FC<Doc6ExtraGasFieldArrayProps> = ({
                                             )}
                                             {list
                                                 .filter((item: any) => !defaultIds?.includes(item.id))
-                                                .sort((a: any, b: any) => a.name.localeCompare(b.name))
+                                                .sort((a: any, b: any) => (a?.name || "").localeCompare(b?.name || ""))
                                                 .map((item: any) => (
                                                     <MenuItem key={item.id} value={item.id}>
                                                         <Checkbox checked={shipperVals.includes(item.id)} />
@@ -494,9 +494,8 @@ const Doc6ExtraGasFieldArray: React.FC<Doc6ExtraGasFieldArrayProps> = ({
                                                                     </div>
                                                                     <button
                                                                         type="button"
-                                                                        className={`flex items-center justify-center px-[2px] py-[2px] rounded-[4px] relative ${!dlUrl ? "bg-[#f0f0f0] cursor-not-allowed pointer-events-none" : "hover:bg-[#DFE4EA] hover:border hover:border-[#DFE4EA]"}`}
+                                                                        className="flex items-center justify-center px-[2px] py-[2px] rounded-[4px] relative hover:bg-[#DFE4EA] hover:border hover:border-[#DFE4EA]"
                                                                         onClick={() => downloadUrl(dlUrl)}
-                                                                        disabled={!dlUrl}
                                                                     >
                                                                         <FileDownloadIcon
                                                                             sx={{

@@ -133,11 +133,11 @@ const TablePlanDeadHistory: React.FC<TableProps> = ({ tableData, isLoading, colu
                                 )}
 
                                 {columnVisibility.date_of_month && (
-                                    <td className="px-2 py-1 text-[#464255]">{row?.day && row?.day}</td>
+                                    <td className="px-2 py-1 text-[#464255]">{row?.day}</td>
                                 )}
 
                                 {columnVisibility.before_month && (
-                                    <td className="px-2 py-1 text-[#464255]">{row?.before_month && row?.before_month}</td>
+                                    <td className="px-2 py-1 text-[#464255]">{row?.before_month}</td>
                                 )}
 
                                 {/* <td className="px-2 py-1 text-right text-[#464255]">{formatNumber(row?.area_nominal_capacity)}</td> */}

@@ -467,43 +467,21 @@ const TableWeeklyNomination: React.FC<any> = ({ openWarning, tableData, isLoadin
                                             let saturday_max_cap;
                                             
                                             if(row?.unix === "MMBTU/D"){
-                                                if(row?.zone_text === "EAST-WEST"){
-                                                    
-                                                    sunday_max_cap = parseFloat(row?.sunday_hv) * parseFloat(find_validate?.maximum_capacity)
-                                                    monday_max_cap = parseFloat(row?.monday_hv) * parseFloat(find_validate?.maximum_capacity)
-                                                    tuesday_max_cap = parseFloat(row?.tuesday_hv) * parseFloat(find_validate?.maximum_capacity)
-                                                    wednesday_max_cap = parseFloat(row?.wednesday_hv) * parseFloat(find_validate?.maximum_capacity)
-                                                    thursday_max_cap = parseFloat(row?.thursday_hv) * parseFloat(find_validate?.maximum_capacity)
-                                                    friday_max_cap = parseFloat(row?.friday_hv) * parseFloat(find_validate?.maximum_capacity)
-                                                    saturday_max_cap = parseFloat(row?.saturday_hv) * parseFloat(find_validate?.maximum_capacity)
+                                                sunday_max_cap = parseFloat(row?.sunday_hv) * parseFloat(find_validate?.maximum_capacity)
+                                                monday_max_cap = parseFloat(row?.monday_hv) * parseFloat(find_validate?.maximum_capacity)
+                                                tuesday_max_cap = parseFloat(row?.tuesday_hv) * parseFloat(find_validate?.maximum_capacity)
+                                                wednesday_max_cap = parseFloat(row?.wednesday_hv) * parseFloat(find_validate?.maximum_capacity)
+                                                thursday_max_cap = parseFloat(row?.thursday_hv) * parseFloat(find_validate?.maximum_capacity)
+                                                friday_max_cap = parseFloat(row?.friday_hv) * parseFloat(find_validate?.maximum_capacity)
+                                                saturday_max_cap = parseFloat(row?.saturday_hv) * parseFloat(find_validate?.maximum_capacity)
 
-                                                    sunday_validate = sunday_max_cap > parseFloat(row?.sunday)
-                                                    monday_validate = monday_max_cap > parseFloat(row?.monday)
-                                                    tuesday_validate = tuesday_max_cap > parseFloat(row?.tuesday)
-                                                    wednesday_validate = wednesday_max_cap > parseFloat(row?.wednesday)
-                                                    thursday_validate = thursday_max_cap > parseFloat(row?.thursday)
-                                                    friday_validate = friday_max_cap > parseFloat(row?.friday)
-                                                    saturday_validate = saturday_max_cap > parseFloat(row?.saturday)
-                                                    
-                                                }else{
-                                                
-                                                    sunday_max_cap = parseFloat(row?.sunday_hv) * parseFloat(find_validate?.maximum_capacity)
-                                                    monday_max_cap = parseFloat(row?.monday_hv) * parseFloat(find_validate?.maximum_capacity)
-                                                    tuesday_max_cap = parseFloat(row?.tuesday_hv) * parseFloat(find_validate?.maximum_capacity)
-                                                    wednesday_max_cap = parseFloat(row?.wednesday_hv) * parseFloat(find_validate?.maximum_capacity)
-                                                    thursday_max_cap = parseFloat(row?.thursday_hv) * parseFloat(find_validate?.maximum_capacity)
-                                                    friday_max_cap = parseFloat(row?.friday_hv) * parseFloat(find_validate?.maximum_capacity)
-                                                    saturday_max_cap = parseFloat(row?.saturday_hv) * parseFloat(find_validate?.maximum_capacity)
-
-                                                    sunday_validate = sunday_max_cap > parseFloat(row?.sunday)
-                                                    monday_validate = monday_max_cap > parseFloat(row?.monday)
-                                                    tuesday_validate = tuesday_max_cap > parseFloat(row?.tuesday)
-                                                    wednesday_validate = wednesday_max_cap > parseFloat(row?.wednesday)
-                                                    thursday_validate = thursday_max_cap > parseFloat(row?.thursday)
-                                                    friday_validate = friday_max_cap > parseFloat(row?.friday)
-                                                    saturday_validate = saturday_max_cap > parseFloat(row?.saturday)
-                                                    
-                                                }
+                                                sunday_validate = sunday_max_cap > parseFloat(row?.sunday)
+                                                monday_validate = monday_max_cap > parseFloat(row?.monday)
+                                                tuesday_validate = tuesday_max_cap > parseFloat(row?.tuesday)
+                                                wednesday_validate = wednesday_max_cap > parseFloat(row?.wednesday)
+                                                thursday_validate = thursday_max_cap > parseFloat(row?.thursday)
+                                                friday_validate = friday_max_cap > parseFloat(row?.friday)
+                                                saturday_validate = saturday_max_cap > parseFloat(row?.saturday)
                                             }else{
                                             
                                                     sunday_max_cap = find_validate?.mmscf_max_cap

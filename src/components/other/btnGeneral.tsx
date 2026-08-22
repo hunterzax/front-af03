@@ -131,8 +131,7 @@ const BtnGeneral: React.FC<BtnGeneralProps> = ({ generalFunc, textRender, iconNo
                     <>
                         <Button
                             ref={buttonRef}
-                            className={`flex items-center justify-center gap-3 px-2 h-[43px] min-w-[120px] w-[100px] rounded-[6px]
-                            ${disable ? 'opacity-50 text-[#ffffff] border border-[#AEAEB2] cursor-not-allowed !bg-[#AEAEB2]' : disable ? 'opacity-50 cursor-not-allowed !bg-[#B6B6B6]' : ''} `}
+                            ${disable ? 'opacity-50 text-[#ffffff] border border-[#AEAEB2] cursor-not-allowed !bg-[#AEAEB2]' : ''} `}
                             // onClick={handleClick}
                             onClick={disable ? undefined : handleClick}
                             style={{ backgroundColor: bgcolor }}

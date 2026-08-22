@@ -407,7 +407,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.topic || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div >{row?.topic && row?.topic}</div>)
+                    return (<div >{row?.topic}</div>)
                 }
             },
             {

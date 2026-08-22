@@ -138,7 +138,7 @@ const TableTermAndCondition: React.FC<TableProps> = ({ openEditForm, openViewFor
                                         className={`${table_row_style}`}
                                     >
                                         {columnVisibility.topic && (
-                                            <td className="px-2 py-1 text-[#464255] font-bold">{row?.topic && row?.topic}</td>
+                                            <td className="px-2 py-1 text-[#464255] font-bold">{row?.topic}</td>
                                         )}
 
                                         {columnVisibility.file && (

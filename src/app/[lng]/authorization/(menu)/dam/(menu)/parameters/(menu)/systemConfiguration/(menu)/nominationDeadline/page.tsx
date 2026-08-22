@@ -451,7 +451,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.process_type?.name || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.process_type && row?.process_type?.name}</div>)
+                    return (<div>{row?.process_type?.name}</div>)
                 }
             },
             {
@@ -485,7 +485,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 accessorFn: (row: any) => row?.before_gas_day || '',
                 cell: (info) => {
                     const row: any = info?.row?.original
-                    return (<div>{row?.before_gas_day && row?.before_gas_day}</div>)
+                    return (<div>{row?.before_gas_day}</div>)
                 }
             },
             {

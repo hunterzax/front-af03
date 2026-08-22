@@ -46,8 +46,8 @@ export const TooltipWrapper = ({
                     <div
                         className="pointer-events-none fixed z-[9999999]"
                         style={{
-                            top: placement === "right" ? pos.top : pos.top,
-                            left: placement === "right" ? pos.left : pos.left,
+                            top: pos.top,
+                            left: pos.left,
                             transform:
                                 placement === "right" ? "translateY(-50%)" : "translate(-50%, -100%)",
                         }}

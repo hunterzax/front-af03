@@ -249,7 +249,7 @@ export function GeneralTable({
                             displayText = displayText.charAt(0).toUpperCase() + displayText.slice(1)
                           }
                           return (
-                            <label key={column.id} className="flex items-center gap-2">
+                            <label key={column?.id} className="flex items-center gap-2">
                             <input
                                 type="checkbox"
                                 checked={column.getIsVisible()}
@@ -325,10 +325,10 @@ export function GeneralTable({
                       className={`${table_row_style} hover:bg-gray-50 even:bg-gray-50 even:hover:bg-gray transition-colors duration-200"`}
                     >
                       {row.getVisibleCells().map(cell => {
-                        const meta = cell.column.columnDef.meta as any
+                        const meta = cell?.column?.columnDef?.meta as any
                         return (
                           <td
-                            key={cell.id}
+                            key={cell?.id}
                             className="border px-4 py-2 text-[#464255] bg-white border-none h-[53px]"
                             style={{
                               color: meta?.textColor ? meta?.textColor : '#464255',
