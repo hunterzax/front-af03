@@ -1,4 +1,3 @@
-"use client";
 import { fetchAllocationModeMaster } from '@/utils/store/slices/allocationModeSlice';
 import { fetchAllocationStatusMaster } from '@/utils/store/slices/allocationStatusSlice';
 import { fetchAreaMaster } from '@/utils/store/slices/areaMasterSlice';

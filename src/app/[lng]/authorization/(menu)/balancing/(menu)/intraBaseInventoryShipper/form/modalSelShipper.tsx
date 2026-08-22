@@ -49,7 +49,7 @@ const ModalSelShipperContract: React.FC<FormExampleProps> = ({
         reset,
         formState: { errors },
         watch,
-        clearErrors
+        clearErrors();
     } = useForm<any>({
         defaultValues: {},
     });

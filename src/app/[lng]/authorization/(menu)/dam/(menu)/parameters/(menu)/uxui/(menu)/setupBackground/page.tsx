@@ -515,7 +515,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
 
             {isModalOpen && selectedImage && (
                 <div
-                    className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-25 transition-opacity duration-300 ease-in-out ${isModalOpen ? 'opacity-100' : 'opacity-0'}`}
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-25 transition-opacity duration-300 ease-in-out opacity-100"
                     onClick={closeModal}
                 >
                     <div className="relative">

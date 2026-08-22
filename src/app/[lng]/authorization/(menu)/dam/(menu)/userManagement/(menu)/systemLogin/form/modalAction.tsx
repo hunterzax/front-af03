@@ -421,7 +421,7 @@ const ModalAction: React.FC<FormExampleProps> = ({
                                                 className="w-[167px] font-light bg-[#00ADEF] text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
                                                 disabled={selectedItems.length <= 0}
                                             >
-                                                {mode === 'create' ? 'Save' : 'Save'}
+                                                Save
                                             </button>
                                         )}
                                     </div>

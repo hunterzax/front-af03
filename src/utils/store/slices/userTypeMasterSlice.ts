@@ -1,4 +1,3 @@
-"use client";
 import { getService } from '@/utils/postService';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';

@@ -43,7 +43,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
 
     const [tabIndexNomAreaTotal, setTabIndexNomAreaTotal] = useState(mainTab === "1" ? 1 : 0);
     const [tabIndexFrameTableMain, setTabIndexFrameTableMain] = useState<any>(mainTab === "1" ? 1 : 0); // ส่งเข้าไปใน FrameTable จะเอาไว้ดูว่ากด tab ไหน (tab หลัก 0 = Nomination, 1 = Area, 2 = Total System)
-    const [tabIndexFrameTableSub, setTabIndexFrameTableSub] = useState<any>(subTab === "0" ? 0 : 0); // ส่งเข้าไปใน FrameTable จะเอาไว้ดูว่ากด tab ไหน (tab ย่อย 0 = MMSCF, 1 = MMBTU, Imbalance)
+    const [tabIndexFrameTableSub, setTabIndexFrameTableSub] = useState<any>(subTab === "1" ? 1 : 0); // ส่งเข้าไปใน FrameTable จะเอาไว้ดูว่ากด tab ไหน (tab ย่อย 0 = MMSCF, 1 = MMBTU, Imbalance)
     const [filteredDataTable, setFilteredDataTable] = useState<any>(null);
     const [filteredDataTableWeekly, setFilteredDataTableWeekly] = useState<any>(null);
     const [filteredDataTableDaily, setFilteredDataTableDaily] = useState<any>(null);

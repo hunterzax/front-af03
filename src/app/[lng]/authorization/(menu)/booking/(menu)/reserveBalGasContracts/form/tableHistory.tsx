@@ -59,7 +59,7 @@ const TableTablePathMgnHistory: React.FC<TableProps> = ({ tableData, isLoading }
                                 key={row?.id}
                                 className={`${table_row_style}`}
                             >
-                                <td className="px-2 py-1 text-[#464255] font-light">{row?.name && row?.name}</td>
+                                <td className="px-2 py-1 text-[#464255] font-light">{row?.name}</td>
 
                                 <td className="px-2 py-1 text-center">
                                     <div className="inline-flex items-center justify-center relative">
@@ -67,7 +67,7 @@ const TableTablePathMgnHistory: React.FC<TableProps> = ({ tableData, isLoading }
                                             type="button"
                                             className="flex items-center justify-center px-[2px] py-[2px] rounded-md hover:bg-blue-600 border border-[#DFE4EA] relative"
                                             // onClick={() => openViewModal(row)}
-                                            disabled={row?.edit_email_group_for_event_match.length <= 0 && true}
+                                            disabled={(row?.edit_email_group_for_event_match?.length ?? 0) <= 0}
                                         >
                                             <SupervisorAccountRoundedIcon sx={{ fontSize: 18, color: '#1473A1', '&:hover': { color: '#ffffff' } }} />
                                         </button>

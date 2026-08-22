@@ -700,11 +700,8 @@ const ChartSystem: React.FC<Props> = ({data, chartRef, containerRef, showDateArr
         return toDayjs(a).valueOf() - toDayjs(b).valueOf()
       })
 
-    // map แปลง format และเติม comma ยกเว้นตัวสุดท้าย
-    return sorted.map((date, i) => {
-      const formatted = toDayjs(date).format('DD/MM/YYYY')
-      return i === sorted.length - 1 ? formatted : formatted
-    })
+    // map แปลง format
+    return sorted.map((date) => toDayjs(date).format('DD/MM/YYYY'))
   }
 
   function createDoubleLineSymbol(color: any) {

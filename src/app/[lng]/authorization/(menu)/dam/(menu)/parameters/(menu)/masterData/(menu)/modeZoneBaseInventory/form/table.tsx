@@ -97,7 +97,7 @@ const TableConfigModeZone: React.FC<TableProps> = ({ openEditForm, openViewForm,
                                         )}
 
                                         {columnVisibility.mode && (
-                                            <td className="px-2 py-1 text-[#464255]">{row?.mode?.mode && row?.mode?.mode}</td>
+                                            <td className="px-2 py-1 text-[#464255]">{row?.mode?.mode}</td>
                                         )}
 
                                         {columnVisibility.start_date && (

@@ -35,7 +35,7 @@ export const transformGroupTSO = (dataMain: any, column?: any) => {
                         break;
                     case 'updated_by':
                         filteredItem[key] = item?.update_by_account
-                            ? `${item.update_by_account.first_name} ${item.update_by_account.last_name} ${formatDateTimeSec(item?.update_date) || ''}`
+                            ? `${item?.update_by_account?.first_name || ""} ${item?.update_by_account?.last_name || ""} ${formatDateTimeSec(item?.update_date) || ''}`
                             : null;
                         break;
                 }
@@ -88,7 +88,7 @@ export const transformGroupShippers = (dataMain: any, column?: any) => {
                         break;
                     case 'updated_by':
                         filteredItem[key] = item?.update_by_account
-                            ? `${item.update_by_account.first_name} ${item.update_by_account.last_name} ${formatDateTimeSec(item?.update_date) || ''}`
+                            ? `${item?.update_by_account?.first_name || ""} ${item?.update_by_account?.last_name || ""} ${formatDateTimeSec(item?.update_date) || ''}`
                             : null;
                         break;
                 }
@@ -130,7 +130,7 @@ export const transformGroupOthers = (dataMain: any, column?: any) => {
                         break;
                     case 'updated_by':
                         filteredItem[key] = item?.update_by_account
-                            ? `${item.update_by_account.first_name} ${item.update_by_account.last_name} ${formatDateTimeSec(item?.update_date) || ''}`
+                            ? `${item?.update_by_account?.first_name || ""} ${item?.update_by_account?.last_name || ""} ${formatDateTimeSec(item?.update_date) || ''}`
                             : null;
                         break;
                 }
@@ -236,7 +236,7 @@ export const transformArea = (dataMain: any, column?: any) => {
                         break;
                     case 'updated_by':
                         filteredItem[key] = item?.update_by_account
-                            ? `${item.update_by_account.first_name} ${item.update_by_account.last_name} ${formatDateTimeSec(item?.update_date) || ''}`
+                            ? `${item?.update_by_account?.first_name || ""} ${item?.update_by_account?.last_name || ""} ${formatDateTimeSec(item?.update_date) || ''}`
                             : null;
                         break;
                 }
@@ -277,7 +277,7 @@ export const transformContractPoint = (dataMain: any, column?: any) => {
                         break;
                     case 'updated_by':
                         filteredItem[key] = item?.update_by_account
-                            ? `${item.update_by_account.first_name} ${item.update_by_account.last_name} ${formatDateTimeSec(item?.update_date) || ''}`
+                            ? `${item?.update_by_account?.first_name || ""} ${item?.update_by_account?.last_name || ""} ${formatDateTimeSec(item?.update_date) || ''}`
                             : null;
                         break;
                 }
@@ -325,7 +325,7 @@ export const transformChartArea = (dataMain: any, column?: any) => {
         // start_date: item.start_date,
         // end_date: item.end_date,
         // updated_by: item.update_by_account
-        //     ? `${item.update_by_account.first_name} ${item.update_by_account.last_name}`
+        //     ? `${item?.update_by_account?.first_name || ""} ${item?.update_by_account?.last_name || ""}`
         //     : null,
     }));
 }

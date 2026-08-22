@@ -345,62 +345,62 @@ export const calDatePeriod = (date: any, period: any, type: any, mode: any, term
   } else if (mode === 'start_date') {
     switch (type) {
       case 'year':
-        if (term_type?.[0].file_period_mode == 1) {
+        if (term_type?.[0]?.file_period_mode == 1) {
           // day
           // change period from year to day
           let cal_period = period * 365
-          if (term_type?.[0].max >= cal_period) {
+          if (term_type?.[0]?.max >= cal_period) {
             return parsedDate.add(cal_period, 'day').format('DD/MM/YYYY')
-          } else if (cal_period > term_type?.[0].max) {
-            return parsedDate.add(term_type?.[0].max, 'day').format('DD/MM/YYYY')
+          } else if (cal_period > term_type?.[0]?.max) {
+            return parsedDate.add(term_type?.[0]?.max, 'day').format('DD/MM/YYYY')
           }
-        } else if (term_type[0].file_period_mode == 2) {
+        } else if (term_type?.[0]?.file_period_mode == 2) {
           // month
           // period = 1 year
           // change period to month
           // Convert year to months (1 year = 12 months)
           let cal_period = period * 12
-          if (term_type?.[0].max >= cal_period) {
+          if (term_type?.[0]?.max >= cal_period) {
             return parsedDate.add(cal_period, 'month').format('DD/MM/YYYY')
           } else {
-            return parsedDate.add(term_type?.[0].max, 'month').format('DD/MM/YYYY')
+            return parsedDate.add(term_type?.[0]?.max, 'month').format('DD/MM/YYYY')
           }
-        } else if (term_type[0].file_period_mode == 3) {
+        } else if (term_type?.[0]?.file_period_mode == 3) {
           // year
-          if (term_type?.[0].max >= period) {
+          if (term_type?.[0]?.max >= period) {
             return parsedDate.add(period, 'year').format('DD/MM/YYYY')
           } else {
-            return parsedDate.add(term_type?.[0].max, 'year').format('DD/MM/YYYY')
+            return parsedDate.add(term_type?.[0]?.max, 'year').format('DD/MM/YYYY')
           }
         }
 
         break
 
       case 'day':
-        if (term_type?.[0].file_period_mode == 1) {
+        if (term_type?.[0]?.file_period_mode == 1) {
           // day
-          if (term_type?.[0].max >= period) {
+          if (term_type?.[0]?.max >= period) {
             return parsedDate.add(period, 'day').format('DD/MM/YYYY')
-          } else if (period > term_type?.[0].max) {
-            return parsedDate.add(term_type?.[0].max, 'day').format('DD/MM/YYYY')
+          } else if (period > term_type?.[0]?.max) {
+            return parsedDate.add(term_type?.[0]?.max, 'day').format('DD/MM/YYYY')
           }
-        } else if (term_type[0].file_period_mode == 2) {
+        } else if (term_type?.[0]?.file_period_mode == 2) {
           // month
           // Convert days to months (approximate: 30 days = 1 month)
           let cal_period = Math.floor(period / 30)
-          if (term_type?.[0].max >= cal_period) {
+          if (term_type?.[0]?.max >= cal_period) {
             return parsedDate.add(cal_period, 'month').format('DD/MM/YYYY')
           } else {
-            return parsedDate.add(term_type?.[0].max, 'month').format('DD/MM/YYYY')
+            return parsedDate.add(term_type?.[0]?.max, 'month').format('DD/MM/YYYY')
           }
-        } else if (term_type[0].file_period_mode == 3) {
+        } else if (term_type?.[0]?.file_period_mode == 3) {
           // year
           // Convert days to years (approximate: 365 days = 1 year)
           let cal_period = Math.floor(period / 365)
-          if (term_type?.[0].max >= cal_period) {
+          if (term_type?.[0]?.max >= cal_period) {
             return parsedDate.add(cal_period, 'year').format('DD/MM/YYYY')
           } else {
-            return parsedDate.add(term_type?.[0].max, 'year').format('DD/MM/YYYY')
+            return parsedDate.add(term_type?.[0]?.max, 'year').format('DD/MM/YYYY')
           }
         }
 
@@ -3054,7 +3054,7 @@ export const exportCyberpunk4 = async (data?: any) => {
   data?.forEach((entry: any) => {
     entry?.nomPoint?.forEach((point: any) => {
       if (!points[point.point]) points[point.point] = new Set()
-      point?.data?.forEach((d: any) => points[point.point].add(d.shipper_name))
+      point?.data?.forEach((d: any) => { if (point?.point) { if (!points[point.point]) points[point.point] = new Set(); points[point.point].add(d?.shipper_name); } })
     })
   })
 
@@ -3164,7 +3164,7 @@ export const exportCyberpunk4_2 = async (data?: any, originRow?: any) => {
   data?.forEach((entry: any) => {
     entry?.nomPoint?.forEach((point: any) => {
       if (!points[point.point]) points[point.point] = new Set()
-      point?.data?.forEach((d: any) => points[point.point].add(d.shipper_name))
+      point?.data?.forEach((d: any) => { if (point?.point) { if (!points[point.point]) points[point.point] = new Set(); points[point.point].add(d?.shipper_name); } })
     })
   })
 
@@ -3374,7 +3374,7 @@ export const exportCyberpunk4_2 = async (data?: any, originRow?: any) => {
 //     original_data?.forEach((entry: any) => {
 //         entry?.nomPoint?.forEach((point: any) => {
 //             if (!points[point.point]) points[point.point] = new Set();
-//             point?.data?.forEach((d: any) => points[point.point].add(d.shipper_name));
+//             point?.data?.forEach((d: any) => { if (point?.point) { if (!points[point.point]) points[point.point] = new Set(); points[point.point].add(d?.shipper_name); } });
 //         });
 //     });
 
@@ -4944,7 +4944,7 @@ export const filterStartEndDate = (dataTable: any[], schStartDate: any, schEndDa
     // Case 3: Filter by both start_date and end_date
     return dataTable?.filter((item) => {
       const itemStartDate = normalizeDate(item.start_date || item.contract_point_start_date || item.contract_start_date)
-      const itemEndDate = normalizeDate(item.end_date || item.contract_point_end_date || item.contract_end_date)
+      const itemEndDate = normalizeDate(item.end_date || item?.contract_point_end_date || item?.contract_end_date)
       return itemStartDate <= formattedSchStartDate && itemEndDate >= formattedSchEndDate
     })
   } else if (formattedSchStartDate && !formattedSchEndDate) {
@@ -4958,7 +4958,7 @@ export const filterStartEndDate = (dataTable: any[], schStartDate: any, schEndDa
     // Case 2: Filter by end_date only
     return dataTable?.filter((item) => {
       // const itemEndDatex = item.end_date ? normalizeDate(item.end_date) : null;
-      const itemEndDate = item?.end_date || item.contract_point_end_date || item.contract_end_date ? normalizeDate(item?.end_date || item?.contract_point_end_date || item.contract_end_date) : null
+      const itemEndDate = item?.end_date || item?.contract_point_end_date || item?.contract_end_date ? normalizeDate(item?.end_date || item?.contract_point_end_date || item?.contract_end_date) : null
       // If end_date is null, include the item
       if (itemEndDate === null) return true
       return itemEndDate >= formattedSchEndDate
@@ -5123,7 +5123,7 @@ export const filterStartEndDateBooking = (dataTable: any[], srchStartDate?: Date
     // ต้อง "อยู่ในช่วง" [sY, eY] แบบ inclusive
     return dataTable.filter((item) => {
       const start = toLocalYMD(item.contract_start_date)
-      const end = toLocalYMD(item.contract_end_date)
+      const end = toLocalYMD(item?.contract_end_date)
       return !!start && !!end && start >= sY && end <= eY
     })
   }
@@ -5135,7 +5135,7 @@ export const filterStartEndDateBooking = (dataTable: any[], srchStartDate?: Date
 
   if (!sY && eY) {
     // มีแต่ end → ตรงวัน end
-    return dataTable.filter((item) => toLocalYMD(item.contract_end_date) === eY)
+    return dataTable.filter((item) => toLocalYMD(item?.contract_end_date) === eY)
   }
 
   return dataTable
@@ -6251,7 +6251,7 @@ export const findDateRanges = (data: any) => {
 
 export const transformDataDonut = (dataFromBank?: any) => {
   // Calculate total number of contract_code across all items
-  const totalContractCount = dataFromBank?.reduce((total: any, item: any) => total + item?.contract_code.length, 0)
+  const totalContractCount = dataFromBank?.reduce((total: any, item: any) => total + (item?.contract_code?.length ?? 0), 0)
 
   // Transform into required format
   const transformedData = {
@@ -6259,7 +6259,7 @@ export const transformDataDonut = (dataFromBank?: any) => {
     datasets: [
       {
         label: 'Shipper Contract',
-        data: dataFromBank?.map((item: any) => item?.contract_code.length), // Extract contract_code lengths
+        data: dataFromBank?.map((item: any) => (item?.contract_code?.length ?? 0)), // Extract contract_code lengths
         backgroundColor: dataFromBank?.map((item: any) => item.color), // Extract colors
         borderWidth: 1
       }
@@ -6269,7 +6269,7 @@ export const transformDataDonut = (dataFromBank?: any) => {
   // Calculate percentages for each category
   const percentages = dataFromBank?.map((item: any) => ({
     name: item.name,
-    percentage: totalContractCount > 0 ? ((item?.contract_code.length / totalContractCount) * 100).toFixed(2) : 0
+    percentage: totalContractCount > 0 ? (((item?.contract_code?.length ?? 0) / totalContractCount) * 100).toFixed(2) : 0
   }))
 
   return {transformedData, percentages}
@@ -9446,7 +9446,9 @@ export const sumDataNomShipperReportNo = (data_for_sum: any[]) => {
      */
     const totalValue = totalVolumeGrouped.get(groupKey) ?? 0
 
-    existing.data_temp[totalKey] = fmt3(totalValue)
+    if (existing?.data_temp) {
+      existing.data_temp[totalKey] = fmt3(totalValue)
+    }
 
     grouped.set(groupKey, existing)
   })
@@ -9559,20 +9561,20 @@ export const sumDataNomShipperReportConcept = (data_for_sum: any[]) => {
 
     const existing = grouped.get(groupKey)
 
-    if (!existing.data_temp) {
-      existing.data_temp = {}
+    if (existing) {
+      if (!existing.data_temp) {
+        existing.data_temp = {}
+      }
+
+      // รวมเฉพาะ key 14 - 37
+      for (const key of keysToSum) {
+        const existingValue = toNumber(existing?.data_temp?.[key])
+        const currentValue = toNumber(dt?.[key])
+        existing.data_temp[key] = fmt3(existingValue + currentValue)
+      }
+
+      grouped.set(groupKey, existing)
     }
-
-    // รวมเฉพาะ key 14 - 37
-    for (const key of keysToSum) {
-      const existingValue = toNumber(existing?.data_temp?.[key])
-
-      const currentValue = toNumber(dt?.[key])
-
-      existing.data_temp[key] = fmt3(existingValue + currentValue)
-    }
-
-    grouped.set(groupKey, existing)
   }
 
   /*
@@ -9655,7 +9657,7 @@ export const groupByTimeAndPoint = (data: any) => {
       let summmm = 0
       const total: number | undefined = items.reduce((sum: number | undefined, item: any) => {
         if (item?.timeShow?.valueMmscfd !== null) {
-          summmm = summmm + item.timeShow.valueMmscfd
+          summmm = summmm + (item?.timeShow?.valueMmscfd ?? 0)
         }
         return summmm
       }, undefined)
@@ -9915,7 +9917,7 @@ export const separateTimeShow = (data_origin?: any) => {
 
     for (const [group, items] of Object.entries(groupMap)) {
       output.push({
-        dailyAdjustFindPoint: entry.dailyAdjustFindPoint,
+        dailyAdjustFindPoint: entry?.dailyAdjustFindPoint,
         adjustment: entry.adjustment,
         rowId: entry.rowId,
         nomination_code: entry.nomination_code,
@@ -12485,7 +12487,7 @@ export const sortRevisedCapacityPathBlocks = (blocks: AreaBlock[]): AreaBlock[] 
       }
 
       // map area_id -> item
-      const itemByArea = new Map<number, PathItem>(items?.map((it) => [it.area_id, it]))
+      const itemByArea = new Map<number, PathItem>(items?.map((it) => [it?.area_id, it]))
 
       // สร้าง next map และชุด source/target
       const next = new Map<number, number>()
@@ -14001,7 +14003,7 @@ export function mapShipperNames(data: GasDayBlock[], dataShipper: ShipperRef[]):
 
         return {
           ...row,
-          shipper_name: prettyName ?? row.shipper_name // ถ้าไม่เจอ ให้คงค่าเดิม
+          shipper_name: prettyName ?? row?.shipper_name // ถ้าไม่เจอ ให้คงค่าเดิม
         }
       })
     }))
@@ -14887,7 +14889,7 @@ export const addSumPerRow = (data_new?: any) => {
     // finalTotalUsage เทียบผลรวมกับ row.nominatedValueMMBTUD
     // sum > nominatedValueMMBTUD ---> ไม่ถือว่า overuse ให้เป็น 0
     // sum < nominatedValueMMBTUD ---> เอาค่าส่วนต่างแบบบวกเก็บไว้
-    const tmpOverUseage = sum - row?.nominatedValueMMBTUD
+    const tmpOverUseage = sum - (row?.nominatedValueMMBTUD ?? 0)
     let finalTotalUsage = tmpOverUseage > 0 ? 0 : Math.abs(tmpOverUseage)
 
     // คำนวณ overusageMMBTUD รายรายการย่อยใน dataRow

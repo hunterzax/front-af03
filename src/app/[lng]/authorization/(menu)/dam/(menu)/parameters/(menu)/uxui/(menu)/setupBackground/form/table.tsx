@@ -212,7 +212,7 @@ const TableSetupBackground: React.FC<TableProps> = ({ openDeleteForm, openEditFo
 
             {isModalOpen == true && selectedImage !== '' && (
                 <div
-                    className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-25 transition-opacity duration-300 ease-in-out ${isModalOpen == true ? 'opacity-100' : 'opacity-0'}`}
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-25 transition-opacity duration-300 ease-in-out opacity-100"
                     onClick={closeModal}
                 >
                     <div className="relative">

@@ -1,5 +1,3 @@
-"use client";
-
 import getCookieValue from '@/utils/getCookieValue';
 import { getService } from '@/utils/postService';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';

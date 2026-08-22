@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import i18next, { FlatNamespace, KeyPrefix } from "i18next";
 import {

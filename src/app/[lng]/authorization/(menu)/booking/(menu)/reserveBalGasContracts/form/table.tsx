@@ -32,12 +32,7 @@ const TableReserveBalGas: React.FC<TableProps> = ({ openEditForm, openViewForm, 
     const [sortedData, setSortedData] = useState(tableData);
 
     useEffect(() => {
-        if (tableData && tableData.length > 0) {
-            setSortedData(tableData);
-        } else {
-            setSortedData(tableData);
-        }
-
+        setSortedData(tableData);
     }, [tableData]);
 
     const getArrowIcon = (column: string) => {

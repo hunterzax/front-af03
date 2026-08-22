@@ -694,7 +694,7 @@ const ClientPage: React.FC<ClientProps> = (props) => {
                 // คืนค่าเป็น String ที่มีทั้งแบบ 'เลขดิบ' และ 'เลขมีคอมม่า'
                 // เพื่อให้ Global Filter มองเห็นทั้งสองร่าง
                 accessorFn: (row: any) => {
-                    const val = row?.nominationValue || '0';
+                    const val = row?.nominationValue;
                     if (val === null || val === undefined || val === '') return '';
 
                     const rawNumber = Number(val);

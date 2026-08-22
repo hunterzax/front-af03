@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 
 const TABS_KEY = "app_active_tabs_v1";
